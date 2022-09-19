@@ -20,5 +20,6 @@ namespace TallerEnrique.Server
         //    modelBuilder.Entity<PeliculaActor>().HasKey(x => new { x.PeliculaId, x.PersonaId });
         //}
         public DbSet<Mecanico> Mecanicos { get; set; }
+        public DbSet<Articulo> Articulos { get; set; }
     }
 }

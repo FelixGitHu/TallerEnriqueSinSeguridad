@@ -1,0 +1,66 @@
+﻿@page "/articulos"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Artículos</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="articulos/crear">Agregar artículo</a>
+</div>
+
+<ListadoGenerico Listado="Articulos">
+    <HayRegistrosCompleto>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Articulos)
+                {
+                <tr>
+                    <td>
+                        <a href="/articulos/editar/@item.Id" class="btn btn-success">Editar</a>
+                        <button @onclick="@(() => BorrarArticulo(item))" class="btn btn-danger">Borrar</button>
+                    </td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Marca</td>
+                    <td>@item.PrecioUnitario</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@code {
+    public List<Articulo> Articulos { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Articulo>>("api/articulos");
+        Articulos = responseHttp.Response;
+    }
+
+    private async Task BorrarArticulo(Articulo articulo)
+    {
+        var responseHttp = await repositorio.Delete($"api/mecanicos/{articulo.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+}
