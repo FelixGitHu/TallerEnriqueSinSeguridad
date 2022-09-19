@@ -1,0 +1,66 @@
+﻿@page "/mecanicos"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Mecánicos</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="mecanicos/crear">Agregar mecánico</a>
+</div>
+
+<ListadoGenerico Listado="Mecanicos">
+    <HayRegistrosCompleto>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Teléfono</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Mecanicos)
+                {
+                <tr>
+                    <td>
+                        <a href="/mecanicos/editar/@item.Id" class="btn btn-success">Editar</a>
+                        <button @onclick="@(() => BorrarMecanico(item))" class="btn btn-danger">Borrar</button>
+                    </td>
+                    <td>@item.Nombre</td>
+                    <td>@item.Apellido</td>
+                    <td>@item.Telefono</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@code {
+    public List<Mecanico> Mecanicos { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Mecanico>>("api/mecanicos");
+        Mecanicos = responseHttp.Response;
+    }
+
+    private async Task BorrarMecanico(Mecanico mecanico)
+    {
+        var responseHttp = await repositorio.Delete($"api/mecanicos/{mecanico.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+}

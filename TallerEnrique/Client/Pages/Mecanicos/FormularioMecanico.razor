@@ -1,0 +1,40 @@
+﻿<EditForm Model="Mecanico" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Nombre:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Mecanico.Nombre" />
+            <ValidationMessage For="@(() => Mecanico.Nombre)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Apellido:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Mecanico.Apellido" />
+            <ValidationMessage For="@(() => Mecanico.Apellido)" />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label>Teléfono:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Mecanico.Telefono" />
+            <ValidationMessage For="@(() => Mecanico.Telefono)" />
+        </div>
+    </div>
+    
+    <div class="row">
+
+        <div class="col-6">
+            <button class="btn btn-success" type="submit">Guardar Cambios</button>
+            <a asp-page="mecanico" class="btn btn-success">volver</a>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public Mecanico Mecanico { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}
