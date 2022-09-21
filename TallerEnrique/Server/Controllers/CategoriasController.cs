@@ -11,37 +11,37 @@ namespace TallerEnrique.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MecanicosController : ControllerBase
+    public class CategoriasController : ControllerBase
     {
         private readonly ApplicationDbContext context;
-        public MecanicosController(ApplicationDbContext context)
+        public CategoriasController(ApplicationDbContext context)
         {
             this.context = context;
         }
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Mecanico mecanico)
+        public async Task<ActionResult<int>> Post(Categoria categoria)
         {
-            context.Add(mecanico);
+            context.Add(categoria);
             await context.SaveChangesAsync();
-            return mecanico.Id;
+            return categoria.Id;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Mecanico>>> Get()
+        public async Task<ActionResult<List<Categoria>>> Get()
         {
-            return await context.Mecanicos.ToListAsync();
+            return await context.Categorias.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Mecanico>> Get(int id)
+        public async Task<ActionResult<Categoria>> Get(int id)
         {
-            return await context.Mecanicos.FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Categorias.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(Mecanico mecanico)
+        public async Task<ActionResult> Put(Categoria categoria)
         {
-            context.Attach(mecanico).State = EntityState.Modified;
+            context.Attach(categoria).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();
         }
@@ -49,9 +49,9 @@ namespace TallerEnrique.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await context.Mecanicos.AnyAsync(x => x.Id == id);
+            var existe = await context.Categorias.AnyAsync(x => x.Id == id);
             if (!existe) { return NotFound(); }
-            context.Remove(new Mecanico { Id = id });
+            context.Remove(new Categoria { Id = id });
             await context.SaveChangesAsync();
             return NoContent();
         }

@@ -1,0 +1,27 @@
+﻿@page "/garantias/crear"
+@inject IRepositorio repositorio
+@inject NavigationManager navigationManager
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Agregar garantia</h3>
+
+<FormularioGarantia OnValidSubmit="Crear" Garantia="Garantia" />
+
+@code {
+    //private Garantia Garantias = new Garantia();
+    private Garantia Garantia = new Garantia();
+
+    private async Task Crear()
+    {
+        var httpResponse = await repositorio.Post("api/garantias", Garantia);
+        if (httpResponse.Error)
+        {
+            var body = await httpResponse.GetBody();
+            await mostrarMensajes.MostrarMensajeError(body);
+        }
+        else
+        {
+            navigationManager.NavigateTo("/garantias");
+        }
+    }
+}

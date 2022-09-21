@@ -1,0 +1,53 @@
+﻿@page "/garantias/editar/{GarantiaId:int}"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensaje
+@inject NavigationManager navigationManager
+
+<h3>Editar garantia</h3>
+
+@if (Garantia == null)
+{
+    <text>Cargando...</text>
+}
+else
+{
+    <FormularioGarantia OnValidSubmit="Editar" Garantia="Garantia" />
+}
+
+@code {
+    [Parameter] public int GarantiaId { get; set; }
+    private Garantia Garantia;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var httpResponse = await repositorio.Get<Garantia>($"api/garantias/{GarantiaId}");
+        if (httpResponse.Error)
+        {
+            if (httpResponse.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("garantias");
+            }
+            else
+            {
+                await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+            }
+        }
+        else
+        {
+            Garantia = httpResponse.Response;
+        }
+    }
+
+    private async void Editar()
+    {
+        var httpResponse = await repositorio.Put("api/garantias", Garantia);
+        if (httpResponse.Error)
+        {
+            await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+        }
+        else
+        {
+            navigationManager.NavigateTo("garantias");
+        }
+    }
+}

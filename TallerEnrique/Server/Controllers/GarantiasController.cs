@@ -4,44 +4,43 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TallerEnrique.Server;
 using TallerEnrique.Shared.Entidades;
 
 namespace TallerEnrique.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MecanicosController : ControllerBase
+    public class GarantiasController : ControllerBase
     {
         private readonly ApplicationDbContext context;
-        public MecanicosController(ApplicationDbContext context)
+        public GarantiasController(ApplicationDbContext context)
         {
             this.context = context;
         }
         [HttpPost]
-        public async Task<ActionResult<int>> Post(Mecanico mecanico)
+        public async Task<ActionResult<int>> Post(Garantia garantia)
         {
-            context.Add(mecanico);
+            context.Add(garantia);
             await context.SaveChangesAsync();
-            return mecanico.Id;
+            return garantia.Id;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Mecanico>>> Get()
+        public async Task<ActionResult<List<Garantia>>> Get()
         {
-            return await context.Mecanicos.ToListAsync();
+            return await context.Garantias.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Mecanico>> Get(int id)
+        public async Task<ActionResult<Garantia>> Get(int id)
         {
-            return await context.Mecanicos.FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Garantias.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(Mecanico mecanico)
+        public async Task<ActionResult> Put(Garantia garantia)
         {
-            context.Attach(mecanico).State = EntityState.Modified;
+            context.Attach(garantia).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();
         }
@@ -49,9 +48,9 @@ namespace TallerEnrique.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await context.Mecanicos.AnyAsync(x => x.Id == id);
+            var existe = await context.Garantias.AnyAsync(x => x.Id == id);
             if (!existe) { return NotFound(); }
-            context.Remove(new Mecanico { Id = id });
+            context.Remove(new Garantia { Id = id });
             await context.SaveChangesAsync();
             return NoContent();
         }

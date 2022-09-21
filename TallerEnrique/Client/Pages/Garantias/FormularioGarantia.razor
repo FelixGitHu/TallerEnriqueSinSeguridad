@@ -1,0 +1,26 @@
+﻿<EditForm Model="Garantia" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Tiempo de la garantia:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Garantia.TiempoGarantia" />
+            <ValidationMessage For="@(() => Garantia.TiempoGarantia)" />
+        </div>
+    </div>
+
+
+
+    <div class="row">
+
+        <div class="col-6">
+            <button class="btn btn-success" type="submit">Guardar Cambios</button>
+            <a asp-page="garantia" class="btn btn-success">volver</a>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public Garantia Garantia { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}
+

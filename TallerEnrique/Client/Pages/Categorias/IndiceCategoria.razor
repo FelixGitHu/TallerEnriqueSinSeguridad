@@ -1,0 +1,66 @@
+﻿@page "/categorias"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Categorías</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="categorias/crear">Agregar categoría</a>
+</div>
+
+<ListadoGenerico Listado="Categorias">
+    <HayRegistrosCompleto>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Nombre</th>
+                    <th>Descripcion</th>
+                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Categorias)
+                {
+                    <tr>
+                        <td>
+                            <a href="/categorias/editar/@item.Id" class="btn btn-success">Editar</a>
+                            <button @onclick="@(() => BorrarCategoria(item))" class="btn btn-danger">Borrar</button>
+                        </td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Descripcion</td>
+                       
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@code {
+    public List<Categoria> Categorias { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Categoria>>("api/categorias");
+        Categorias = responseHttp.Response;
+    }
+
+    private async Task BorrarCategoria(Categoria categoria)
+    {
+        var responseHttp = await repositorio.Delete($"api/categorias/{categoria.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+}
