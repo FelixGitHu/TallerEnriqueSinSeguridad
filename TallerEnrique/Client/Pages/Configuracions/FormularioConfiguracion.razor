@@ -1,0 +1,54 @@
+﻿<EditForm Model="Configuracion" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Encabezado Principal:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Configuracion.Encabezado" />
+            <ValidationMessage For="@(() => Configuracion.Encabezado)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Nombre del Taller:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Configuracion.NombreNegocio" />
+            <ValidationMessage For="@(() => Configuracion.NombreNegocio)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Descripción de los servicios:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Configuracion.DescripcionServicios" />
+            <ValidationMessage For="@(() => Configuracion.DescripcionServicios)" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Direcció:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Configuracion.Direccion" />
+            <ValidationMessage For="@(() => Configuracion.Direccion)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Teléfono:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Configuracion.Telefono" />
+            <ValidationMessage For="@(() => Configuracion.Telefono)" />
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-6">
+            <button class="btn btn-success" type="submit">Guardar Cambios</button>
+            <a asp-page="mecanico" class="btn btn-success">volver</a>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public Configuracion Configuracion { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
+}
+

@@ -1,0 +1,53 @@
+﻿@page "/Configuracions/editar/{ConfiguarcionId:int}"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensaje
+@inject NavigationManager navigationManager
+
+<h3>Editar Información</h3>
+
+@if (Configuracion == null)
+{
+    <text>Cargando...</text>
+}
+else
+{
+    <FormularioConfiguracion OnValidSubmit="Editar" Configuracion="Configuracion" />
+}
+
+@code {
+    [Parameter] public int ConfiguarcionId { get; set; }
+    private Configuracion Configuracion;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var httpResponse = await repositorio.Get<Configuracion>($"api/Configuracions/{ConfiguarcionId}");
+        if (httpResponse.Error)
+        {
+            if (httpResponse.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("Configuracions");
+            }
+            else
+            {
+                await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+            }
+        }
+        else
+        {
+            Configuracion = httpResponse.Response;
+        }
+    }
+
+    private async void Editar()
+    {
+        var httpResponse = await repositorio.Put("api/Configuracions", Configuracion);
+        if (httpResponse.Error)
+        {
+            await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+        }
+        else
+        {
+            navigationManager.NavigateTo("Configuracions");
+        }
+    }
+}

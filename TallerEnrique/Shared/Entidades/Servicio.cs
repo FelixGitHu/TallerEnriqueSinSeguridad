@@ -14,7 +14,7 @@ namespace TallerEnrique.Shared.Entidades
 
         [Required(ErrorMessage = "La Descripcion es Obligatorio ")]
         [StringLength(2000, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
-        public string Descripcio { get; set; }
+        public string Descripcion { get; set; }
 
         [Required(ErrorMessage = "El Precio es Obligatorio ")]
         public int Precio { get; set; }

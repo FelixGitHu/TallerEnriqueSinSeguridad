@@ -13,5 +13,8 @@ namespace TallerEnrique.Shared.Entidades
         public int Id { get; set; }
         public string TiempoGarantia { get; set; }
         public bool Estado { get; set; }
+        
+        public int? ServicioId { get; set; }
+        public Servicio Servicio { get; set; }
     }
 }

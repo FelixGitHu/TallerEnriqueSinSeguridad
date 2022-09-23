@@ -34,5 +34,6 @@ namespace TallerEnrique.Server
         public DbSet<DVentaArticulo> DVentaArticulos { get; set; }
         public DbSet<DVentaServicio> DVentaServicios { get; set; }
         public DbSet<Cierre> Cierre { get; set; }
+        public DbSet<Configuracion> Configuracions { get; set; }
     }
 }
