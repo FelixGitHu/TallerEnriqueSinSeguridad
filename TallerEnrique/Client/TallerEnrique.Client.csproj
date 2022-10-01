@@ -16,4 +16,8 @@
     <ProjectReference Include="..\Shared\TallerEnrique.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
 ﻿using TallerEnrique.Shared.Entidades;
+//using TallerEnrique.Shared.MaestrosDelles;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,5 +36,6 @@ namespace TallerEnrique.Server
         public DbSet<DVentaServicio> DVentaServicios { get; set; }
         public DbSet<Cierre> Cierre { get; set; }
         public DbSet<Configuracion> Configuracions { get; set; }
+        //public DbSet<MDetalle> MDetalles { get; set; }
     }
 }

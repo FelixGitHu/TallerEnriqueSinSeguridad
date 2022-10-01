@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MaestrosDelles\**" />
+    <EmbeddedResource Remove="MaestrosDelles\**" />
+    <None Remove="MaestrosDelles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 </Project>

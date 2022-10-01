@@ -13,5 +13,10 @@ namespace TallerEnrique.Client.Helpers
             await js.InvokeVoidAsync("console.log", "prueba de console.log");
             return await js.InvokeAsync<bool>("confirm", mensaje);
         }
+
+        //public  static void CargarCompra(this IJSRuntime js)
+        //{
+        //    js.InvokeVoidAsync("myfunction");
+        //}
     }
 }

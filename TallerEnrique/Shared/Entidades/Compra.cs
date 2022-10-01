@@ -25,6 +25,6 @@ namespace TallerEnrique.Shared.Entidades
         public Inventario Inventario { get; set; }
         public Proveedor Proveedor { get; set; }
         public Mecanico Mecanico { get; set; }
-
+       // public List<DCompra> MDetalles { get; set; }//probando el maestro detalle
     }
 }
