@@ -1,0 +1,26 @@
+﻿@page "/proveedores/crear"
+@inject IRepositorio repositorio
+@inject NavigationManager navigationManager
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Agregar Proveedor</h3>
+
+<FormularioProveedor OnValidSubmit="Crear" Proveedor="Proveedores"/>
+
+@code {
+    private Proveedor Proveedores = new Proveedor();
+
+    private async Task Crear()
+    {
+        var httpResponse = await repositorio.Post("api/proveedores", Proveedores);
+        if (httpResponse.Error)
+        {
+            var body = await httpResponse.GetBody();
+            await mostrarMensajes.MostrarMensajeError(body);
+        }
+        else
+        {
+            navigationManager.NavigateTo("/proveedores");
+        }
+    }
+}

@@ -1,0 +1,75 @@
+﻿<EditForm Model="Proveedor" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+
+    <div class="form-group ">
+        <label>Nombre Empresa:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Proveedor.NombreEmpresa" />
+            <ValidationMessage For="@(() => Proveedor.NombreEmpresa)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Nombre Contacto:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Proveedor.NombreContacto" />
+            <ValidationMessage For="@(() => Proveedor.NombreContacto)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Dirección:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Proveedor.Direccion" />
+            <ValidationMessage For="@(() => Proveedor.Direccion)" />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label>Departamento:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Proveedor.Departamento" />
+            <ValidationMessage For="@(() => Proveedor.Departamento)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Ciudad</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Proveedor.Ciudad"></InputText>
+            <ValidationMessage For="@(() => Proveedor.Ciudad)"></ValidationMessage>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Email:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Proveedor.Email" />
+            <ValidationMessage For="@(() => Proveedor.Email)" />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label>Teléfono:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@Proveedor.Telefono" />
+            <ValidationMessage For="@(() => Proveedor.Telefono)" />
+        </div>
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-6">
+            <button class="btn btn-success" type="submit">Guardar Cambios</button>
+            <a asp-page="mecanico" class="btn btn-success">volver</a>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public Proveedor Proveedor { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
+}

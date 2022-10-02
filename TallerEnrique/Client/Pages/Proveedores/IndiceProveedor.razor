@@ -1,0 +1,74 @@
+﻿@page "/proveedores"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Proveedores</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="proveedores/crear">Agregar Proveedor</a>
+</div>
+
+<ListadoGenerico Listado="Proveedores">
+    <HayRegistrosCompleto>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Nombre Empresa</th>
+                    <th>Nombre Contácto</th>
+                    <th>Dirección</th>
+                    <th>Departamento</th>
+                    <th>Ciudad</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Proveedores)
+                {
+                <tr>
+                    <td>
+                        <a href="/proveedores/editar/@item.Id" class="btn btn-success">Editar</a>
+                        <button @onclick="@(() => BorrarProveedor(item))" class="btn btn-danger">Borrar</button>
+                    </td>
+                    <td>@item.NombreEmpresa</td>
+                    <td>@item.NombreContacto</td>
+                    <td>@item.Direccion</td>
+                    <td>@item.Departamento</td>
+                    <td>@item.Ciudad</td>
+                    <td>@item.Email</td>
+                    <td>@item.Telefono</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@code {
+    public List<Proveedor> Proveedores { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Proveedor>>("api/proveedores");
+        Proveedores = responseHttp.Response;
+    }
+
+    private async Task BorrarProveedor(Proveedor proveedor)
+    {
+        var responseHttp = await repositorio.Delete($"api/proveedores/{proveedor.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+}
