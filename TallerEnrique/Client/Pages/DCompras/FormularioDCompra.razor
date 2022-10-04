@@ -1,7 +1,10 @@
-﻿@page "/dcompras"
-@inject IRepositorio repositorio
-@inject IMostrarMensajes mostrarMensajes
-@inject IJSRuntime JS
+﻿@*@page "/dcompras"
+    @inject IRepositorio repositorio
+    @inject IMostrarMensajes mostrarMensajes
+    @inject IJSRuntime JS
+    @inject Articulo articulo
+    @inject DCompra dcompra
+    @inject Compra  compra*@
 
 
 <h3>Compras</h3>
@@ -24,37 +27,75 @@
             </div>
             <div class="col-sm-4">
                 <label class="form-label">Proveedor</label>
-                <input class="form-control form-control-sm" type="text" id="txtproveedor" />
+                <input class="form-control form-control-sm" type="text" id="txtproveedor" @bind-value="Proveedor.NombreEmpresa" />
             </div>
             <div class="col-sm-4">
+                <label class="form-label">Articulo</label>
+                <InputText class="form-control form-control-sm" type="text" id="txtarticulo" @bind-Value="Articulo.Nombre" />
+            </div>
+            @* Agregando la parte del TypeHead para buscar los proveedoes *@
+
+            @*<div>
+                    <div class="form-group">
+                        <label>Articulo:</label>
+                        <div>
+                            <SelectorMultiple Seleccionados="Seleccionados"
+                                              NoSeleccionados="NoSeleccionados"></SelectorMultiple>
+                        </div>
+                    </div>
+                </div>*@
+            @*<div class="form-group">
+                    <label>Articulos:</label>
+                    <div>
+                        <SelectorMultipleTypeahead Context="articulo"
+                                                   SearchMethod="BuscarArticulos"
+                                                   ElementosSeleccionados="ArticulosSeleccionados">
+                            <MyListTemplate>
+                                @articulo.Nombre
+                            </MyListTemplate>
+                            <MyResultTemplate>
+                                @articulo.Nombre
+                            </MyResultTemplate>
+
+                        </SelectorMultipleTypeahead>
+                    </div>
+                </div>*@
+
+            <div class="col-sm-4">
                 <label class="form-label">Fecha</label>
-                <input class="form-control form-control-sm" type="datetime-local" id="txtfecha" />
+                <InputDate class="form-control form-control-sm" type="datetime-local" id="txtfecha" @bind-Value="Compra.Fecha" />
+                <ValidationMessage For="@(() => Compra.Fecha)" />
             </div>
         </div>
         <hr />
         <div class="row align-items-end">
             <div class="col-sm-2">
                 <label class="form-label">Producto</label>
-                <input class="form-control form-control-sm" type="text" id="txtproducto" />
+                <InputText class="form-control form-control-sm" type="text" id="txtproducto" @bind-Value="@Articulo.Nombre" />
+                <ValidationMessage For="@(() => Articulo.Nombre)" />
             </div>
+
             <div class="col-sm-2">
                 <label class="form-label">Precio</label>
-                <input class="form-control form-control-sm" type="text" id="txtprecio" />
+                <InputNumber class="form-control form-control-sm" type="text" id="txtprecio" @bind-Value="Articulo.PrecioUnitario" />
+                <ValidationMessage For="@(() => Articulo.PrecioUnitario)" />
             </div>
             <div class="col-sm-2">
                 <label class="form-label">Cantidad</label>
-                <input class="form-control form-control-sm" type="text" id="txtcantidad" />
+                <InputNumber class="form-control form-control-sm" type="text" id="txtcantidad" @bind-Value="DCompra.Cantidad" />
+                <ValidationMessage For="@(() => DCompra.Cantidad)" />
             </div>
             <div class="col-sm-2">
                 <label class="form-label">Marca</label>
-                <input class="form-control form-control-sm" type="text" id="txtmarca" />
+                <InputText class="form-control form-control-sm" type="text" id="txtmarca" @bind-Value="Articulo.Marca" />
+                <ValidationMessage For="@(() => Articulo.Marca)" />
             </div>
 
             <div class="col-sm-3">
                 <button class="btn-success btn-sm">Agregar</button>
                 <button class="btn btn-primary btn-sm" id="btnterminar">Terminar</button>
                 @*<button @onclick="Mostrar">Mostrar</button>*@
-               
+
             </div>
         </div>
         <hr />
@@ -81,22 +122,22 @@
     </div>
 </div>
 @*@if(!string.IsNullOrEmpty(nombre))
-            {
-                <p>Hola, @nombre</p>
-            }*@
+    {
+        <p>Hola, @nombre</p>
+    }*@
 
 @code {
 
-    IJSObjectReference module;
+    ////IJSObjectReference module;
     //string nombre = string.Empty;
-    //aqui se esta cargando el archivo js 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            module = await JS.InvokeAsync<IJSObjectReference>("import", "./JavaScript.js");
-        }
-    }
+    //aqui se esta cargando el archivo js
+    ////protected override async Task OnAfterRenderAsync(bool firstRender)
+    ////{
+    ////    if (firstRender)
+    ////    {
+    ////        module = await JS.InvokeAsync<IJSObjectReference>("import", "./JavaScript.js");
+    ////    }
+    ////}
     //async Task Cargar()
     //{
     //    module = await JS.InvokeAsync<IJSObjectReference>("import", "./JavaScript.js");
@@ -107,10 +148,10 @@
     //    nombre = await module.InvokeAsync<string>("Mostrar", "Coloque su nombre");
     //}
 
-    async Task CargarCompra()
-    {
-        await module.InvokeVoidAsync("AgregarArticulos");
-    }
+    ////async Task CargarCompra()
+    ////{
+    ////    await module.InvokeVoidAsync("AgregarArticulos");
+    ////}
 
 
     //protected async override Task OnAfterRenderAsync(bool firstRender)
@@ -121,6 +162,37 @@
     //    }
     //}
 
+    //probando una nueva idea Martes 4 de octubre
+    [Parameter] public Compra Compra { get; set; }
+    [Parameter] public DCompra DCompra { get; set; }
+    [Parameter] public Proveedor Proveedor { get; set; }
 
+
+    [Parameter] public Articulo Articulo { get; set; }
+    [Parameter] public EventCallback OnvalidSubmit { get; set; }
+    [Parameter] public List<Articulo> ArticulosSeleccionados { get; set; } = new List<Articulo>();
+    [Parameter] public List<Articulo> ArticulosNoSeleccionados { get; set; } = new List<Articulo>();
+    // [Parameter] public List<Articulo>
+
+    private List<SelectorMultipleModel> Seleccionados { get; set; } = new List<SelectorMultipleModel>();
+    private List<SelectorMultipleModel> NoSeleccionados { get; set; } = new List<SelectorMultipleModel>();
+
+
+    protected override void OnInitialized()
+    {
+        Seleccionados = ArticulosSeleccionados.Select(x => new SelectorMultipleModel(x.Id.ToString(), x.Nombre)).ToList();
+        NoSeleccionados = ArticulosNoSeleccionados.Select(x => new SelectorMultipleModel(x.Id.ToString(), x.Nombre)).ToList();
+        //if (!string.IsNullOrWhiteSpace(Pelicula.Poster))
+        //{
+        //    posterTemporal = Pelicula.Poster;
+        //    Pelicula.Poster = null;
+        //}
+    }
+
+    private async Task<IEnumerable<Articulo>> BuscarArticulos(string searchText)
+    {
+        var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos/buscar/{searchText}");
+        return responseHttp.Response;
+    }
 }
 

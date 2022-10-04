@@ -22,5 +22,17 @@ namespace TallerEnrique.Shared.Entidades
         //public float Descuento { get; set; }
         public bool Estado { get; set; }
 
+        public override bool Equals(object obj)///esto es de la prueba para typeHead, pero no me funciono
+        {
+            if (obj is Articulo a2) 
+            {
+                return Id == a2.Id;
+            }
+            return false;
+        }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

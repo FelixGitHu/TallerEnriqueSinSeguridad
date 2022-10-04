@@ -1,11 +1,13 @@
 ﻿@*Modificación del componente de typeahead de Chris Sainty*@
+@*Aqui hay un texbox que va apermitir escribir*@
 
 @typeparam TItem
 @inherits CustomTypeaheadBase<TItem>
 
 <div class="blazored-typeahead" @ref="typeahead">
-    <div class="blazored-typeahead__controls">
-        <input @ref="searchInput"
+    <div class="blazored-typeahead__controls"
+
+         <input @ref="searchInput"
                class="blazored-typeahead__input"
                @bind-value="@SearchText"
                @bind-value:event="oninput"
