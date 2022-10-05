@@ -17,6 +17,7 @@ namespace TallerEnrique.Shared.Entidades
 
         [Required(ErrorMessage = "El Precio es Obligatorio ")]
         public float PrecioUnitario { get; set; }
+
         public bool Estado { get; set; }
 
         //Relacion de las Tablas 

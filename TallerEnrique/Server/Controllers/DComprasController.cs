@@ -57,7 +57,7 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
 
-        //[HttpPost]//probando hacer funcionar el maestro detalle de compras 
+        //[HttpPost]//probando hacer funcionar el maestro detalle de compras con funciones de Java Scripts, no funciono😪😪
         //public IActionResult FormularioDCompra([FromBody] MDetalle mDetalle)
         //{
         //    Compra oCompra = mDetalle.oCompra;

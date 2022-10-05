@@ -18,8 +18,8 @@ namespace TallerEnrique.Shared.Entidades
         [StringLength(100, ErrorMessage = "{0} la marca debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
         public string Marca { get; set; }
         [Required(ErrorMessage = "El Precio  es obligatorio ")]
-        public float PrecioUnitario { get; set; }
-        //public float Descuento { get; set; }
+        public float PrecioCompra { get; set; }
+        public decimal PrecioVenta { get; set; }
         public bool Estado { get; set; }
 
         public override bool Equals(object obj)///esto es de la prueba para typeHead, pero no me funciono
