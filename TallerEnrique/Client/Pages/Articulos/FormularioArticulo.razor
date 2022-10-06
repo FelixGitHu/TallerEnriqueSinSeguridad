@@ -18,10 +18,18 @@
 
 
     <div class="form-group">
-        <label>Precio Unitario:</label>
+        <label>Precio Compra:</label>
         <div>
             <InputNumber class="form-control" @bind-Value="@Articulo.PrecioCompra" />
             <ValidationMessage For="@(() => Articulo.PrecioCompra)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Precio Venta:</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@Articulo.PrecioVenta" />
+            <ValidationMessage For="@(() => Articulo.PrecioVenta)" />
         </div>
     </div>
 

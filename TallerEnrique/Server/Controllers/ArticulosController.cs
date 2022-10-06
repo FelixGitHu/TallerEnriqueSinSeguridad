@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TallerEnrique.Server.Helpers;
+using TallerEnrique.Shared.Complement;
 using TallerEnrique.Shared.Entidades;
 
 namespace TallerEnrique.Server.Controllers
@@ -26,11 +28,11 @@ namespace TallerEnrique.Server.Controllers
             return articulo.Id;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Articulo>>> Get()
-        {
-            return await context.Articulos.ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<List<Articulo>>> Get()
+        //{
+        //    return await context.Articulos.ToListAsync();
+        //}
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Articulo>> Get(int id)
@@ -39,9 +41,9 @@ namespace TallerEnrique.Server.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult> Put(Mecanico mecanico)
+        public async Task<ActionResult> Put(Articulo articulo)
         {
-            context.Attach(mecanico).State = EntityState.Modified;
+            context.Attach(articulo).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return NoContent();
         }
@@ -54,6 +56,16 @@ namespace TallerEnrique.Server.Controllers
             context.Remove(new Articulo { Id = id });
             await context.SaveChangesAsync();
             return NoContent();
+        }
+
+        // paginacion
+
+        [HttpGet]
+        public async Task<ActionResult<List<Articulo>>> Get([FromQuery] Paginacion paginacion)
+        {
+            var queryable = context.Articulos.AsQueryable();
+            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
+            return await queryable.Paginar(paginacion).ToListAsync();
         }
     }
 }

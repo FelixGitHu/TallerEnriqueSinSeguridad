@@ -16,7 +16,8 @@
                     <th>Acción</th>
                     <th>Nombre</th>
                     <th>Marca</th>
-                    <th>Precio</th>
+                    <th>Precio Compra</th>
+                    <th>Precio Venta</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +31,7 @@
                     <td>@item.Nombre</td>
                     <td>@item.Marca</td>
                     <td>@item.PrecioCompra</td>
+                    <td>@item.PrecioVenta</td>
                 </tr>
                 }
             </tbody>
@@ -52,7 +54,7 @@
 
     private async Task BorrarArticulo(Articulo articulo)
     {
-        var responseHttp = await repositorio.Delete($"api/mecanicos/{articulo.Id}");
+        var responseHttp = await repositorio.Delete($"api/articulos/{articulo.Id}");
         if (responseHttp.Error)
         {
             await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
