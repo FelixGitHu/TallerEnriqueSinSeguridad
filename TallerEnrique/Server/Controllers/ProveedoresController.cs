@@ -4,7 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TallerEnrique.Client.Shared;
+using TallerEnrique.Server.Helpers;
 using TallerEnrique.Shared.Entidades;
+using TallerEnrique.Shared.Complement;
 
 namespace TallerEnrique.Server.Controllers
 {
@@ -54,5 +57,15 @@ namespace TallerEnrique.Server.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
+
+        // paginacion
+
+        //[HttpGet]
+        //public async Task<ActionResult<List<Proveedor>>> Get([FromQuery] Paginacion paginacion)
+        //{
+        //    var queryable = context.Proveedors.AsQueryable();
+        //    await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
+        //    return await queryable.Paginar(paginacion).ToListAsync();
+        //}
     }
 }
