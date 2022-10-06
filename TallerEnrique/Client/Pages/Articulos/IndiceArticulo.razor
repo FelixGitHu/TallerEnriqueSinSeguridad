@@ -38,12 +38,35 @@
         </table>
     </HayRegistrosCompleto>
 </ListadoGenerico>
+@*Paginaccion*@
+<Paginacion PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
+            PaginasTotales="paginasTotales"></Paginacion>
 
 @code {
+    //Paginacion
+    private int paginaActual = 1;
+    private int paginasTotales;
+
     public List<Articulo> Articulos { get; set; }
     protected async override Task OnInitializedAsync()
     {
         await Cargar();
+    }
+    //Paginacion
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+    private async Task Cargar(int pagina = 1)
+    {
+        var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos?pagina={pagina}");
+        if (!responseHttp.Error)
+        {
+            Articulos = responseHttp.Response;
+            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
+            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+        }
     }
 
     private async Task Cargar()
