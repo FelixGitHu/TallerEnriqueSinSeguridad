@@ -1,0 +1,42 @@
+﻿<EditForm Model="DCompra" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Nombre:</label>
+        <div>
+            <InputText class="form-control" @bind-Value="@DCompra.Articulo.Nombre" />
+            <ValidationMessage For="@(() => DCompra.Articulo.Nombre)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Apellido:</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@DCompra.Cantidad" />
+            <ValidationMessage For="@(() => DCompra.Cantidad)" />
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label>Teléfono:</label>
+        <div>
+            <InputNumber class="form-control" @bind-Value="@DCompra.PrecioUnitario" />
+            <ValidationMessage For="@(() => DCompra.PrecioUnitario)" />
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-6">
+            <button class="btn btn-success" type="submit">Guardar Cambios</button>
+            <a asp-page="mecanico" class="btn btn-success">volver</a>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public DCompra DCompra { get; set; }
+    [Parameter] public Articulo Articulo { get; set; }
+    [Parameter] public Proveedor Proveedor { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
+}
