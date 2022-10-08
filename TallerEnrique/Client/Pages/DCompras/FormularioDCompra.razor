@@ -1,42 +1,118 @@
 ﻿<EditForm Model="DCompra" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <div class="form-group">
-        <label>Nombre:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@DCompra.Articulo.Nombre" />
-            <ValidationMessage For="@(() => DCompra.Articulo.Nombre)" />
+    <div class="card">
+        <div class="card-header">
+            Compras
         </div>
-    </div>
+        <div class="card-body">
+            <div class="row ">
+                <div class=" form-group col-sm-4">
+                    <label>Nomero Factura:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Compra.NFactura" />
+                        <ValidationMessage For="@(() => Compra.NFactura)" />
+                    </div>
+                </div>
+                <div class=" form-group col-sm-4">
+                    <label>Proveedor:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Proveedor.NombreEmpresa" />
+                        <ValidationMessage For="@(() => Proveedor.NombreEmpresa)" />
+                    </div>
+                </div>
+                <div class=" form-group col-sm-4">
+                    <label>Fecha:</label>
+                    <div>
+                        <InputDate class="form-control" @bind-Value="@Compra.Fecha" />
+                        <ValidationMessage For="@(() => Compra.Fecha)" />
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row align-items-center">
+                <div class=" form-group col-sm-2">
+                    <label>Nombre Producto:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Articulo.Nombre" />
+                        <ValidationMessage For="@(() => Articulo.Nombre)" />
+                    </div>
+                </div>
+                <div class=" form-group col-sm-2">
+                    <label>Marca:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Articulo.Marca" />
+                        <ValidationMessage For="@(() => Articulo.Marca)" />
+                    </div>
+                </div>
 
-    <div class="form-group">
-        <label>Apellido:</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@DCompra.Cantidad" />
-            <ValidationMessage For="@(() => DCompra.Cantidad)" />
-        </div>
-    </div>
+                <div class="form-group col-sm-2">
+                    <label>Cantidad:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@DCompra.Cantidad" />
+                        <ValidationMessage For="@(() => DCompra.Cantidad)" />
+                    </div>
+                </div>
 
 
-    <div class="form-group">
-        <label>Teléfono:</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@DCompra.PrecioUnitario" />
-            <ValidationMessage For="@(() => DCompra.PrecioUnitario)" />
-        </div>
-    </div>
-
-    <div class="row">
-
-        <div class="col-6">
-            <button class="btn btn-success" type="submit">Guardar Cambios</button>
-            <a asp-page="mecanico" class="btn btn-success">volver</a>
+                <div class="form-group col-sm-2">
+                    <label>Precio:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@DCompra.PrecioUnitario" />
+                        <ValidationMessage For="@(() => DCompra.PrecioUnitario)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-3">
+                    <button class="btn-success ">Agregar</button>
+                    <button class="btn-primary " id="btnterminar">Terminar</button>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    <table class="table table-bordered table-sm" id="tbproducto">
+                        <thead>
+                            <tr class="table-active">
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Marca</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @*@foreach (var item in Articulos)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="/dCompras/editar/@item.Id" class="btn btn-success">Editar</a>
+                                        <button @onclick="@(() => BorrarDCompra(item))" class="btn btn-danger">Borrar</button>
+                                    </td>
+                                    <td>@item.Nombre</td>
+                                    <td>@item.PrecioCompra</td>
+                                    <td>@item.Ca</td>
+                                </tr>
+                            }*@
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a asp-page="mecanico" class="btn btn-success">volver</a>
+                </div>
+            </div>
         </div>
     </div>
 </EditForm>
 
 @code {
+
+    [Parameter] public Articulo Articulo { get; set; } = new Articulo();
+    public List<Articulo> Articulos { get; set; }
+    [Parameter] public Compra Compra { get; set; } = new Compra();
+    [Parameter] public Proveedor Proveedor { get; set; } = new Proveedor();
+
     [Parameter] public DCompra DCompra { get; set; }
-    [Parameter] public Articulo Articulo { get; set; }
-    [Parameter] public Proveedor Proveedor { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
 }
