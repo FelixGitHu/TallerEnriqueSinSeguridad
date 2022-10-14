@@ -28,11 +28,11 @@ namespace TallerEnrique.Server.Controllers
             return proveedor.Id;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Proveedor>>> Get()
-        {
-            return await context.Proveedors.ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<List<Proveedor>>> Get()
+        //{
+        //    return await context.Proveedors.ToListAsync();
+        //}
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Proveedor>> Get(int id)
@@ -60,12 +60,21 @@ namespace TallerEnrique.Server.Controllers
 
         // paginacion
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<Proveedor>>> Get([FromQuery] Paginacion paginacion)
+        [HttpGet]
+        public async Task<ActionResult<List<Proveedor>>> Get([FromQuery] Paginacion paginacion)
+        {
+            var queryable = context.Proveedors.AsQueryable();
+            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
+            return await queryable.Paginar(paginacion).ToListAsync();
+        }
+
+        //selcctor multiple
+        //[HttpGet("buscar/{textobusqueda}")]
+        //public async Task<ActionResult<List<Proveedor>>> Get (string textoBusqueda)
         //{
-        //    var queryable = context.Proveedors.AsQueryable();
-        //    await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
-        //    return await queryable.Paginar(paginacion).ToListAsync();
+        //    if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Proveedor>(); }
+        //    textoBusqueda = textoBusqueda.ToLower();
+        //    return await context.Proveedors.Where(x => x.NombreEmpresa.ToLower().Contains(textoBusqueda)).ToListAsync();
         //}
     }
 }

@@ -1,45 +1,53 @@
 ﻿<EditForm Model="Articulo" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <div class="form-group">
-        <label>Nombre:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Articulo.Nombre" />
-            <ValidationMessage For="@(() => Articulo.Nombre)" />
+    <div class="card">
+        <div class="card-header">
+            Artículos
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Nombre:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Articulo.Nombre" />
+                        <ValidationMessage For="@(() => Articulo.Nombre)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Marca:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Articulo.Marca" />
+                        <ValidationMessage For="@(() => Articulo.Marca)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Precio Compra:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Articulo.PrecioCompra" />
+                        <ValidationMessage For="@(() => Articulo.PrecioCompra)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Precio Venta:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Articulo.PrecioVenta" />
+                        <ValidationMessage For="@(() => Articulo.PrecioVenta)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a href="articulos" class="btn btn-success">Cancelar</a>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="form-group">
-        <label>Marca:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Articulo.Marca" />
-            <ValidationMessage For="@(() => Articulo.Marca)" />
-        </div>
-    </div>
-
-
-    <div class="form-group">
-        <label>Precio Compra:</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@Articulo.PrecioCompra" />
-            <ValidationMessage For="@(() => Articulo.PrecioCompra)" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Precio Venta:</label>
-        <div>
-            <InputNumber class="form-control" @bind-Value="@Articulo.PrecioVenta" />
-            <ValidationMessage For="@(() => Articulo.PrecioVenta)" />
-        </div>
-    </div>
-
-    <div class="row">
-
-        <div class="col-6">
-            <button class="btn btn-success" type="submit">Guardar Cambios</button>
-            <a asp-page="articulos" class="btn btn-success">volver</a>
-        </div>
-    </div>
+ 
 </EditForm>
 
 @code {

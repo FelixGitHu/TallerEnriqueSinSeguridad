@@ -1,0 +1,69 @@
+﻿@page "/compras"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Compras</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="compras/crear">Agregar Compras</a>
+</div>
+
+<ListadoGenerico Listado="Compras">
+    <HayRegistrosCompleto>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>N° Factura</th>
+                    <th>Fecha</th>
+                    <th>Proveedor</th>
+                    <th>Existencia</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Compras)
+                {
+                    <tr>
+                        <td>
+                            <a href="/compras/editar/@item.Id" class="btn btn-success">Editar</a>
+                            <button @onclick="@(() => BorrarCompra(item))" class="btn btn-danger">Borrar</button>
+                        </td>
+                        <td>@item.NFactura</td>
+                        <td>@item.Fecha</td>
+                        <td>@item.Proveedor</td>
+                        <td>@item.InventarioId</td>
+                        <td>@item.CostoTotal</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@code {
+    public List<Compra> Compras { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Compra>>("api/compras");
+        Compras = responseHttp.Response;
+    }
+
+    private async Task BorrarCompra(Compra compra)
+    {
+        var responseHttp = await repositorio.Delete($"api/compras/{compra.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+}

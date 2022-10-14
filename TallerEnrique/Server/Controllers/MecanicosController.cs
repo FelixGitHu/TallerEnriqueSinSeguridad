@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TallerEnrique.Server;
+using TallerEnrique.Server.Helpers;
+using TallerEnrique.Shared.Complement;
 using TallerEnrique.Shared.Entidades;
 
 namespace TallerEnrique.Server.Controllers
@@ -26,10 +28,19 @@ namespace TallerEnrique.Server.Controllers
             return mecanico.Id;
         }
 
+        //[HttpGet]
+        //public async Task<ActionResult<List<Mecanico>>> Get()
+        //{
+        //    return await context.Mecanicos.ToListAsync();
+        //}
+        // paginacion
+
         [HttpGet]
-        public async Task<ActionResult<List<Mecanico>>> Get()
+        public async Task<ActionResult<List<Mecanico>>> Get([FromQuery] Paginacion paginacion)
         {
-            return await context.Mecanicos.ToListAsync();
+            var queryable = context.Mecanicos.AsQueryable();
+            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
+            return await queryable.Paginar(paginacion).ToListAsync();
         }
 
         [HttpGet("{id}")]
@@ -55,5 +66,7 @@ namespace TallerEnrique.Server.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
+
+       
     }
 }

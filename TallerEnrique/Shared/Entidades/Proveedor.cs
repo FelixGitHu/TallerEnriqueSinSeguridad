@@ -40,5 +40,20 @@ namespace TallerEnrique.Shared.Entidades
         public string Telefono { get; set; }
 
         public bool Estado { get; set; }
+
+        //para que no se pueda seleccionar un proveedor mas de una vez
+        //public override bool Equals(object obj)
+        //{
+        //    if( obj is Proveedor prov)
+        //    {
+        //        return Id == prov.Id;
+        //    }
+        //    return false;
+        //}
+
+        //public override int GetHashCode()
+        //{
+        //    return base.GetHashCode();
+        //}
     }
 }

@@ -22,26 +22,50 @@
             <tbody>
                 @foreach (var item in Mecanicos)
                 {
-                <tr>
-                    <td>
-                        <a href="/mecanicos/editar/@item.Id" class="btn btn-success">Editar</a>
-                        <button @onclick="@(() => BorrarMecanico(item))" class="btn btn-danger">Borrar</button>
-                    </td>
-                    <td>@item.Nombre</td>
-                    <td>@item.Apellido</td>
-                    <td>@item.Telefono</td>
-                </tr>
+                    <tr>
+                        <td>
+                            <a href="/mecanicos/editar/@item.Id" class="btn btn-success">Editar</a>
+                            <button @onclick="@(() => BorrarMecanico(item))" class="btn btn-danger">Borrar</button>
+                        </td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Apellido</td>
+                        <td>@item.Telefono</td>
+                    </tr>
                 }
             </tbody>
         </table>
     </HayRegistrosCompleto>
 </ListadoGenerico>
+@*Paginaccion*@
+<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
+              PaginasTotales="paginasTotales"></Paginaciones>
 
 @code {
+    //Paginacion
+    private int paginaActual = 1;
+    private int paginasTotales;
+
     public List<Mecanico> Mecanicos { get; set; }
     protected async override Task OnInitializedAsync()
     {
         await Cargar();
+    }
+
+    //Paginacion
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+    private async Task Cargar(int pagina = 1)
+    {
+        var responseHttp = await repositorio.Get<List<Mecanico>>($"api/mecanicos?pagina={pagina}");
+        if (!responseHttp.Error)
+        {
+            Mecanicos = responseHttp.Response;
+            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
+            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+        }
     }
 
     private async Task Cargar()

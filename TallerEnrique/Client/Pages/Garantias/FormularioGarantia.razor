@@ -1,27 +1,32 @@
 ﻿<EditForm Model="Garantia" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
-    <div class="form-group">
-        <label>Tiempo de la garantía:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Garantia.TiempoGarantia" />
-            <ValidationMessage For="@(() => Garantia.TiempoGarantia)" />
+    <div class="card">
+        <div class="card-header">
+            Garantías
         </div>
-    </div>
-    <div class="form-group">
-        <label>Políticas de la garantía:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Garantia.Politicas" />
-            <ValidationMessage For="@(() => Garantia.Politicas)" />
-        </div>
-    </div>
-
-
-
-    <div class="row">
-
-        <div class="col-6">
-            <button class="btn btn-success" type="submit">Guardar Cambios</button>
-            <a asp-page="garantia" class="btn btn-success">volver</a>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-6">
+                    <label>Tiempo de la garantía:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Garantia.TiempoGarantia" />
+                        <ValidationMessage For="@(() => Garantia.TiempoGarantia)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    <label>Políticas de la garantía:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Garantia.Politicas" />
+                        <ValidationMessage For="@(() => Garantia.Politicas)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a href="garantias" class="btn btn-success">Cancelar</a>
+                </div>
+            </div>
         </div>
     </div>
 </EditForm>

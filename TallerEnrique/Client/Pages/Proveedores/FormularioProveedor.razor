@@ -1,72 +1,79 @@
 ﻿<EditForm Model="Proveedor" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header">
+            Proveedores
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Nombre Empresa:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Proveedor.NombreEmpresa" />
+                        <ValidationMessage For="@(() => Proveedor.NombreEmpresa)" />
+                    </div>
+                </div>
 
-    <div class="form-group ">
-        <label>Nombre Empresa:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Proveedor.NombreEmpresa" />
-            <ValidationMessage For="@(() => Proveedor.NombreEmpresa)" />
+                <div class="form-group col-sm-4">
+                    <label>Nombre Contacto:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Proveedor.NombreContacto" />
+                        <ValidationMessage For="@(() => Proveedor.NombreContacto)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Dirección:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Proveedor.Direccion" />
+                        <ValidationMessage For="@(() => Proveedor.Direccion)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Departamento:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Proveedor.Departamento" />
+                        <ValidationMessage For="@(() => Proveedor.Departamento)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Ciudad</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Proveedor.Ciudad"></InputText>
+                        <ValidationMessage For="@(() => Proveedor.Ciudad)"></ValidationMessage>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Email:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Proveedor.Email" />
+                        <ValidationMessage For="@(() => Proveedor.Email)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Teléfono:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Proveedor.Telefono" />
+                        <ValidationMessage For="@(() => Proveedor.Telefono)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a href="proveedores" class="btn btn-success">Cancelar</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="form-group">
-        <label>Nombre Contacto:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Proveedor.NombreContacto" />
-            <ValidationMessage For="@(() => Proveedor.NombreContacto)" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Dirección:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Proveedor.Direccion" />
-            <ValidationMessage For="@(() => Proveedor.Direccion)" />
-        </div>
-    </div>
-
-
-    <div class="form-group">
-        <label>Departamento:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Proveedor.Departamento" />
-            <ValidationMessage For="@(() => Proveedor.Departamento)" />
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Ciudad</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Proveedor.Ciudad"></InputText>
-            <ValidationMessage For="@(() => Proveedor.Ciudad)"></ValidationMessage>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label>Email:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Proveedor.Email" />
-            <ValidationMessage For="@(() => Proveedor.Email)" />
-        </div>
-    </div>
-
-
-    <div class="form-group">
-        <label>Teléfono:</label>
-        <div>
-            <InputText class="form-control" @bind-Value="@Proveedor.Telefono" />
-            <ValidationMessage For="@(() => Proveedor.Telefono)" />
-        </div>
-    </div>
-
-
-    <div class="row">
-
-        <div class="col-6">
-            <button class="btn btn-success" type="submit">Guardar Cambios</button>
-            <a asp-page="mecanico" class="btn btn-success">volver</a>
-        </div>
-    </div>
+    
 </EditForm>
 
 @code {
