@@ -16,7 +16,9 @@
                     <th>N° Factura</th>
                     <th>Fecha</th>
                     <th>Proveedor</th>
-                    <th>Existencia</th>
+                    @*<th>Existencia</th>*@
+                    <th>Impuesto</th>
+                    <th>Subtotal</th>
                     <th>Total</th>
                 </tr>
             </thead>
@@ -31,7 +33,9 @@
                         <td>@item.NFactura</td>
                         <td>@item.Fecha</td>
                         <td>@item.Proveedor</td>
-                        <td>@item.InventarioId</td>
+                        @*<td>@item.InventarioId</td>*@
+                        <td>@item.IVA</td>
+                        <td>@item.SubTotal</td>
                         <td>@item.CostoTotal</td>
                     </tr>
                 }

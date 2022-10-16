@@ -5,7 +5,9 @@
 
 <h3>Agregar Compra</h3>
 
-<FormularioCompra OnValidSubmit="Crear" Compra="Compras"/>
+@*<FormCompra OnValidSubmit="Crear" Compra="Compras"/>*@
+<FormCompra OnValidSubmit="Crear" Compras="Compras"/>
+
 
 @code {
     private Compra Compras = new Compra();

@@ -27,12 +27,12 @@ namespace TallerEnrique.Server.Controllers
             await context.SaveChangesAsync();
             return articulo.Id;
         }
-
-        //[HttpGet]
-        //public async Task<ActionResult<List<Articulo>>> Get()
-        //{
-        //    return await context.Articulos.ToListAsync();
-        //}
+        //General
+        [HttpGet("cargartodo")]
+        public async Task<ActionResult<List<Articulo>>> Get()
+        {
+            return await context.Articulos.ToListAsync();
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Articulo>> Get(int id)
@@ -56,6 +56,15 @@ namespace TallerEnrique.Server.Controllers
             context.Remove(new Articulo { Id = id });
             await context.SaveChangesAsync();
             return NoContent();
+        }
+        //para buscar articulos
+        [HttpGet("buscar/{textoBusqueda}")]
+        public async Task<ActionResult<List<Articulo>>> Get(string textoBusqueda)
+        {
+            if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Articulo>(); }
+            textoBusqueda = textoBusqueda.ToLower();
+            return await context.Articulos
+                .Where(x => x.Nombre.ToLower().Contains(textoBusqueda)).ToListAsync();
         }
 
         // paginacion

@@ -13,10 +13,12 @@ namespace TallerEnrique.Shared.Entidades
         public int Id { get; set; }
 
         [Required(ErrorMessage = "La Cantidad es Obligatorio ")]
-        public int Cantidad { get; set; }
+        public int Cantidad { get; set; } = 0;
 
         [Required(ErrorMessage = "El Precio es Obligatorio ")]
-        public float PrecioUnitario { get; set; }
+        public decimal PrecioUnitario { get; set; } = 0;
+
+        public decimal Descuento { get; set; } = 0;
 
         public bool Estado { get; set; }
 

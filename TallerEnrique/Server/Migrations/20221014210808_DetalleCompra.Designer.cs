@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TallerEnrique.Server;
 
 namespace TallerEnrique.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221014210808_DetalleCompra")]
+    partial class DetalleCompra
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,8 +111,8 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("CostoTotal")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("CostoTotal")
+                        .HasColumnType("real");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
@@ -118,8 +120,8 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("IVA")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("IVA")
+                        .HasColumnType("real");
 
                     b.Property<int>("InventarioId")
                         .HasColumnType("int");
@@ -130,8 +132,8 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<int>("ProveedorId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("SubTotal")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("SubTotal")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -190,14 +192,14 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<int?>("CompraId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Descuento")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("Descuento")
+                        .HasColumnType("real");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("PrecioUnitario")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("PrecioUnitario")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -595,7 +597,7 @@ namespace TallerEnrique.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("TallerEnrique.Shared.Entidades.Compra", "Compra")
-                        .WithMany("DCompras")
+                        .WithMany()
                         .HasForeignKey("CompraId");
 
                     b.Navigation("Articulo");
@@ -703,11 +705,6 @@ namespace TallerEnrique.Server.Migrations
                     b.Navigation("Moneda");
 
                     b.Navigation("Vehiculo");
-                });
-
-            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>
-                {
-                    b.Navigation("DCompras");
                 });
 #pragma warning restore 612, 618
         }

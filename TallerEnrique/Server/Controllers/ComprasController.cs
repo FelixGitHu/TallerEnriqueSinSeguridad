@@ -33,16 +33,54 @@ namespace TallerEnrique.Server.Controllers
             return await context.Compras.ToListAsync();
         }
 
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Compra>> Get(int id)
+        //{
+        //    return await context.Compras.FirstOrDefaultAsync(x => x.Id == id);
+        //}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Compra>> Get(int id)
+        public async Task<ActionResult<Compra>> GetPol(int id)
         {
-            return await context.Compras.FirstOrDefaultAsync(x => x.Id == id);
+            var compra = await context.Compras
+                .Include(x => x.DCompras)
+                .FirstOrDefaultAsync(x => x.Id == id);
+                if (compra == null)
+            {
+                return NotFound();
+            }
+            return compra;
         }
+
+        //[HttpPut]
+        //public async Task<ActionResult> Put(Compra compra)
+        //{
+        //    context.Attach(compra).State = EntityState.Modified;
+        //    await context.SaveChangesAsync();
+        //    return NoContent();
+        //}
 
         [HttpPut]
         public async Task<ActionResult> Put(Compra compra)
         {
             context.Attach(compra).State = EntityState.Modified;
+            foreach ( var detalle in compra.DCompras)
+            {
+                if ( detalle.Id != 0)
+                {
+                    context.Entry(detalle).State = EntityState.Modified;
+                }
+                else
+                {
+                    context.Entry(detalle).State = EntityState.Added;
+                }
+            } 
+            var ListDetalle = compra.DCompras.Select(x => x.Id).ToList();
+            var DetalleBorrar = await context
+                .DCompras
+                .Where(x => !ListDetalle.Contains(x.Id) && x.CompraId == compra.Id)
+                .ToListAsync();
+
+            context.RemoveRange(DetalleBorrar);
             await context.SaveChangesAsync();
             return NoContent();
         }

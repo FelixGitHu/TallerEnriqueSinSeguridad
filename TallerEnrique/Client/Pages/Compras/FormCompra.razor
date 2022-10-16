@@ -1,0 +1,180 @@
+﻿@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager
+@*@inject ISnackbar Snackbar*@
+
+<EditForm Model="Compras" OnValidSubmit="OnValidSubmit">
+    @*<DataAnnotationsValidator />*@
+    <div class="card">
+        <div class=" card-header">
+            Compras
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <button class="btn btn-success" type="submit">
+                        Guardar Cambios
+                    </button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>N° Factura:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Compras.NFactura" />
+                        <ValidationMessage For="@(() => Compras.NFactura)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Fecha de Compra:</label>
+                    <div>
+                        <InputDate class="form-control" @bind-Value="@Compras.Fecha" />
+                        <ValidationMessage For="@(() => Compras.Fecha)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Proveedor:</label>
+                    <div>
+                        <InputSelectNumber class="form-control" @bind-Value="Compras.ProveedorId">
+                            <option value="0">Proveedor Ocacional</option>
+                            @foreach (var item in ProveedoresSeleccionados)
+                            {
+                                <option value="@item.Id">@item.NombreEmpresa &nbsp; @item.NombreContacto</option>
+                            }
+                        </InputSelectNumber>
+                        <ValidationMessage For="@(() => Compras.ProveedorId)" />
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="form-group col-sm-4">
+                    <label>SubTotal:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Compras.SubTotal" readonly="readonly" />
+                        <ValidationMessage For="@(() => Compras.SubTotal)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>I.V.A:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Compras.IVA" readonly="readonly" />
+                        <ValidationMessage For="@(() => Compras.IVA)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Total:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Compras.CostoTotal" readonly="readonly" />
+                        <ValidationMessage For="@(() => Compras.CostoTotal)" />
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="col-md-4 mb-6">
+                    <button type="button" class="btn btn-secondary"
+                            @onclick="@(() => Compras.DCompras.Add(new DCompra()))">
+                        Agregar Detalles
+                    </button>
+                </div>
+                @for (var i = 0; i < Compras.DCompras.Count; i++)
+                {
+                    var indice = i;
+                    var detalle = Compras.DCompras[i];
+
+                    <h5>Detalles de la Compra @(i + 1)</h5>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Productos:</label>
+                            <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
+                                <option value="0" disabled> --- Seleccione un producto ---</option>
+                                @foreach (var item in ProductosSeleccionados)
+                                    {
+                                    <option value="@item.Id">@item.Nombre</option>
+                                    }
+                            </InputSelectNumber>
+                            <ValidationMessage For="@(() => detalle.ArticuloId)" /> @*//  para validar que sea un Id*@
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Descuento:</label>
+                            <div>
+                                <InputNumber class="form-control" @bind-Value="@detalle.Descuento" readonly="readonly" />
+                                <ValidationMessage For="@(() => detalle.Descuento)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Cantidad:</label>
+                            <div>
+                                <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" readonly="readonly" />
+                                <ValidationMessage For="@(() => detalle.Cantidad)" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label>Precio:</label>
+                            <div>
+                                <InputNumber class="form-control" @bind-Value="@detalle.PrecioUnitario" readonly="readonly" />
+                                <ValidationMessage For="@(() => detalle.PrecioUnitario)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-danger btn-sm"
+                                @onclick="@(() => Compras.DCompras.RemoveAt(indice))">
+                            Eliminar
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+    [Parameter] public Compra Compras { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public List<Proveedor> ProveedoresSeleccionados { get; set; } = new List<Proveedor>();
+    [Parameter] public List<Articulo> ProductosSeleccionados { get; set; } = new List<Articulo>();
+    private Articulo Articulo = new Articulo();
+    private List<Articulo> ListArticulos = new List<Articulo>();
+
+    string valorSelect = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ObtenerProductos();
+        await ObtenerProveedores();
+    }
+
+    private void Cancelar()
+    {
+        Compras = new Compra();
+    }
+
+    private async Task ObtenerProveedores()
+    {
+        var httpResponse = await repositorio.Get<List<Proveedor>>("api/proveedores/cargartodos");
+        ProveedoresSeleccionados = httpResponse.Response;
+    }
+    private async Task ObtenerProductos()
+    {
+        var httpResponse = await repositorio.Get<List<Articulo>>("api/articulos/cargartodos");
+        ProductosSeleccionados = httpResponse.Response;
+    }
+    private async Task<IEnumerable<Articulo>> BuscarProductos(string searchText)
+    {
+        var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos/buscar/{searchText}"); //aqui busca el método "buscar" en el controlador de producto
+        return responseHttp.Response;
+    }
+
+    //No se para que es esto
+    void OnChange(object value)
+    {
+        var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+
+        Console.WriteLine($"Value changed to {str}");
+    }
+}

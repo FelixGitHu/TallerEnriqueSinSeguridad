@@ -27,12 +27,12 @@ namespace TallerEnrique.Server.Controllers
             await context.SaveChangesAsync();
             return proveedor.Id;
         }
-
-        //[HttpGet]
-        //public async Task<ActionResult<List<Proveedor>>> Get()
-        //{
-        //    return await context.Proveedors.ToListAsync();
-        //}
+        //generico
+        [HttpGet("cargartodos")]
+        public async Task<ActionResult<List<Proveedor>>> Get()
+        {
+            return await context.Proveedors.ToListAsync();
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Proveedor>> Get(int id)
