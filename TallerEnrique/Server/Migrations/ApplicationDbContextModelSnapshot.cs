@@ -589,7 +589,7 @@ namespace TallerEnrique.Server.Migrations
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.DCompra", b =>
                 {
                     b.HasOne("TallerEnrique.Shared.Entidades.Articulo", "Articulo")
-                        .WithMany()
+                        .WithMany("DCompras")
                         .HasForeignKey("ArticuloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -703,6 +703,11 @@ namespace TallerEnrique.Server.Migrations
                     b.Navigation("Moneda");
 
                     b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Articulo", b =>
+                {
+                    b.Navigation("DCompras");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>

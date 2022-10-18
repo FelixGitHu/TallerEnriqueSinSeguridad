@@ -29,10 +29,10 @@ namespace TallerEnrique.Shared.Entidades
         public string Placa { get; set; }
 
         [Required(ErrorMessage = "La Fecha de Entrada es Obligatorio ")]
-        public DateTime FechaEntrada { get; set; }
+        public DateTime FechaEntrada { get; set; } = DateTime.Today;
 
         [Required(ErrorMessage = "La fecha de salida es obligatorio ")]
-        public DateTime FechaSalida { get; set; }
+        public DateTime FechaSalida { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "El Año es obligatorio ")]
         [StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]

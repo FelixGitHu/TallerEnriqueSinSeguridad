@@ -1,0 +1,79 @@
+﻿@*@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject NavigationManager navigationManager*@
+
+<EditForm Model="Servicio" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header">
+            Servicios
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Categoria:</label>
+                    <div>
+                        <InputSelectNumber class="form-control" @bind-Value="Servicio.CategoriaId">
+                            <option value="0">--Categoria--</option>
+                            @foreach (var item in CategoriasSeleccionados)
+                            {
+                                <option value="@item.Id">@item.Nombre &nbsp; @item.Descripcion</option>
+                            }
+                        </InputSelectNumber>
+                        <ValidationMessage For="@(() => Servicio.CategoriaId)" />
+                    </div>
+                </div>
+                @*<div class="form-group col-sm-6">
+                        <label>Categoria:</label>
+                        <div>
+                            <InputText class="form-control" @bind-Value="@Servicio.Categoria.Nombre" />
+                            <ValidationMessage For="@(() => Servicio.Categoria.Nombre)" />
+                        </div>
+                    </div>*@
+
+                <div class="form-group col-sm-4">
+                    <label>Descripcion:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Servicio.Descripcion" />
+                        <ValidationMessage For="@(() => Servicio.Descripcion)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Precio:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Servicio.Precio" />
+                        <ValidationMessage For="@(() => Servicio.Precio)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a href="categorias" class="btn btn-success">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</EditForm>
+
+@code {
+    [Parameter] public Servicio Servicio { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public List<Categoria> CategoriasSeleccionados { get; set; } = new List<Categoria>();
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    //await ObtenerProductos();
+    //    await ObtenerCategorias();
+    //}
+
+    //private async Task ObtenerCategorias()
+    //{
+    //    var httpResponse = await repositorio.Get<List<Categoria>>("api/categorias/cargartodos");
+    //    CategoriasSeleccionados = httpResponse.Response;
+    //}
+
+}

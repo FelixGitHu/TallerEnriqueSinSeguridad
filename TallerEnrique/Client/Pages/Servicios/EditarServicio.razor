@@ -1,0 +1,53 @@
+﻿@page "/servicios/editar/{ServicioId:int}"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensaje
+@inject NavigationManager navigationManager
+
+<h3>Editar Servicio</h3>
+
+@if (Servicio == null)
+{
+    <text>Cargando...</text>
+}
+else
+{
+    <FormularioServicio OnValidSubmit="Editar" Servicio="Servicio" />
+}
+
+@code {
+    [Parameter] public int ServicioId { get; set; }
+    private Servicio Servicio;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var httpResponse = await repositorio.Get<Servicio>($"api/servicios/{ServicioId}");
+        if (httpResponse.Error)
+        {
+            if (httpResponse.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("servicios");
+            }
+            else
+            {
+                await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+            }
+        }
+        else
+        {
+            Servicio = httpResponse.Response;
+        }
+    }
+
+    private async void Editar()
+    {
+        var httpResponse = await repositorio.Put("api/servicios", Servicio);
+        if (httpResponse.Error)
+        {
+            await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+        }
+        else
+        {
+            navigationManager.NavigateTo("servicios");
+        }
+    }
+}

@@ -25,11 +25,14 @@ namespace TallerEnrique.Shared.Entidades
         //Relacionando las tablas 
         public int InventarioId { get; set; }
         public int ProveedorId { get; set; }
+        ///public int ArticuloId { get; set; }
         //public int UsuarioId { get; set; }
 
         public Inventario Inventario { get; set; }
         public Proveedor Proveedor { get; set; }
-       // public Mecanico Mecanico { get; set; }
-       public List<DCompra> DCompras { get; set; } = new List<DCompra>(); //probando el maestro detalle
+        //public Articulo Articulo { get; set; } //probando el maestro detalle
+        // public Mecanico Mecanico { get; set; }
+        public List<DCompra> DCompras { get; set; } = new List<DCompra>(); //probando el maestro detalle
+        //public List<Articulo> Articulos { get; set; } = new List<Articulo>(); //probando el maestro detalle
     }
 }

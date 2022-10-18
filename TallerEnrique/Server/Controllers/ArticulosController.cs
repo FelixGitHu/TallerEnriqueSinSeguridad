@@ -33,6 +33,13 @@ namespace TallerEnrique.Server.Controllers
         {
             return await context.Articulos.ToListAsync();
         }
+        //probando el maestro detalle/ si no funciona xf borrarlo
+        //[HttpGet("{articuloId}/articuloId")]
+        //public async Task<List<Articulo>> GetPrecio(int articuloId)
+        //{
+        //    return await context.Articulos.Where(x => x.Id == articuloId)
+        //        .OrderBy(x => x.Nombre).ToListAsync();
+        //}
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Articulo>> Get(int id)

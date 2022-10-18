@@ -10,8 +10,8 @@ using TallerEnrique.Server;
 namespace TallerEnrique.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221014212037_DetalleCompras")]
-    partial class DetalleCompras
+    [Migration("20221017162602_MaestroDetalleCompra")]
+    partial class MaestroDetalleCompra
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -591,7 +591,7 @@ namespace TallerEnrique.Server.Migrations
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.DCompra", b =>
                 {
                     b.HasOne("TallerEnrique.Shared.Entidades.Articulo", "Articulo")
-                        .WithMany()
+                        .WithMany("DCompras")
                         .HasForeignKey("ArticuloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -705,6 +705,11 @@ namespace TallerEnrique.Server.Migrations
                     b.Navigation("Moneda");
 
                     b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Articulo", b =>
+                {
+                    b.Navigation("DCompras");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>

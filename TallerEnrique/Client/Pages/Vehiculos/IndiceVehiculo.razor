@@ -1,0 +1,78 @@
+﻿
+@page "/vehiculos"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Vehiculos</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="vehiculos/crear">Agregar Vehiculo</a>
+</div>
+
+<ListadoGenerico Listado="Vehiculos">
+    <HayRegistrosCompleto>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Marca</th>
+                    <th>Modelo</th>
+                    <th>Color</th>
+                    <th>Año</th>
+                    <th>Placa</th>
+                    <th>Fecha de Entrada</th>
+                    <th>Fecha de Salida</th>
+                    <th>Kilometraje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Vehiculos)
+                {
+                <tr>
+                    <td>
+                        <a href="/vehiculos/editar/@item.Id" class="btn btn-success">Editar</a>
+                        <button @onclick="@(() => BorrarVehiculo(item))" class="btn btn-danger">Borrar</button>
+                    </td>
+                    <td>@item.Marca</td>
+                    <td>@item.Modelo</td>
+                    <td>@item.Color</td>
+                    <td>@item.YearCar</td>
+                    <td>@item.Placa</td>
+                    <td>@item.FechaEntrada</td>
+                    <td>@item.FechaSalida</td>
+                    <td>@item.Kilometraje</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@code {
+    public List<Vehiculo> Vehiculos { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Vehiculo>>("api/vehiculos");
+        Vehiculos = responseHttp.Response;
+    }
+
+    private async Task BorrarVehiculo(Vehiculo vehiculo)
+    {
+        var responseHttp = await repositorio.Delete($"api/vehiculoc/{vehiculo.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+}

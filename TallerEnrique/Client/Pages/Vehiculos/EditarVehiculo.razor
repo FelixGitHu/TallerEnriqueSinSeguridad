@@ -1,0 +1,53 @@
+﻿@page "/vehiculos/editar/{VehiculoId:int}"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensaje
+@inject NavigationManager navigationManager
+
+<h3>Editar Auto</h3>
+
+@if (Vehiculo == null)
+{
+    <text>Cargando...</text>
+}
+else
+{
+    <FormularioVehiculo OnValidSubmit="Editar" Vehiculo="Vehiculo" />
+}
+
+@code {
+    [Parameter] public int VehiculoId { get; set; }
+    private Vehiculo Vehiculo;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var httpResponse = await repositorio.Get<Vehiculo>($"api/vehiculos/{VehiculoId}");
+        if (httpResponse.Error)
+        {
+            if (httpResponse.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("vehiculos");
+            }
+            else
+            {
+                await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+            }
+        }
+        else
+        {
+            Vehiculo = httpResponse.Response;
+        }
+    }
+
+    private async void Editar()
+    {
+        var httpResponse = await repositorio.Put("api/vehiculos", Vehiculo);
+        if (httpResponse.Error)
+        {
+            await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+        }
+        else
+        {
+            navigationManager.NavigateTo("vehiculos");
+        }
+    }
+}

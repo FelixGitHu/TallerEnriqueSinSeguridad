@@ -4,7 +4,7 @@
 @*@inject ISnackbar Snackbar*@
 
 <EditForm Model="Compras" OnValidSubmit="OnValidSubmit">
-    @*<DataAnnotationsValidator />*@
+    <DataAnnotationsValidator />
     <div class="card">
         <div class=" card-header">
             Compras
@@ -94,29 +94,38 @@
                                     <option value="@item.Id">@item.Nombre</option>
                                     }
                             </InputSelectNumber>
-                            <ValidationMessage For="@(() => detalle.ArticuloId)" /> @*//  para validar que sea un Id*@
+                            <ValidationMessage For="@(() => detalle.ArticuloId)" />
+                            @*para validar que sea un Id*@
                         </div>
-                        <div class="form-group col-sm-6">
-                            <label>Descuento:</label>
+
+                        @*<div class="form-group col-sm-6">
+                            <label>Producto:</label>
                             <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.Descuento" readonly="readonly" />
-                                <ValidationMessage For="@(() => detalle.Descuento)" />
+                                <InputText class="form-control" @bind-Value="@Articulo.Nombre" />
+                                <ValidationMessage For="@(() => Articulo.Nombre)" />
+                            </div>
+                        </div>*@
+                        <div class="form-group col-sm-6">
+                            <label>Cantidad:</label>
+                            <div>
+                                <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" />
+                                <ValidationMessage For="@(() => detalle.Cantidad)" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-6">
-                            <label>Cantidad:</label>
-                            <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" readonly="readonly" />
-                                <ValidationMessage For="@(() => detalle.Cantidad)" />
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-4">
                             <label>Precio:</label>
                             <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.PrecioUnitario" readonly="readonly" />
+                                <InputNumber class="form-control" @bind-Value="@detalle.PrecioUnitario" />
                                 <ValidationMessage For="@(() => detalle.PrecioUnitario)" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Descuento:</label>
+                            <div>
+                                <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
+                                <ValidationMessage For="@(() => detalle.Descuento)" />
                             </div>
                         </div>
                     </div>

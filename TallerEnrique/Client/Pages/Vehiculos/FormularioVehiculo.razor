@@ -1,0 +1,89 @@
+﻿<EditForm Model="Vehiculo" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header">
+            Vehiculos
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Marca:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Vehiculo.Marca" />
+                        <ValidationMessage For="@(() => Vehiculo.Marca)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Modelo:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Vehiculo.Modelo" />
+                        <ValidationMessage For="@(() => Vehiculo.Modelo)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Color:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Vehiculo.Color" />
+                        <ValidationMessage For="@(() => Vehiculo.Color)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Placa:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Vehiculo.Placa" />
+                        <ValidationMessage For="@(() => Vehiculo.Placa)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Fecha de Entrada</label>
+                    <div>
+                        <InputDate class="form-control" @bind-Value="@Vehiculo.FechaEntrada"></InputDate>
+                        <ValidationMessage For="@(() => Vehiculo.FechaEntrada)"></ValidationMessage>
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Fecha de Salida:</label>
+                    <div>
+                        <InputDate class="form-control" @bind-Value="@Vehiculo.FechaSalida" />
+                        <ValidationMessage For="@(() => Vehiculo.FechaSalida)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Año del Auto:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@Vehiculo.YearCar" />
+                        <ValidationMessage For="@(() => Vehiculo.YearCar)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Kilometraje:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Vehiculo.Kilometraje" />
+                        <ValidationMessage For="@(() => Vehiculo.Kilometraje)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a href="vehiculos" class="btn btn-success">Cancelar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</EditForm>
+
+@code {
+    [Parameter] public Vehiculo Vehiculo { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
+}

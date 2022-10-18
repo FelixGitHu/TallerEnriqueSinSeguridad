@@ -25,6 +25,12 @@ namespace TallerEnrique.Server.Controllers
             await context.SaveChangesAsync();
             return categoria.Id;
         }
+        //generico
+        //[HttpGet("cargartodos")]
+        //public async Task<ActionResult<List<Proveedor>>> Get()
+        //{
+        //    return await context.Proveedors.ToListAsync();
+        //}
 
         [HttpGet]
         public async Task<ActionResult<List<Categoria>>> Get()
