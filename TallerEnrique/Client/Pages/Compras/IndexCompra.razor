@@ -13,6 +13,7 @@
         <table class="table table-striped">
             <thead>
                 <tr>
+                    <th>Acciones</th>
                     <th>N° Factura</th>
                     <th>Fecha</th>
                     <th>Proveedor</th>
@@ -32,11 +33,11 @@
                         </td>
                         <td>@item.NFactura</td>
                         <td>@item.Fecha</td>
-                        <td>@item.Proveedor</td>
+                        <td>@item.Proveedor.NombreEmpresa</td>
                         @*<td>@item.InventarioId</td>*@
-                        <td>@item.IVA</td>
-                        <td>@item.SubTotal</td>
-                        <td>@item.CostoTotal</td>
+                        <td>S$@item.IVA</td>
+                        <td>S$@item.SubTotal</td>
+                        <td>S$@item.CostoTotal</td>
                     </tr>
                 }
             </tbody>
@@ -46,6 +47,7 @@
 
 @code {
     public List<Compra> Compras { get; set; }
+    public List<Proveedor> Proveedores { get; set; } = new List<Proveedor>();
     protected async override Task OnInitializedAsync()
     {
         await Cargar();

@@ -28,7 +28,7 @@ namespace TallerEnrique.Server.Controllers
             return articulo.Id;
         }
         //General
-        [HttpGet("cargartodo")]
+        [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Articulo>>> Get()
         {
             return await context.Articulos.ToListAsync();
@@ -60,19 +60,19 @@ namespace TallerEnrique.Server.Controllers
         {
             var existe = await context.Articulos.AnyAsync(x => x.Id == id);
             if (!existe) { return NotFound(); }
-            context.Remove(new Articulo { Id = id });
+            context.Remove(new Articulo { Id = id});
             await context.SaveChangesAsync();
             return NoContent();
         }
         //para buscar articulos
-        [HttpGet("buscar/{textoBusqueda}")]
-        public async Task<ActionResult<List<Articulo>>> Get(string textoBusqueda)
-        {
-            if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Articulo>(); }
-            textoBusqueda = textoBusqueda.ToLower();
-            return await context.Articulos
-                .Where(x => x.Nombre.ToLower().Contains(textoBusqueda)).ToListAsync();
-        }
+        //[HttpGet("buscar/{textoBusqueda}")]
+        //public async Task<ActionResult<List<Articulo>>> Get(string textoBusqueda)
+        //{
+        //    if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Articulo>(); }
+        //    textoBusqueda = textoBusqueda.ToLower();
+        //    return await context.Articulos
+        //        .Where(x => x.Nombre.ToLower().Contains(textoBusqueda)).ToListAsync();
+        //}
 
         // paginacion
 

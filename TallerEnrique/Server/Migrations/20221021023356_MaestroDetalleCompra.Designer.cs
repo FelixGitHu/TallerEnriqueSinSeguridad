@@ -10,7 +10,7 @@ using TallerEnrique.Server;
 namespace TallerEnrique.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221017162602_MaestroDetalleCompra")]
+    [Migration("20221021023356_MaestroDetalleCompra")]
     partial class MaestroDetalleCompra
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,9 +123,6 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<decimal>("IVA")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("InventarioId")
-                        .HasColumnType("int");
-
                     b.Property<long>("NFactura")
                         .HasColumnType("bigint");
 
@@ -136,8 +133,6 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InventarioId");
 
                     b.HasIndex("ProveedorId");
 
@@ -571,19 +566,11 @@ namespace TallerEnrique.Server.Migrations
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>
                 {
-                    b.HasOne("TallerEnrique.Shared.Entidades.Inventario", "Inventario")
-                        .WithMany()
-                        .HasForeignKey("InventarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TallerEnrique.Shared.Entidades.Proveedor", "Proveedor")
                         .WithMany()
                         .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Inventario");
 
                     b.Navigation("Proveedor");
                 });

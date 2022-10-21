@@ -6,6 +6,18 @@ namespace TallerEnrique.Server.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Compras_Inventarios_InventarioId",
+                table: "Compras");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Compras_InventarioId",
+                table: "Compras");
+
+            migrationBuilder.DropColumn(
+                name: "InventarioId",
+                table: "Compras");
+
             migrationBuilder.AlterColumn<decimal>(
                 name: "PrecioUnitario",
                 table: "DCompras",
@@ -73,6 +85,26 @@ namespace TallerEnrique.Server.Migrations
                 nullable: false,
                 oldClrType: typeof(decimal),
                 oldType: "decimal(18,2)");
+
+            migrationBuilder.AddColumn<int>(
+                name: "InventarioId",
+                table: "Compras",
+                type: "int",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Compras_InventarioId",
+                table: "Compras",
+                column: "InventarioId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Compras_Inventarios_InventarioId",
+                table: "Compras",
+                column: "InventarioId",
+                principalTable: "Inventarios",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

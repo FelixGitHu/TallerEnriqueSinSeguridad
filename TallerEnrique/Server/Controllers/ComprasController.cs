@@ -27,11 +27,21 @@ namespace TallerEnrique.Server.Controllers
             return compra.Id;
         }
 
-        [HttpGet]
+        [HttpGet] //Original
         public async Task<ActionResult<List<Compra>>> Get()
         {
             return await context.Compras.ToListAsync();
         }
+        //[HttpGet]//probando traer los campos calculados 
+        //public async Task<ActionResult<List<Compra>>> Get()
+        //{
+        //    var compras = await context.Compras.ToListAsync();
+        //    foreach (var item in compras)
+        //    {
+        //        item.CostoTotal = (List<Compra>)await context.Compras.GetByCompra(item.Id);
+        //    }
+        //    return compras;
+        //}
 
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Compra>> Get(int id)
@@ -86,7 +96,7 @@ namespace TallerEnrique.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)     
         {
             var existe = await context.Compras.AnyAsync(x => x.Id == id);
             if (!existe) { return NotFound(); }

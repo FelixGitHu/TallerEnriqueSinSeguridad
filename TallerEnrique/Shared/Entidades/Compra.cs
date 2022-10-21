@@ -19,16 +19,17 @@ namespace TallerEnrique.Shared.Entidades
         public decimal CostoTotal { get { return DCompras.Sum(x => IVA - (IVA * (x.Descuento / 100M))); } set { } }
 
         public decimal SubTotal { get { return DCompras.Sum(x => (x.Cantidad * x.PrecioUnitario)); } set { } }
+        
         public decimal IVA { get { return SubTotal + (SubTotal * (15M / 100M)); } set { } }
         public bool Estado { get; set; }
 
         //Relacionando las tablas 
-        public int InventarioId { get; set; }
+        //public int InventarioId { get; set; }
         public int ProveedorId { get; set; }
         ///public int ArticuloId { get; set; }
         //public int UsuarioId { get; set; }
 
-        public Inventario Inventario { get; set; }
+        //public Inventario Inventario { get; set; }
         public Proveedor Proveedor { get; set; }
         //public Articulo Articulo { get; set; } //probando el maestro detalle
         // public Mecanico Mecanico { get; set; }

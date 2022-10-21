@@ -2,11 +2,12 @@
 @inject IRepositorio repositorio
 @inject NavigationManager navigationManager
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient httclient
 
 <h3>Agregar Compra</h3>
 
 @*<FormCompra OnValidSubmit="Crear" Compra="Compras"/>*@
-<FormCompra OnValidSubmit="Crear" Compras="Compras"/>
+<FormCompra OnValidSubmit="OnvalidSubmit" Compras="Compras" />
 
 
 @code {
@@ -23,6 +24,22 @@
         else
         {
             navigationManager.NavigateTo("/compras");
+        }
+    }
+
+    private async Task OnvalidSubmit()
+    {
+        var respuesta = await httclient.PostAsJsonAsync("api/compras", Compras);
+        var cuerpoRespuesta = await respuesta.Content.ReadAsStringAsync();
+
+        if (respuesta.IsSuccessStatusCode)
+        {
+            navigationManager.NavigateTo("compras");
+        }
+        else
+        {
+            Console.WriteLine(cuerpoRespuesta);
+            Console.WriteLine((int)respuesta.StatusCode);
         }
     }
 }

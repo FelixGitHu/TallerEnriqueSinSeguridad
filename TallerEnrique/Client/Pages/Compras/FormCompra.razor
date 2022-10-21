@@ -1,7 +1,7 @@
 ﻿@inject IRepositorio repositorio
-@inject IMostrarMensajes mostrarMensajes
-@inject NavigationManager navigationManager
-@*@inject ISnackbar Snackbar*@
+@*@inject IMostrarMensajes mostrarMensajes
+  @inject NavigationManager navigationManager*@
+
 
 <EditForm Model="Compras" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -98,13 +98,7 @@
                             @*para validar que sea un Id*@
                         </div>
 
-                        @*<div class="form-group col-sm-6">
-                            <label>Producto:</label>
-                            <div>
-                                <InputText class="form-control" @bind-Value="@Articulo.Nombre" />
-                                <ValidationMessage For="@(() => Articulo.Nombre)" />
-                            </div>
-                        </div>*@
+
                         <div class="form-group col-sm-6">
                             <label>Cantidad:</label>
                             <div>
@@ -144,6 +138,9 @@
 
 @code {
     [Parameter] public Compra Compras { get; set; }
+    //probando si guarda los datos
+    //Compra compras = new Compra();
+    //[Parameter] public DCompra DCompras { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public List<Proveedor> ProveedoresSeleccionados { get; set; } = new List<Proveedor>();
     [Parameter] public List<Articulo> ProductosSeleccionados { get; set; } = new List<Articulo>();
@@ -186,4 +183,5 @@
 
         Console.WriteLine($"Value changed to {str}");
     }
+
 }
