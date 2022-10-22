@@ -41,7 +41,7 @@
                             <option value="0">Proveedor Ocacional</option>
                             @foreach (var item in ProveedoresSeleccionados)
                             {
-                                <option value="@item.Id">@item.NombreEmpresa &nbsp; @item.NombreContacto</option>
+                                <option value="@item.Id">@item.NombreEmpresa @*&nbsp; @item.NombreContacto*@</option>
                             }
                         </InputSelectNumber>
                         <ValidationMessage For="@(() => Compras.ProveedorId)" />

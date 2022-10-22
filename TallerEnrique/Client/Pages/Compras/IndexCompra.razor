@@ -33,7 +33,7 @@
                         </td>
                         <td>@item.NFactura</td>
                         <td>@item.Fecha</td>
-                        <td>@item.Proveedor.NombreEmpresa</td>
+                        <td>@item.Proveedor</td>
                         @*<td>@item.InventarioId</td>*@
                         <td>S$@item.IVA</td>
                         <td>S$@item.SubTotal</td>
@@ -46,7 +46,7 @@
 </ListadoGenerico>
 
 @code {
-    public List<Compra> Compras { get; set; }
+    public List<Compra> Compras { get; set; } 
     public List<Proveedor> Proveedores { get; set; } = new List<Proveedor>();
     protected async override Task OnInitializedAsync()
     {
