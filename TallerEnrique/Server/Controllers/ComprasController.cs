@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TallerEnrique.Server.Helpers;
+using TallerEnrique.Shared.Complement;
 using TallerEnrique.Shared.Entidades;
 
 
@@ -27,7 +29,7 @@ namespace TallerEnrique.Server.Controllers
             return compra.Id;
         }
 
-        [HttpGet] //Original
+        [HttpGet("cargartodos")] //Original
         public async Task<ActionResult<List<Compra>>> Get()
         {
             return await context.Compras.ToListAsync();
@@ -103,6 +105,16 @@ namespace TallerEnrique.Server.Controllers
             context.Remove(new Compra { Id = id });
             await context.SaveChangesAsync();
             return NoContent();
+        }
+
+        // paginacion
+
+        [HttpGet]
+        public async Task<ActionResult<List<Compra>>> Get([FromQuery] Paginacion paginacion)
+        {
+            var queryable = context.Compras.AsQueryable();
+            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
+            return await queryable.Paginar(paginacion).ToListAsync();
         }
 
         //[HttpPost]//probando hacer funcionar el maestro detalle de compras 
