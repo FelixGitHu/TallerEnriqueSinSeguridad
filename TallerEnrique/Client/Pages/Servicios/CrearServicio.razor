@@ -1,7 +1,8 @@
-﻿@page "/servicio/crear"
+﻿@page "/servicios/crear"
 @inject IRepositorio repositorio
 @inject NavigationManager navigationManager
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient httclient
 
 <h3>Agregar Servicio</h3>
 
@@ -21,6 +22,21 @@
         else
         {
             navigationManager.NavigateTo("/servicios");
+        }
+    }
+    private async Task OnvalidSubmit()
+    {
+        var respuesta = await httclient.PostAsJsonAsync("api/servicios", Servicio);
+        var cuerpoRespuesta = await respuesta.Content.ReadAsStringAsync();
+
+        if (respuesta.IsSuccessStatusCode)
+        {
+            navigationManager.NavigateTo("servicios");
+        }
+        else
+        {
+            Console.WriteLine(cuerpoRespuesta);
+            Console.WriteLine((int)respuesta.StatusCode);
         }
     }
 }

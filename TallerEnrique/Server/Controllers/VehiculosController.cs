@@ -27,20 +27,20 @@ namespace TallerEnrique.Server.Controllers
             return vehiculo.Id;
         }
 
-        [HttpGet]
+        [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Vehiculo>>> Get()
         {
             return await context.Vehiculos.ToListAsync();
         }
         // paginacion
 
-        //[HttpGet]
-        //public async Task<ActionResult<List<Vehiculo>>> Get([FromQuery] Paginacion paginacion)
-        //{
-        //    var queryable = context.Vehiculos.AsQueryable();
-        //    await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
-        //    return await queryable.Paginar(paginacion).ToListAsync();
-        //}
+        [HttpGet]
+        public async Task<ActionResult<List<Vehiculo>>> Get([FromQuery] Paginacion paginacion)
+        {
+            var queryable = context.Vehiculos.AsQueryable();
+            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
+            return await queryable.Paginar(paginacion).ToListAsync();
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Vehiculo>> Get(int id)
@@ -66,6 +66,6 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
 
-
+        
     }
 }

@@ -5,14 +5,14 @@
 
 <h3>Agregar Auto</h3>
 
-<FormularioVehiculo OnValidSubmit="Crear" Vehiculo="Vehiculos" />
+<FormularioVehiculo OnValidSubmit="Crear" Vehiculo="Vehiculo" />
 
 @code {
-    private Vehiculo Vehiculos = new Vehiculo();
+    private Vehiculo Vehiculo = new Vehiculo();
 
     private async Task Crear()
     {
-        var httpResponse = await repositorio.Post("api/vehiculos", Vehiculos);
+        var httpResponse = await repositorio.Post("api/vehiculos", Vehiculo);
         if (httpResponse.Error)
         {
             var body = await httpResponse.GetBody();

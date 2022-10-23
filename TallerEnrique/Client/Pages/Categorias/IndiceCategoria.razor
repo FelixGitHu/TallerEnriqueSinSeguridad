@@ -46,7 +46,7 @@
 
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Categoria>>("api/categorias");
+        var responseHttp = await repositorio.Get<List<Categoria>>("api/categorias/cargartodos");
         Categorias = responseHttp.Response;
     }
 

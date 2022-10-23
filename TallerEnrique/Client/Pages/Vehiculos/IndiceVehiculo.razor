@@ -28,27 +28,35 @@
             <tbody>
                 @foreach (var item in Vehiculos)
                 {
-                <tr>
-                    <td>
-                        <a href="/vehiculos/editar/@item.Id" class="btn btn-success">Editar</a>
-                        <button @onclick="@(() => BorrarVehiculo(item))" class="btn btn-danger">Borrar</button>
-                    </td>
-                    <td>@item.Marca</td>
-                    <td>@item.Modelo</td>
-                    <td>@item.Color</td>
-                    <td>@item.YearCar</td>
-                    <td>@item.Placa</td>
-                    <td>@item.FechaEntrada</td>
-                    <td>@item.FechaSalida</td>
-                    <td>@item.Kilometraje</td>
-                </tr>
+                    <tr>
+                        <td>
+                            <a href="/vehiculos/editar/@item.Id" class="btn btn-success">Editar</a>
+                            <button @onclick="@(() => BorrarVehiculo(item))" class="btn btn-danger">Borrar</button>
+                        </td>
+                        <td>@item.Marca</td>
+                        <td>@item.Modelo</td>
+                        <td>@item.Color</td>
+                        <td>@item.YearCar</td>
+                        <td>@item.Placa</td>
+                        <td>@item.FechaEntrada</td>
+                        <td>@item.FechaSalida</td>
+                        <td>@item.Kilometraje</td>
+                    </tr>
                 }
             </tbody>
         </table>
     </HayRegistrosCompleto>
 </ListadoGenerico>
 
+@*Paginaccion*@
+<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
+              PaginasTotales="paginasTotales"></Paginaciones>
+
 @code {
+    //Paginacion
+    private int paginaActual = 1;
+    private int paginasTotales;
+
     public List<Vehiculo> Vehiculos { get; set; }
 
     protected async override Task OnInitializedAsync()
@@ -58,13 +66,13 @@
 
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Vehiculo>>("api/vehiculos");
+        var responseHttp = await repositorio.Get<List<Vehiculo>>("api/vehiculos/cargartodos");
         Vehiculos = responseHttp.Response;
     }
 
     private async Task BorrarVehiculo(Vehiculo vehiculo)
     {
-        var responseHttp = await repositorio.Delete($"api/vehiculoc/{vehiculo.Id}");
+        var responseHttp = await repositorio.Delete($"api/vehiculos/{vehiculo.Id}");
         if (responseHttp.Error)
         {
             await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
@@ -74,5 +82,22 @@
             await Cargar();
         }
 
+    }
+
+    //Paginacion
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+    private async Task Cargar(int pagina = 1)
+    {
+        var responseHttp = await repositorio.Get<List<Vehiculo>>($"api/vehiculos?pagina={pagina}");
+        if (!responseHttp.Error)
+        {
+            Vehiculos = responseHttp.Response;
+            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
+            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+        }
     }
 }

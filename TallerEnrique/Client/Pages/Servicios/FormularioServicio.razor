@@ -1,6 +1,7 @@
-﻿@*@inject IRepositorio repositorio
-@inject IMostrarMensajes mostrarMensajes
-@inject NavigationManager navigationManager*@
+﻿@inject IRepositorio repositorio
+
+@*@inject IMostrarMensajes mostrarMensajes
+  @inject NavigationManager navigationManager*@
 
 <EditForm Model="Servicio" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -15,22 +16,15 @@
                     <div>
                         <InputSelectNumber class="form-control" @bind-Value="Servicio.CategoriaId">
                             <option value="0">--Categoria--</option>
-                            @foreach (var item in CategoriasSeleccionados)
+                            @foreach (var item in CategoriasSeleccionadas)
                             {
-                                <option value="@item.Id">@item.Nombre &nbsp; @item.Descripcion</option>
+                                <option value="@item.Id">@item.Nombre @*&nbsp; @item.Descripcion*@</option>
                             }
                         </InputSelectNumber>
                         <ValidationMessage For="@(() => Servicio.CategoriaId)" />
                     </div>
                 </div>
-                @*<div class="form-group col-sm-6">
-                        <label>Categoria:</label>
-                        <div>
-                            <InputText class="form-control" @bind-Value="@Servicio.Categoria.Nombre" />
-                            <ValidationMessage For="@(() => Servicio.Categoria.Nombre)" />
-                        </div>
-                    </div>*@
-
+                
                 <div class="form-group col-sm-4">
                     <label>Descripcion:</label>
                     <div>
@@ -39,7 +33,7 @@
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
-                    <label>Precio:</label>
+                    <label>Precio del Servicio:</label>
                     <div>
                         <InputNumber class="form-control" @bind-Value="@Servicio.Precio" />
                         <ValidationMessage For="@(() => Servicio.Precio)" />
@@ -62,18 +56,30 @@
 @code {
     [Parameter] public Servicio Servicio { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
-    [Parameter] public List<Categoria> CategoriasSeleccionados { get; set; } = new List<Categoria>();
+    [Parameter] public List<Categoria> CategoriasSeleccionadas { get; set; } = new List<Categoria>();
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    //await ObtenerProductos();
-    //    await ObtenerCategorias();
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        //await ObtenerProductos();
+        await ObtenerCategorias();
+    }
 
-    //private async Task ObtenerCategorias()
-    //{
-    //    var httpResponse = await repositorio.Get<List<Categoria>>("api/categorias/cargartodos");
-    //    CategoriasSeleccionados = httpResponse.Response;
-    //}
+    private void Cancelar()
+    {
+        Servicio = new Servicio();
+    }
 
+    private async Task ObtenerCategorias()
+    {
+        var httpResponse = await repositorio.Get<List<Categoria>>("api/categorias/cargartodos");
+        CategoriasSeleccionadas = httpResponse.Response;
+    }
+
+    //No se para que es esto
+    void OnChange(object value)
+    {
+        var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+
+        Console.WriteLine($"Value changed to {str}");
+    }
 }

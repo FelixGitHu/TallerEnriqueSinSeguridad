@@ -26,13 +26,7 @@ namespace TallerEnrique.Server.Controllers
             return categoria.Id;
         }
         //generico
-        //[HttpGet("cargartodos")]
-        //public async Task<ActionResult<List<Proveedor>>> Get()
-        //{
-        //    return await context.Proveedors.ToListAsync();
-        //}
-
-        [HttpGet]
+        [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Categoria>>> Get()
         {
             return await context.Categorias.ToListAsync();

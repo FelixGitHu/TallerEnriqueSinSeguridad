@@ -1,4 +1,7 @@
-﻿<EditForm Model="Vehiculo" OnValidSubmit="OnValidSubmit">
+﻿
+
+
+<EditForm Model="Vehiculo" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <div class="card">
         <div class="card-header">
@@ -79,11 +82,16 @@
             </div>
         </div>
     </div>
-
-
 </EditForm>
 
+
+
 @code {
+   
+
     [Parameter] public Vehiculo Vehiculo { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
+
+    
+
 }
