@@ -21,19 +21,64 @@ namespace TallerEnrique.Server.Controllers
             this.context = context;
         }
 
+
+        //public async Task<ActionResult<int>> Post(Compra compra)
+        //{
+        //    context.Add(compra);
+        //    await context.SaveChangesAsync();
+        //    return compra.Id;
+        //}
         [HttpPost]
         public async Task<ActionResult<int>> Post(Compra compra)
         {
-            context.Add(compra);
+            foreach (DCompra dCompra in compra.DCompras)
+            {
+                //extrae el registro del inventario que contiene el articulo a comprar, sino es igual a null
+                Inventario inventario = context.Inventarios.FirstOrDefault(inv => inv.ArticuloId == dCompra.ArticuloId);
+                //si el existe un registro con el inventario :
+                if (inventario != null)
+                {
+                    //busca nuevamente el registro en la base de datos (ya sabemos q existe)
+                    //y extrae la variable Existencia para asignar el valor de existencia mas la cantidad nueva
+                    //del articulo que se compra
+                    context.Inventarios.Find(inventario.Id).Existencia = context.Inventarios.Find(inventario.Id).Existencia + dCompra.Cantidad;
+
+                }
+                else
+                {
+                    //sino existe ninmgun registro, es mas facil porque solo creamos uno nuevo
+                    context.Inventarios.Add(new Inventario()
+                    {
+                        ArticuloId = dCompra.ArticuloId,
+                        Existencia = dCompra.Cantidad,
+                        Estado = true
+                    });
+                }
+                dCompra.Articulo = null;
+            }
+            compra.Proveedor = null;
+            //una vez se agregan o modifican los registros de invenmtario, se guarda la compra
+            //context.Compras.Add(compra);
+            compra = context.Add(compra).Entity;
             await context.SaveChangesAsync();
             return compra.Id;
         }
 
-        [HttpGet("cargartodos")] //Original
+        //[HttpGet]//probando traer los campos calculados 
+        //public async Task<List<Compra>> Get()
+        //{
+        //    return await context.Compras.Include("Proveedor").Include("DCompras").ToListAsync();
+
+
+        //}
+
+        [HttpGet("cargartodo")] //Original(este no lo tiene D
         public async Task<ActionResult<List<Compra>>> Get()
         {
-            return await context.Compras.ToListAsync();
+            //return await context.Compras.ToListAsync();
+            return await context.Compras.Include("Proveedor").Include("DCompras").ToListAsync();
         }
+
         //[HttpGet]//probando traer los campos calculados 
         //public async Task<ActionResult<List<Compra>>> Get()
         //{
@@ -117,19 +162,6 @@ namespace TallerEnrique.Server.Controllers
             return await queryable.Paginar(paginacion).ToListAsync();
         }
 
-        //[HttpPost]//probando hacer funcionar el maestro detalle de compras 
-        //public IActionResult FormularioDCompra([FromBody] MDetalle mDetalle)
-        //{
-        //    Compra oCompra = mDetalle.oCompra;
-        //    oCompra.MDetalles = mDetalle.oDCompra;
-        //    context.Compras.Add(oCompra);
-        //    context.SaveChanges();
-        //    return JsonResult(new { respuesta = true });
-        //}
-
-        //private IActionResult JsonResult(object p)
-        //{
-        //    throw new NotImplementedException();
-        //}
+       
     }
 }

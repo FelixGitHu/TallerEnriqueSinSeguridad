@@ -1,10 +1,11 @@
 ﻿@inject IRepositorio repositorio
+@using System.Linq
 
 @*@inject IMostrarMensajes mostrarMensajes
   @inject NavigationManager navigationManager*@
 
 
-<EditForm Model="Compras" OnValidSubmit="OnValidSubmit">
+<EditForm Model="NuevaCompra" OnValidSubmit="@(()=>enviarCompra())">
     <DataAnnotationsValidator />
     <div class="card">
         <div class=" card-header">
@@ -12,11 +13,13 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-4 mb-3">
+                <div class="col-md-8 mb-8">
                     <button class="btn btn-success" type="submit">
                         Guardar Cambios
                     </button>
-                    <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Compra</button>
+
+                    <a href="compras" class="btn btn-success">Volver</a>
                 </div>
 
             </div>
@@ -24,28 +27,28 @@
                 <div class="form-group col-sm-4">
                     <label>N° Factura:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@Compras.NFactura" />
-                        <ValidationMessage For="@(() => Compras.NFactura)" />
+                        <InputNumber class="form-control" @bind-Value="@NuevaCompra.NFactura" />
+                        <ValidationMessage For="@(() => NuevaCompra.NFactura)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Fecha de Compra:</label>
                     <div>
-                        <InputDate class="form-control" @bind-Value="@Compras.Fecha" />
-                        <ValidationMessage For="@(() => Compras.Fecha)" />
+                        <InputDate class="form-control" @bind-Value="@NuevaCompra.Fecha" />
+                        <ValidationMessage For="@(() => NuevaCompra.Fecha)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Proveedor:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="Compras.ProveedorId">
+                        <InputSelectNumber class="form-control" @bind-Value="NuevaCompra.ProveedorId">
                             <option value="0">Proveedor Ocacional</option>
                             @foreach (var item in ProveedoresSeleccionados)
                             {
-                                <option value="@item.Id">@item.NombreEmpresa @*&nbsp; @item.NombreContacto*@</option>
+                                <option value="@item.Id">@item.NombreEmpresa &nbsp; @item.NombreContacto</option>
                             }
                         </InputSelectNumber>
-                        <ValidationMessage For="@(() => Compras.ProveedorId)" />
+                        <ValidationMessage For="@(() => NuevaCompra.ProveedorId)" />
                     </div>
                 </div>
             </div>
@@ -53,92 +56,147 @@
                 <div class="form-group col-sm-4">
                     <label>SubTotal:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@Compras.SubTotal" readonly="readonly" />
-                        <ValidationMessage For="@(() => Compras.SubTotal)" />
+                        <InputNumber class="form-control" @bind-Value="@NuevaCompra.SubTotal" readonly="readonly" />
+                        @*<ValidationMessage For="@(() => NuevaCompra.SubTotal)" />*@
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
-                    <label>I.V.A:</label>
+                    <label>I.V.A mas SubTotal:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@Compras.IVA" readonly="readonly" />
-                        <ValidationMessage For="@(() => Compras.IVA)" />
+                        <InputNumber class="form-control" @bind-Value="@NuevaCompra.IVA" readonly="readonly" />
+                        <ValidationMessage For="@(() => NuevaCompra.IVA)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Total:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@Compras.CostoTotal" readonly="readonly" />
-                        <ValidationMessage For="@(() => Compras.CostoTotal)" />
+                        <InputNumber class="form-control" @bind-Value="@NuevaCompra.CostoTotal" readonly="readonly" />
+                        <ValidationMessage For="@(() => NuevaCompra.CostoTotal)" />
                     </div>
                 </div>
             </div>
-            <div class="container">
-                <div class="col-md-4 mb-6">
-                    <button type="button" class="btn btn-secondary"
-                            @onclick="@(() => Compras.DCompras.Add(new DCompra()))">
-                        Agregar Detalles
+
+            <hr />
+            <h3>  Articulos Disponibles</h3>
+            <div class="row ">
+                @*aca la lista de productos que se pueden llevar*@
+                <div class="col-md-5 ">
+                    <table class="table table-bordered table-sm" id="tbproducto">
+                        <thead>
+                            <tr class="table-active">
+                                <th>NombreArticulo</th>
+                                <th>Precio</th>
+                                <th>Marca</th>
+                                <th>Agregado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Articulo ArticuloDisponible in articulosDisponibles)
+                            {
+                                <TrArticuloAddCompra ArticuloaddDetail="ArticuloDisponible" addArticuloCompra="addDCompra" />
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                @*aca la lista que actualmente se lleva*@
+                <div class="col-md-6 ">
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr class="table-active">
+                                <th>NombreArticulo</th>
+                                <th>Precio</th>
+                                <th>Cantidad</th>
+                                <th>Descuento</th>
+                                <th>SubTotal</th>
+
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (NuevaCompra.DCompras.Count != 0)
+                            {
+                                @foreach (DCompra articuloEnCompra in NuevaCompra.DCompras)
+                                {
+                                    <TrArticuloInCompra removeArticuloCompra="removeDCompra" calcularSubTotal="calcularSubtotal" compraDetail="articuloEnCompra" />
+                                }
+                            }
+                            else
+                            {
+                                <h3>sin compras</h3>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            @*<div class="container">
+            <div class="col-md-4 mb-6">
+                <button type="button" class="btn btn-secondary"
+                        @onclick="@(() => Compras.DCompras.Add(new DCompra()))">
+                    Agregar Detalles
+                </button>
+            </div>
+            @for (var i = 0; i < Compras.DCompras.Count; i++)
+            {
+                var indice = i;
+                var detalle = Compras.DCompras[i];
+
+                <h5>Detalles de la Compra @(i + 1)</h5>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label>Productos:</label>
+                        <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
+                            <option value="0" disabled> --- Seleccione un producto ---</option>
+                            @foreach (var item in ProductosSeleccionados)
+                                {
+                                <option value="@item.Id">@item.Nombre</option>
+                                }
+                        </InputSelectNumber>
+                        <ValidationMessage For="@(() => detalle.ArticuloId)" />
+                        para validar que sea un Id
+                    </div>
+
+
+                    <div class="form-group col-sm-6">
+                        <label>Cantidad:</label>
+                        <div>
+                            <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" />
+                            <ValidationMessage For="@(() => detalle.Cantidad)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label>Precio:</label>
+                        <div>
+                            <InputNumber class="form-control" @bind-Value="@detalle.PrecioUnitario" />
+                            <ValidationMessage For="@(() => detalle.PrecioUnitario)" />
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label>Descuento:</label>
+                        <div>
+                            <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
+                            <ValidationMessage For="@(() => detalle.Descuento)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" class="btn btn-danger btn-sm"
+                            @onclick="@(() => Compras.DCompras.RemoveAt(indice))">
+                        Eliminar
                     </button>
                 </div>
-                @for (var i = 0; i < Compras.DCompras.Count; i++)
-                {
-                    var indice = i;
-                    var detalle = Compras.DCompras[i];
-
-                    <h5>Detalles de la Compra @(i + 1)</h5>
-                    <div class="row">
-                        <div class="form-group col-sm-6">
-                            <label>Productos:</label>
-                            <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
-                                <option value="0" disabled> --- Seleccione un producto ---</option>
-                                @foreach (var item in ProductosSeleccionados)
-                                    {
-                                    <option value="@item.Id">@item.Nombre</option>
-                                    }
-                            </InputSelectNumber>
-                            <ValidationMessage For="@(() => detalle.ArticuloId)" />
-                            @*para validar que sea un Id*@
-                        </div>
-
-
-                        <div class="form-group col-sm-6">
-                            <label>Cantidad:</label>
-                            <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" />
-                                <ValidationMessage For="@(() => detalle.Cantidad)" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-6">
-                            <label>Precio:</label>
-                            <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.PrecioUnitario" />
-                                <ValidationMessage For="@(() => detalle.PrecioUnitario)" />
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label>Descuento:</label>
-                            <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
-                                <ValidationMessage For="@(() => detalle.Descuento)" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <button type="button" class="btn btn-danger btn-sm"
-                                @onclick="@(() => Compras.DCompras.RemoveAt(indice))">
-                            Eliminar
-                        </button>
-                    </div>
-                }
-            </div>
+            }
+        </div>*@
         </div>
     </div>
 
 </EditForm>
 
 @code {
-    [Parameter] public Compra Compras { get; set; }
+    [Parameter] public Compra NuevaCompra { get; set; }
     //probando si guarda los datos
     //Compra compras = new Compra();
     //[Parameter] public DCompra DCompras { get; set; }
@@ -148,17 +206,60 @@
     private Articulo Articulo = new Articulo();
     private List<Articulo> ListArticulos = new List<Articulo>();
 
+    //variablesD
+    private List<Articulo> articulosDisponibles = new List<Articulo>();
+    private List<DCompra> articulosComprados = new List<DCompra>();
+    decimal subTotal;
+
     string valorSelect = "";
 
     protected override async Task OnInitializedAsync()
     {
         await ObtenerProductos();
         await ObtenerProveedores();
+
+        //extraer los articulos disponibles para comprar
+        await GetArticulosDisponibles();
+        //instancia de lista dcompra
+        NuevaCompra.DCompras = new List<DCompra>();
     }
+
+    public async Task GetArticulosDisponibles()
+    {
+        var httpResponse = await repositorio.Get<List<Articulo>>("api/articulos/cargartodos");
+        articulosDisponibles = httpResponse.Response;
+    }
+
+    public async Task addDCompra(DCompra ArticuloNuevo)
+    {
+        NuevaCompra.DCompras.Add(ArticuloNuevo);
+        articulosDisponibles.Remove(ArticuloNuevo.Articulo);
+    }
+
+    public async Task removeDCompra(Articulo remArti)
+    {
+        NuevaCompra.DCompras.RemoveAll(x => x.Articulo == remArti);
+        articulosDisponibles.Add(remArti);
+    }
+
+    public void calcularSubtotal()
+    {
+        subTotal = (decimal)articulosComprados.Select(x => (x.PrecioUnitario * x.Cantidad) - ((x.PrecioUnitario * x.Cantidad)) * (x.Descuento / 100)).Sum();
+
+    }
+
+    public void enviarCompra()
+    {
+        //NuevaCompra.DCompras = articulosComprados;
+        OnValidSubmit.InvokeAsync();
+    }
+
+
+
 
     private void Cancelar()
     {
-        Compras = new Compra();
+        NuevaCompra = new Compra();
     }
 
     private async Task ObtenerProveedores()
@@ -166,6 +267,8 @@
         var httpResponse = await repositorio.Get<List<Proveedor>>("api/proveedores/cargartodos");
         ProveedoresSeleccionados = httpResponse.Response;
     }
+
+
     private async Task ObtenerProductos()
     {
         var httpResponse = await repositorio.Get<List<Articulo>>("api/articulos/cargartodos");

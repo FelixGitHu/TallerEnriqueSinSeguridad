@@ -8,7 +8,7 @@
     <a class="btn btn-info" href="compras/crear">Agregar Compras</a>
 </div>
 
-<ListadoGenerico Listado="Compras">
+<ListadoGenerico Listado="ComprasRealizadas">
     <HayRegistrosCompleto>
         <table class="table table-striped">
             <thead>
@@ -17,32 +17,47 @@
                     <th>N° Factura</th>
                     <th>Fecha</th>
                     <th>Proveedor</th>
-                    @*<th>Existencia</th>*@
                     <th>Impuesto</th>
                     <th>Subtotal</th>
                     <th>Total</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Compras)
+                @*@foreach (var item in Compras)
+        {
+            <tr>
+                <td>
+                    <a href="/compras/editar/@item.Id" class="btn btn-success">Editar</a>
+                    <button @onclick="@(() => BorrarCompra(item))" class="btn btn-danger">Borrar</button>
+                </td>
+                <td>@item.NFactura</td>
+                <td>@item.Fecha</td>
+                <td>@item.Proveedor</td>
+                <td>@item.InventarioId</td>
+                <td>S$@item.IVA</td>
+                <td>S$@item.SubTotal</td>
+                <td>S$@item.CostoTotal</td>
+            </tr>
+        }*@
+
+                @foreach (Compra compraRealizada in ComprasRealizadas)
                 {
                     <tr>
                         <td>
-                            <a href="/compras/editar/@item.Id" class="btn btn-success">Editar</a>
-                            <button @onclick="@(() => BorrarCompra(item))" class="btn btn-danger">Borrar</button>
+                            <a href="/compras/editar/@compraRealizada.Id" class="btn btn-success">Editar</a>
+                            <button @onclick="@(() => BorrarCompra(compraRealizada))" class="btn btn-danger">Borrar</button>
                         </td>
-                        <td>@item.NFactura</td>
-                        <td>@item.Fecha</td>
-                        <td>@item.Proveedor</td>
-                        @*<td>@item.InventarioId</td>*@
-                        <td>S$@item.IVA</td>
-                        <td>S$@item.SubTotal</td>
-                        <td>S$@item.CostoTotal</td>
+                        <td>@compraRealizada.NFactura</td>
+                        <td>@compraRealizada.Fecha</td>
+                        <td>@compraRealizada.Proveedor.NombreEmpresa</td>
+                        <td>$ @Math.Round(compraRealizada.IVA, 2)</td>
+                        <td>$ @Math.Round(compraRealizada.SubTotal, 2)</td>
+                        <td>$ @Math.Round(compraRealizada.CostoTotal, 2)</td>
                     </tr>
-                }
+                 }
             </tbody>
         </table>
-    </HayRegistrosCompleto>
+    </hayregistroscompleto>
 </ListadoGenerico>
 
 @*Paginaccion*@
@@ -56,18 +71,30 @@
     private int paginaActual = 1;
     private int paginasTotales;
 
-    public List<Compra> Compras { get; set; }
+    //public List<Compra> Compras { get; set; }
     public List<Proveedor> Proveedores { get; set; } = new List<Proveedor>();
+    //variablesD
+    public List<Compra> ComprasRealizadas = new List<Compra>();
+
     protected async override Task OnInitializedAsync()
     {
-        await Cargar();
+        //await Cargar();
+        //extraccion de datos al iniciar la pagina
+        await getComprasRealizadas();
+    }
+    private async Task getComprasRealizadas()
+    {
+        var responseHttp = await repositorio.Get<List<Compra>>("api/compras/cargartodo");
+        ComprasRealizadas = responseHttp.Response;
+
     }
 
-    private async Task Cargar()
-    {
-        var responseHttp = await repositorio.Get<List<Compra>>("api/compras/cargartodos");
-        Compras = responseHttp.Response;
-    }
+
+    //private async Task Cargar()
+    //{
+    //    var responseHttp = await repositorio.Get<List<Compra>>("api/compras/cargartodos");
+    //    Compras = responseHttp.Response;
+    //}
 
     private async Task BorrarCompra(Compra compra)
     {
@@ -78,7 +105,8 @@
         }
         else
         {
-            await Cargar();
+            //await Cargar();
+            await getComprasRealizadas();
         }
 
     }
@@ -94,7 +122,7 @@
         var responseHttp = await repositorio.Get<List<Compra>>($"api/compras?pagina={pagina}");
         if (!responseHttp.Error)
         {
-            Compras = responseHttp.Response;
+            ComprasRealizadas = responseHttp.Response;
             var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
             paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
         }

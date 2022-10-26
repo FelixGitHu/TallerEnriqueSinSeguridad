@@ -20,7 +20,8 @@ namespace TallerEnrique.Shared.Entidades
 
         public decimal SubTotal { get { return DCompras.Sum(x => (x.Cantidad * x.PrecioUnitario)); } set { } }
         
-        public decimal IVA { get { return SubTotal + (SubTotal * (15M / 100M)); } set { } }
+        public decimal IVA { get { return  SubTotal + (SubTotal*(15M/100M)); } set { } }
+        //public decimal IVA { get { return SubTotal + (SubTotal * (15M / 100M)); } set { } }
         public bool Estado { get; set; }
 
         //Relacionando las tablas 

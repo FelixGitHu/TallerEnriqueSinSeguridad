@@ -1,0 +1,42 @@
+﻿
+        <tr>
+            <td class="d-sm-table-cell">
+                @compraDetail.Articulo.Nombre.ToString()
+            </td>
+            <td>
+               $ @compraDetail.Articulo.PrecioCompra.ToString()
+            </td>
+            <td>
+                <InputNumber TValue="int" Value="compraDetail.Cantidad" ValueExpression="@(()=>compraDetail.Cantidad)" ValueChanged="@((int newvalue)=>cantidadChange(newvalue))" class="form-control"  ></InputNumber>
+
+            </td>
+            <td>
+                <InputNumber TValue="decimal" Value="compraDetail.Descuento" ValueExpression="@(()=>compraDetail.Descuento)" ValueChanged="@((decimal newvalue)=>descuentoChange(newvalue))" class="form-control"  ></InputNumber>
+            </td>
+             <td>
+               $ @(decimal.Multiply((decimal)compraDetail.PrecioUnitario,compraDetail.Cantidad)-(decimal.Multiply((decimal)compraDetail.PrecioUnitario,compraDetail.Cantidad)*(compraDetail.Descuento/100)))
+            </td>
+            <td>
+                 <button type="button" @onclick="@(()=>removeArticuloCompra.InvokeAsync(compraDetail.Articulo))" class="btn-danger" >
+                    Remover
+                </button>
+            </td>
+            
+        </tr>
+@code {
+    [Parameter] public DCompra compraDetail { get; set; }
+    [Parameter] public EventCallback calcularSubTotal { get; set; }
+    [Parameter] public EventCallback<Articulo> removeArticuloCompra{ get; set; }
+
+    public void descuentoChange(decimal desc)
+    {
+        compraDetail.Descuento = desc;
+        //calcularSubTotal.InvokeAsync();
+    }
+    public void cantidadChange(int cant)
+    {
+        compraDetail.Cantidad = cant;
+        //calcularSubTotal.InvokeAsync();
+    }
+
+}

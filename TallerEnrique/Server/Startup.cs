@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace TallerEnrique.Server
 {
@@ -24,9 +25,15 @@ namespace TallerEnrique.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+             options.UseSqlServer("Server=.;Database=SistemaTallerEnriqueBD;Trusted_Connection=True"));
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            //con esta configuracion de Json, se pueden enviar datos con una longitud grande
+            //y datos complejos como modelos con referencias 
+            services.AddControllers().AddNewtonsoftJson(options =>
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
