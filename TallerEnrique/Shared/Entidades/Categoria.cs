@@ -17,6 +17,6 @@ namespace TallerEnrique.Shared.Entidades
         [Required(ErrorMessage = "La descripcio es obligatorio ")]
         [StringLength(500, ErrorMessage = "{0} la descripcion debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
         public string Descripcion { get; set; }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
     }
 }

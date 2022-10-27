@@ -22,7 +22,7 @@ namespace TallerEnrique.Shared.Entidades
         
         public decimal IVA { get { return  SubTotal + (SubTotal*(15M/100M)); } set { } }
         //public decimal IVA { get { return SubTotal + (SubTotal * (15M / 100M)); } set { } }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
 
         //Relacionando las tablas 
         //public int InventarioId { get; set; }

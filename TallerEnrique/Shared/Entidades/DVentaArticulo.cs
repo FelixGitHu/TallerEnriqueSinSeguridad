@@ -14,7 +14,7 @@ namespace TallerEnrique.Shared.Entidades
 
         [Required(ErrorMessage = "La Cantidad es Obligatorio ")]
         public int Cantidad { get; set; }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
 
         //Estableciendo la relacion de las tablas
         public int? VentaId { get; set; }

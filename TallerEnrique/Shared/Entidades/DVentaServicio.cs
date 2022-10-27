@@ -12,7 +12,7 @@ namespace TallerEnrique.Shared.Entidades
         [Key]
         public int Id { get; set; }
 
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true; 
 
         //Relacion con las tablas
         public int ServicioId { get; set; }

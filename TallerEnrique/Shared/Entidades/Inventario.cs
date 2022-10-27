@@ -15,7 +15,7 @@ namespace TallerEnrique.Shared.Entidades
         [Required(ErrorMessage = "La Existencia es Obligatorio ")]
         [StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
         public int Existencia { get; set; }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
 
         //Estableciendo la relacion entre las tablas Inventario y Articulo
         public int ArticuloId { get; set; }

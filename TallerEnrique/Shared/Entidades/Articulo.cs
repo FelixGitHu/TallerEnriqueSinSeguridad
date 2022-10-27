@@ -20,7 +20,7 @@ namespace TallerEnrique.Shared.Entidades
         [Required(ErrorMessage = "El Precio  es obligatorio ")]
         public float PrecioCompra { get; set; }
         public decimal PrecioVenta { get; set; }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
 
         public List<DCompra> DCompras { get; set; } = new List<DCompra>();//Maestro detalle
 

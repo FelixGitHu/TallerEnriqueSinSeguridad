@@ -41,6 +41,6 @@ namespace TallerEnrique.Shared.Entidades
         [Required(ErrorMessage = "El Kilometraje es Obligatorio ")]
         //[StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
         public string Kilometraje { get; set; }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
     }
 }

@@ -14,6 +14,6 @@ namespace TallerEnrique.Shared.Entidades
         [Required(ErrorMessage = "El Nombre del tipo de moneda es obligatorio ")]
         [StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
         public string TipoMoneda { get; set; }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
     }
 }

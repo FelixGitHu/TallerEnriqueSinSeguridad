@@ -20,7 +20,7 @@ namespace TallerEnrique.Shared.Entidades
 
         public decimal Descuento { get; set; } = 0;
 
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
 
         //Relacion de las Tablas 
         public int ArticuloId { get; set; }

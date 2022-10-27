@@ -25,7 +25,7 @@ namespace TallerEnrique.Shared.Entidades
         public DateTime Fecha { get; set; }
         public float Descuento { get; set; }
         public float ManoObra { get; set; }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
 
         //Estableciendo la relacion entre tablas
         public int VehiculoId { get; set; }

@@ -18,7 +18,7 @@ namespace TallerEnrique.Shared.Entidades
 
         [Required(ErrorMessage = "El Precio es Obligatorio ")]
         public int Precio { get; set; }
-        public bool Estado { get; set; }
+        public bool Estado { get; set; } = true;
 
         //Relacion entre la tabla categoria y servicio
         public int CategoriaId { get; set; }
