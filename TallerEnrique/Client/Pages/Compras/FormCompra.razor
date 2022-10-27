@@ -1,10 +1,6 @@
 ﻿@inject IRepositorio repositorio
 @using System.Linq
 
-@*@inject IMostrarMensajes mostrarMensajes
-  @inject NavigationManager navigationManager*@
-
-
 <EditForm Model="NuevaCompra" OnValidSubmit="@(()=>enviarCompra())">
     <DataAnnotationsValidator />
     <div class="card">
@@ -14,12 +10,11 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-8 mb-8">
+                    <a href="compras" class="btn btn-success">Volver</a>
                     <button class="btn btn-success" type="submit">
                         Guardar Cambios
                     </button>
                     <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Compra</button>
-
-                    <a href="compras" class="btn btn-success">Volver</a>
                 </div>
 
             </div>
@@ -128,69 +123,7 @@
                     </table>
                 </div>
             </div>
-
-
-            @*<div class="container">
-            <div class="col-md-4 mb-6">
-                <button type="button" class="btn btn-secondary"
-                        @onclick="@(() => Compras.DCompras.Add(new DCompra()))">
-                    Agregar Detalles
-                </button>
-            </div>
-            @for (var i = 0; i < Compras.DCompras.Count; i++)
-            {
-                var indice = i;
-                var detalle = Compras.DCompras[i];
-
-                <h5>Detalles de la Compra @(i + 1)</h5>
-                <div class="row">
-                    <div class="form-group col-sm-6">
-                        <label>Productos:</label>
-                        <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
-                            <option value="0" disabled> --- Seleccione un producto ---</option>
-                            @foreach (var item in ProductosSeleccionados)
-                                {
-                                <option value="@item.Id">@item.Nombre</option>
-                                }
-                        </InputSelectNumber>
-                        <ValidationMessage For="@(() => detalle.ArticuloId)" />
-                        para validar que sea un Id
-                    </div>
-
-
-                    <div class="form-group col-sm-6">
-                        <label>Cantidad:</label>
-                        <div>
-                            <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" />
-                            <ValidationMessage For="@(() => detalle.Cantidad)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-6">
-                        <label>Precio:</label>
-                        <div>
-                            <InputNumber class="form-control" @bind-Value="@detalle.PrecioUnitario" />
-                            <ValidationMessage For="@(() => detalle.PrecioUnitario)" />
-                        </div>
-                    </div>
-                    <div class="form-group col-sm-6">
-                        <label>Descuento:</label>
-                        <div>
-                            <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
-                            <ValidationMessage For="@(() => detalle.Descuento)" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <button type="button" class="btn btn-danger btn-sm"
-                            @onclick="@(() => Compras.DCompras.RemoveAt(indice))">
-                        Eliminar
-                    </button>
-                </div>
-            }
-        </div>*@
-        </div>
+         </div>
     </div>
 
 </EditForm>
@@ -198,8 +131,7 @@
 @code {
     [Parameter] public Compra NuevaCompra { get; set; }
     //probando si guarda los datos
-    //Compra compras = new Compra();
-    //[Parameter] public DCompra DCompras { get; set; }
+   
     [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public List<Proveedor> ProveedoresSeleccionados { get; set; } = new List<Proveedor>();
     [Parameter] public List<Articulo> ProductosSeleccionados { get; set; } = new List<Articulo>();

@@ -64,13 +64,7 @@ namespace TallerEnrique.Server.Controllers
             return compra.Id;
         }
 
-        //[HttpGet]//probando traer los campos calculados 
-        //public async Task<List<Compra>> Get()
-        //{
-        //    return await context.Compras.Include("Proveedor").Include("DCompras").ToListAsync();
-
-
-        //}
+        
 
         [HttpGet("cargartodo")] //Original(este no lo tiene D
         public async Task<ActionResult<List<Compra>>> Get()
@@ -79,16 +73,7 @@ namespace TallerEnrique.Server.Controllers
             return await context.Compras.Include("Proveedor").Include("DCompras").ToListAsync();
         }
 
-        //[HttpGet]//probando traer los campos calculados 
-        //public async Task<ActionResult<List<Compra>>> Get()
-        //{
-        //    var compras = await context.Compras.ToListAsync();
-        //    foreach (var item in compras)
-        //    {
-        //        item.CostoTotal = (List<Compra>)await context.Compras.GetByCompra(item.Id);
-        //    }
-        //    return compras;
-        //}
+        
 
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Compra>> Get(int id)

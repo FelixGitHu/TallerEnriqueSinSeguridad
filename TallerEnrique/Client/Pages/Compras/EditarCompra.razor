@@ -16,7 +16,7 @@ else
 
 @code {
     [Parameter] public int CompraId { get; set; }
-    private Compra Compras;
+    private Compra Compras = new Compra();
 
     protected async override Task OnInitializedAsync()
     {

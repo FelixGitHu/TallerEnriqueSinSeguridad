@@ -57,19 +57,6 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
 
-        //[HttpPost]//probando hacer funcionar el maestro detalle de compras con funciones de Java Scripts, no funciono😪😪
-        //public IActionResult FormularioDCompra([FromBody] MDetalle mDetalle)
-        //{
-        //    Compra oCompra = mDetalle.oCompra;
-        //    oCompra.MDetalles = mDetalle.oDCompra;
-        //    context.Compras.Add(oCompra);
-        //    context.SaveChanges();
-        //    return JsonResult(new { respuesta = true });
-        //}
-
-        //private IActionResult JsonResult(object p)
-        //{
-        //    throw new NotImplementedException();
-        //}
+      
     }
 }
