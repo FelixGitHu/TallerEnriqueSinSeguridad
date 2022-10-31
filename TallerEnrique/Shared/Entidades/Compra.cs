@@ -16,11 +16,15 @@ namespace TallerEnrique.Shared.Entidades
 
         [Required(ErrorMessage = "La Fecha es obligatorio")]
         public DateTime Fecha { get; set; } = DateTime.Today;
-        public decimal CostoTotal { get { return DCompras.Sum(x => IVA - (IVA * (x.Descuento / 100M))); } set { } }
+        public decimal CostoTotal 
+        { get { return DCompras.Sum(x => IVA - (IVA * 
+        (x.Descuento / 100M))); } set { } }
 
-        public decimal SubTotal { get { return DCompras.Sum(x => (x.Cantidad * x.PrecioUnitario)); } set { } }
+        public decimal SubTotal { get { return DCompras.Sum
+                    (x => (x.Cantidad * x.PrecioUnitario)); } set { } }
         
-        public decimal IVA { get { return  SubTotal + (SubTotal*(15M/100M)); } set { } }
+        public decimal IVA { get { return  SubTotal + 
+                    (SubTotal*(15M/100M)); } set { } }
         //public decimal IVA { get { return SubTotal + (SubTotal * (15M / 100M)); } set { } }
         public bool Estado { get; set; } = true;
 

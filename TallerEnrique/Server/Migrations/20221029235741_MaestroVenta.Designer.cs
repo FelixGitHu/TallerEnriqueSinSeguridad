@@ -10,8 +10,8 @@ using TallerEnrique.Server;
 namespace TallerEnrique.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220921032410_MigracionCuatro")]
-    partial class MigracionCuatro
+    [Migration("20221029235741_MaestroVenta")]
+    partial class MaestroVenta
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -33,16 +33,19 @@ namespace TallerEnrique.Server.Migrations
 
                     b.Property<string>("Marca")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<float>("PrecioUnitario")
+                    b.Property<float>("PrecioCompra")
                         .HasColumnType("real");
+
+                    b.Property<decimal>("PrecioVenta")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -58,8 +61,8 @@ namespace TallerEnrique.Server.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
@@ -108,8 +111,8 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<float>("CostoTotal")
-                        .HasColumnType("real");
+                    b.Property<decimal>("CostoTotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
@@ -117,27 +120,55 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InventarioId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("IVA")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("MecanicoId")
-                        .HasColumnType("int");
+                    b.Property<long>("NFactura")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("ProveedorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InventarioId");
-
-                    b.HasIndex("MecanicoId");
 
                     b.HasIndex("ProveedorId");
 
                     b.ToTable("Compras");
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Configuracion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("DescripcionServicios")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Encabezado")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombreNegocio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Configuracions");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.DCompra", b =>
@@ -156,11 +187,14 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<int?>("CompraId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Descuento")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<float>("PrecioUnitario")
-                        .HasColumnType("real");
+                    b.Property<decimal>("PrecioUnitario")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -171,7 +205,7 @@ namespace TallerEnrique.Server.Migrations
                     b.ToTable("DCompras");
                 });
 
-            modelBuilder.Entity("TallerEnrique.Shared.Entidades.DVentaArticulo", b =>
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.DVenta", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -184,10 +218,16 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<int>("Cantidad")
                         .HasColumnType("int");
 
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
+                    b.Property<decimal>("Descuento")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("VentaId")
+                    b.Property<decimal>("PrecioVenta")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("VentaId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -196,32 +236,7 @@ namespace TallerEnrique.Server.Migrations
 
                     b.HasIndex("VentaId");
 
-                    b.ToTable("DVentaArticulos");
-                });
-
-            modelBuilder.Entity("TallerEnrique.Shared.Entidades.DVentaServicio", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ServicioId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VentaId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ServicioId");
-
-                    b.HasIndex("VentaId");
-
-                    b.ToTable("DVentaServicios");
+                    b.ToTable("DVentas");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Garantia", b =>
@@ -234,10 +249,20 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Politicas")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<int?>("ServicioId")
+                        .HasColumnType("int");
+
                     b.Property<string>("TiempoGarantia")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ServicioId");
 
                     b.ToTable("Garantias");
                 });
@@ -319,13 +344,37 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Estado")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Nombre")
+                    b.Property<string>("Ciudad")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Departamento")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Direccion")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NombreContacto")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NombreEmpresa")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
@@ -347,16 +396,15 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Descripcio")
+                    b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
                     b.Property<int>("Precio")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -375,42 +423,34 @@ namespace TallerEnrique.Server.Migrations
 
                     b.Property<string>("Color")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
                     b.Property<DateTime>("FechaEntrada")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FechaSalida")
-                        .HasMaxLength(50)
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Kilometraje")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Marca")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Placa")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("YearCar")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -429,6 +469,9 @@ namespace TallerEnrique.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CategoriaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Descripcion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -442,8 +485,8 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InventarioId")
-                        .HasColumnType("int");
+                    b.Property<decimal>("IVA")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<float>("ManoObra")
                         .HasColumnType("real");
@@ -458,16 +501,27 @@ namespace TallerEnrique.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ServicioId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("VehiculoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InventarioId");
+                    b.HasIndex("CategoriaId");
 
                     b.HasIndex("MecanicoId");
 
                     b.HasIndex("MonedaId");
+
+                    b.HasIndex("ServicioId");
 
                     b.HasIndex("VehiculoId");
 
@@ -501,25 +555,11 @@ namespace TallerEnrique.Server.Migrations
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>
                 {
-                    b.HasOne("TallerEnrique.Shared.Entidades.Inventario", "Inventario")
-                        .WithMany()
-                        .HasForeignKey("InventarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TallerEnrique.Shared.Entidades.Mecanico", "Mecanico")
-                        .WithMany()
-                        .HasForeignKey("MecanicoId");
-
                     b.HasOne("TallerEnrique.Shared.Entidades.Proveedor", "Proveedor")
                         .WithMany()
                         .HasForeignKey("ProveedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Inventario");
-
-                    b.Navigation("Mecanico");
 
                     b.Navigation("Proveedor");
                 });
@@ -527,13 +567,13 @@ namespace TallerEnrique.Server.Migrations
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.DCompra", b =>
                 {
                     b.HasOne("TallerEnrique.Shared.Entidades.Articulo", "Articulo")
-                        .WithMany()
+                        .WithMany("DCompras")
                         .HasForeignKey("ArticuloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TallerEnrique.Shared.Entidades.Compra", "Compra")
-                        .WithMany()
+                        .WithMany("DCompras")
                         .HasForeignKey("CompraId");
 
                     b.Navigation("Articulo");
@@ -541,7 +581,7 @@ namespace TallerEnrique.Server.Migrations
                     b.Navigation("Compra");
                 });
 
-            modelBuilder.Entity("TallerEnrique.Shared.Entidades.DVentaArticulo", b =>
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.DVenta", b =>
                 {
                     b.HasOne("TallerEnrique.Shared.Entidades.Articulo", "Articulo")
                         .WithMany()
@@ -550,31 +590,23 @@ namespace TallerEnrique.Server.Migrations
                         .IsRequired();
 
                     b.HasOne("TallerEnrique.Shared.Entidades.Venta", "Venta")
-                        .WithMany()
-                        .HasForeignKey("VentaId");
+                        .WithMany("DVentas")
+                        .HasForeignKey("VentaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Articulo");
 
                     b.Navigation("Venta");
                 });
 
-            modelBuilder.Entity("TallerEnrique.Shared.Entidades.DVentaServicio", b =>
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Garantia", b =>
                 {
                     b.HasOne("TallerEnrique.Shared.Entidades.Servicio", "Servicio")
                         .WithMany()
-                        .HasForeignKey("ServicioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TallerEnrique.Shared.Entidades.Venta", "Venta")
-                        .WithMany()
-                        .HasForeignKey("VentaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ServicioId");
 
                     b.Navigation("Servicio");
-
-                    b.Navigation("Venta");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Inventario", b =>
@@ -601,11 +633,9 @@ namespace TallerEnrique.Server.Migrations
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Venta", b =>
                 {
-                    b.HasOne("TallerEnrique.Shared.Entidades.Inventario", "Inventario")
+                    b.HasOne("TallerEnrique.Shared.Entidades.Categoria", "Categoria")
                         .WithMany()
-                        .HasForeignKey("InventarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoriaId");
 
                     b.HasOne("TallerEnrique.Shared.Entidades.Mecanico", "Mecanico")
                         .WithMany()
@@ -619,19 +649,42 @@ namespace TallerEnrique.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TallerEnrique.Shared.Entidades.Servicio", "Servicio")
+                        .WithMany()
+                        .HasForeignKey("ServicioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TallerEnrique.Shared.Entidades.Vehiculo", "Vehiculo")
                         .WithMany()
                         .HasForeignKey("VehiculoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Inventario");
+                    b.Navigation("Categoria");
 
                     b.Navigation("Mecanico");
 
                     b.Navigation("Moneda");
 
+                    b.Navigation("Servicio");
+
                     b.Navigation("Vehiculo");
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Articulo", b =>
+                {
+                    b.Navigation("DCompras");
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>
+                {
+                    b.Navigation("DCompras");
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Venta", b =>
+                {
+                    b.Navigation("DVentas");
                 });
 #pragma warning restore 612, 618
         }

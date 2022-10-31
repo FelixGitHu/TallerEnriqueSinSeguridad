@@ -1,0 +1,41 @@
+﻿
+
+<tr>
+    <td>
+        @ArticuloaddDetail.Nombre
+    </td>
+    <td>
+        $ @ArticuloaddDetail.PrecioCompra.ToString()
+    </td>
+    <td>
+        @ArticuloaddDetail.Marca
+    </td>
+    <td>
+
+        <button type="button" @onclick=agregar class="btn-success">
+            Agregar
+        </button>
+    </td>
+</tr>
+
+
+@code {
+    [Parameter] public Articulo ArticuloaddDetail { get; set; }
+    [Parameter] public EventCallback<DVenta> addArticuloVenta { get; set; }
+    DVenta articuloNuevo;
+
+    private void agregar()
+    {
+
+        addArticuloVenta.InvokeAsync(new DVenta
+        {
+            Articulo = ArticuloaddDetail,
+            Cantidad = 1,
+            Descuento = 0,
+            ArticuloId = (int)ArticuloaddDetail.Id,
+            PrecioVenta = (decimal)ArticuloaddDetail.PrecioVenta
+        });
+
+    }
+}
+

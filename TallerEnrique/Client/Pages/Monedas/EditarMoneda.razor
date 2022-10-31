@@ -1,0 +1,53 @@
+﻿@page "/monedas/editar/{MonedaId:int}"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensaje
+@inject NavigationManager navigationManager
+
+<h3>Editar Información</h3>
+
+@if (Moneda == null)
+{
+    <text>Cargando...</text>
+}
+else
+{
+    <FormularioMoneda OnValidSubmit="Editar" Moneda="Moneda" />
+}
+
+@code {
+    [Parameter] public int MonedaId { get; set; }
+    private Moneda Moneda;
+
+    protected async override Task OnInitializedAsync()
+    {
+        var httpResponse = await repositorio.Get<Moneda>($"api/monedas/{MonedaId}");
+        if (httpResponse.Error)
+        {
+            if (httpResponse.HttpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                navigationManager.NavigateTo("monedas");
+            }
+            else
+            {
+                await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+            }
+        }
+        else
+        {
+            Moneda = httpResponse.Response;
+        }
+    }
+
+    private async void Editar()
+    {
+        var httpResponse = await repositorio.Put("api/monedas", Moneda);
+        if (httpResponse.Error)
+        {
+            await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+        }
+        else
+        {
+            navigationManager.NavigateTo("monedas");
+        }
+    }
+}

@@ -1,0 +1,34 @@
+﻿<EditForm Model="Moneda" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header">
+            Monedas
+        </div>
+        <div class="card-body">
+            <div class="row">
+                
+
+                <div class="form-group col-sm-6">
+                    <label>Tipo de Moneda:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Moneda.TipoMoneda" />
+                        <ValidationMessage For="@(() => Moneda.TipoMoneda)" />
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-6">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a href="monedas" class="btn btn-success">Cancelar</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public Moneda Moneda { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
+}

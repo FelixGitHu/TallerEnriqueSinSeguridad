@@ -28,7 +28,11 @@ namespace TallerEnrique.Server.Controllers
             return mecanico.Id;
         }
 
-       
+        [HttpGet("cargartodos")]
+        public async Task<ActionResult<List<Mecanico>>> Get()
+        {
+            return await context.Mecanicos.ToListAsync();
+        }
 
         [HttpGet]
         public async Task<ActionResult<List<Mecanico>>> Get([FromQuery] Paginacion paginacion)

@@ -1,0 +1,64 @@
+﻿@page "/monedas"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Monedas</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="monedas/crear">Modificar Monedas</a>
+</div>
+
+<ListadoGenerico Listado="Monedas">
+    <HayRegistrosCompleto>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Acción</th>
+                    <th>Tipo Moneda</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Monedas)
+                {
+                    <tr>
+                        <td>
+                            <a href="/monedas/editar/@item.Id" class="btn btn-success">Editar</a>
+                            <button @onclick="@(() => BorrarMoneda(item))" class="btn btn-danger">Borrar</button>
+                        </td>
+                        <td>@item.TipoMoneda</td>
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@code {
+    public List<Moneda> Monedas { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Moneda>>("api/monedas/cargartodos");
+        Monedas = responseHttp.Response;
+    }
+
+    private async Task BorrarMoneda(Moneda moneda)
+    {
+        var responseHttp = await repositorio.Delete($"api/monedas/{moneda.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+}

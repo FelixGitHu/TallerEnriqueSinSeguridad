@@ -1,0 +1,127 @@
+﻿@page "/ventas"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Ventas</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="ventas/crear">Agregar Ventas</a>
+</div>
+
+<ListadoGenerico Listado="VentasRealizadas">
+    <HayRegistrosCompleto>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Acciones</th>
+                    <th>N° Factura</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Descripción</th>
+                    <th>Fecha</th>
+                    <th>Descuento</th>
+                    <th>Mano Obra</th>
+                    <th>Vehiculo</th>
+                    <th>Mecanico</th>
+                    <th>Tipo Pago</th>
+                    <th>Categoria</th>
+                    <th>Servicio</th>
+                    <th>SubTotal</th>
+                    <th>Impuesto</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Venta ventaRealizada in VentasRealizadas)
+                {
+                <tr>
+                    <td>
+                        <a href="/ventas/editar/@ventaRealizada.Id" class="btn btn-success">Editar</a>
+                        <button @onclick="@(() => BorrarVenta(ventaRealizada))" class="btn btn-danger">Borrar</button>
+                    </td>
+                    <td>@ventaRealizada.Id</td>
+                    <td>@ventaRealizada.Fecha</td>
+                    <td>@ventaRealizada.NombresCliente</td>
+                    <td>@ventaRealizada.ApellidosCliente</td>
+                    <td>@ventaRealizada.Descripcion</td>
+                    <td>@ventaRealizada.Fecha</td>
+                    <td>@ventaRealizada.Descuento</td>
+                    <td>@ventaRealizada.ManoObra</td>
+                    <td>@ventaRealizada.Vehiculo.Placa</td>
+                    <td>@ventaRealizada.Mecanico.Nombre</td>
+                    <td>@ventaRealizada.Moneda.TipoMoneda</td>
+                    <td>@ventaRealizada.Categoria.Nombre</td>
+                    <td>@ventaRealizada.Servicio.Descripcion</td>
+                    <td>$ @Math.Round(ventaRealizada.SubTotal, 2)</td>
+                    <td>$ @Math.Round(ventaRealizada.IVA, 2)</td>
+                    <td>$ @Math.Round(ventaRealizada.Total, 2)</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@*Paginaccion*@
+<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
+              PaginasTotales="paginasTotales"></Paginaciones>
+
+
+@code {
+
+    //Paginacion
+    private int paginaActual = 1;
+    private int paginasTotales;
+
+    public List<Servicio> Servicios { get; set; } = new List<Servicio>();
+    public List<Moneda> Monedas { get; set; } = new List<Moneda>();
+    public List<Mecanico> Mecanicos { get; set; } = new List<Mecanico>();
+    public List<Vehiculo> Vehiculos { get; set; } = new List<Vehiculo>();
+    public List<Categoria> Categorias { get; set; } = new List<Categoria>();
+    //variablesD
+    public List<Venta> VentasRealizadas = new List<Venta>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        //extraccion de datos al iniciar la pagina
+        await getVentasRealizadas();
+    }
+    private async Task getVentasRealizadas()
+    {
+        var responseHttp = await repositorio.Get<List<Venta>>("api/ventas/cargartodo");
+        VentasRealizadas = responseHttp.Response;
+
+    }
+
+    private async Task BorrarVenta(Venta venta)
+    {
+        var responseHttp = await repositorio.Delete($"api/ventas/{venta.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await getVentasRealizadas();
+        }
+
+    }
+
+    //Paginacion
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+    private async Task Cargar(int pagina = 1)
+    {
+        var responseHttp = await repositorio.Get<List<Venta>>($"api/ventas?pagina={pagina}");
+        if (!responseHttp.Error)
+        {
+            VentasRealizadas = responseHttp.Response;
+            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
+            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+        }
+    }
+}

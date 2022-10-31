@@ -1,0 +1,45 @@
+﻿@page "/ventas/crear"
+@inject IRepositorio repositorio
+@inject NavigationManager navigationManager
+@inject IMostrarMensajes mostrarMensajes
+@inject HttpClient httclient
+
+<h3>Agregar Venta</h3>
+
+@*<FormCompra OnValidSubmit="Crear" Compra="Compras"/>*@
+<FormularioVenta OnValidSubmit="OnvalidSubmit" NuevaVenta="Ventas" />
+
+
+@code {
+    private Venta Ventas = new Venta();
+
+    private async Task Crear()
+    {
+        var httpResponse = await repositorio.Post("api/ventas", Ventas);
+        if (httpResponse.Error)
+        {
+            var body = await httpResponse.GetBody();
+            await mostrarMensajes.MostrarMensajeError(body);
+        }
+        else
+        {
+            navigationManager.NavigateTo("/ventas");
+        }
+    }
+
+    private async Task OnvalidSubmit()
+    {
+        var respuesta = await httclient.PostAsJsonAsync("api/ventas", Ventas);
+        var cuerpoRespuesta = await respuesta.Content.ReadAsStringAsync();
+
+        if (respuesta.IsSuccessStatusCode)
+        {
+            navigationManager.NavigateTo("ventas");
+        }
+        else
+        {
+            Console.WriteLine(cuerpoRespuesta);
+            Console.WriteLine((int)respuesta.StatusCode);
+        }
+    }
+}

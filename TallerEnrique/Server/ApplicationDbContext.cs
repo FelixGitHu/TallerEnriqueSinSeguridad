@@ -31,9 +31,10 @@ namespace TallerEnrique.Server
         public DbSet<Compra> Compras { get; set; }
         public DbSet<Vehiculo> Vehiculos { get; set; }
         public DbSet<DCompra> DCompras { get; set; }
+        public DbSet<DVenta> DVentas { get; set; }
         public DbSet<Venta> Ventas { get; set; }
-        public DbSet<DVentaArticulo> DVentaArticulos { get; set; }
-        public DbSet<DVentaServicio> DVentaServicios { get; set; }
+        //public DbSet<DVentaArticulo> DVentaArticulos { get; set; }
+        //public DbSet<DVentaServicio> DVentaServicios { get; set; }
         public DbSet<Cierre> Cierre { get; set; }
         public DbSet<Configuracion> Configuracions { get; set; }
         //public DbSet<MDetalle> MDetalles { get; set; }
