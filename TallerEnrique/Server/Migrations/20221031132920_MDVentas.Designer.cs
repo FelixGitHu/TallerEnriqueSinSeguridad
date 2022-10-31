@@ -10,8 +10,8 @@ using TallerEnrique.Server;
 namespace TallerEnrique.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221029235741_MaestroVenta")]
-    partial class MaestroVenta
+    [Migration("20221031132920_MDVentas")]
+    partial class MDVentas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -222,9 +222,6 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal>("PrecioVenta")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal>("Total")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("VentaId")
@@ -476,8 +473,8 @@ namespace TallerEnrique.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Descuento")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Descuento")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
@@ -488,8 +485,8 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<decimal>("IVA")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("ManoObra")
-                        .HasColumnType("real");
+                    b.Property<decimal>("ManoObra")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("MecanicoId")
                         .HasColumnType("int");
@@ -584,7 +581,7 @@ namespace TallerEnrique.Server.Migrations
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.DVenta", b =>
                 {
                     b.HasOne("TallerEnrique.Shared.Entidades.Articulo", "Articulo")
-                        .WithMany()
+                        .WithMany("DVentas")
                         .HasForeignKey("ArticuloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -675,6 +672,8 @@ namespace TallerEnrique.Server.Migrations
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Articulo", b =>
                 {
                     b.Navigation("DCompras");
+
+                    b.Navigation("DVentas");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>

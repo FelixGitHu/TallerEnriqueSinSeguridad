@@ -23,6 +23,7 @@ namespace TallerEnrique.Shared.Entidades
         public bool Estado { get; set; } = true;
 
         public List<DCompra> DCompras { get; set; } = new List<DCompra>();//Maestro detalle
+        public List<DVenta> DVentas { get; set; } = new List<DVenta>();
 
         //public override bool Equals(object obj)///esto es de la prueba para typeHead, pero no me funciono
         //{

@@ -222,9 +222,6 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<decimal>("PrecioVenta")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int>("VentaId")
                         .HasColumnType("int");
 
@@ -474,8 +471,8 @@ namespace TallerEnrique.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Descuento")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Descuento")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
@@ -486,8 +483,8 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<decimal>("IVA")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<float>("ManoObra")
-                        .HasColumnType("real");
+                    b.Property<decimal>("ManoObra")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("MecanicoId")
                         .HasColumnType("int");
@@ -582,7 +579,7 @@ namespace TallerEnrique.Server.Migrations
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.DVenta", b =>
                 {
                     b.HasOne("TallerEnrique.Shared.Entidades.Articulo", "Articulo")
-                        .WithMany()
+                        .WithMany("DVentas")
                         .HasForeignKey("ArticuloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -673,6 +670,8 @@ namespace TallerEnrique.Server.Migrations
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Articulo", b =>
                 {
                     b.Navigation("DCompras");
+
+                    b.Navigation("DVentas");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>

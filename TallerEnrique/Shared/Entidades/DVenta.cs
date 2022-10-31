@@ -15,7 +15,7 @@ namespace TallerEnrique.Shared.Entidades
         public decimal Descuento { get; set; }
         [Required(ErrorMessage = "La Cantidad es Obligatorio ")]
         public int Cantidad { get; set; }
-        public decimal Total { get; set; }
+        //public decimal Total { get; set; }
 
 
         public int ArticuloId { get; set; }

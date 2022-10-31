@@ -74,7 +74,7 @@ namespace TallerEnrique.Server.Controllers
         public async Task<ActionResult<List<Venta>>> Get()
         {
             //return await context.Compras.ToListAsync();
-            return await context.Ventas.Include("Vehiculo").Include("Moneda").Include("Servicio").Include("Mecanico").Include("Categoria").Include("DVentas").ToListAsync();
+           return await context.Ventas.Include("Vehiculo").Include("Moneda").Include("Servicio").Include("Mecanico").Include("Categoria").Include("DVentas").ToListAsync();
         }
 
         //[HttpGet("{id}")]

@@ -2,7 +2,7 @@
 
 namespace TallerEnrique.Server.Migrations
 {
-    public partial class MaestroVenta : Migration
+    public partial class MDVentas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -25,6 +25,22 @@ namespace TallerEnrique.Server.Migrations
                 name: "IX_Ventas_InventarioId",
                 table: "Ventas",
                 newName: "IX_Ventas_ServicioId");
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "ManoObra",
+                table: "Ventas",
+                type: "decimal(18,2)",
+                nullable: false,
+                oldClrType: typeof(float),
+                oldType: "real");
+
+            migrationBuilder.AlterColumn<decimal>(
+                name: "Descuento",
+                table: "Ventas",
+                type: "decimal(18,2)",
+                nullable: false,
+                oldClrType: typeof(float),
+                oldType: "real");
 
             migrationBuilder.AddColumn<int>(
                 name: "CategoriaId",
@@ -107,7 +123,6 @@ namespace TallerEnrique.Server.Migrations
                     PrecioVenta = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Descuento = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
-                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ArticuloId = table.Column<int>(type: "int", nullable: false),
                     VentaId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -202,6 +217,22 @@ namespace TallerEnrique.Server.Migrations
                 name: "IX_Ventas_ServicioId",
                 table: "Ventas",
                 newName: "IX_Ventas_InventarioId");
+
+            migrationBuilder.AlterColumn<float>(
+                name: "ManoObra",
+                table: "Ventas",
+                type: "real",
+                nullable: false,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)");
+
+            migrationBuilder.AlterColumn<float>(
+                name: "Descuento",
+                table: "Ventas",
+                type: "real",
+                nullable: false,
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Placa",

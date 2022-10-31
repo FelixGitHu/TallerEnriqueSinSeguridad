@@ -22,7 +22,7 @@
                 <div class="form-group col-sm-4">
                     <label>N° Factura:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.Id" />
+                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.Id" readonly="readonly"/>
                         <ValidationMessage For="@(() => NuevaVenta.Id)" />
                     </div>
                 </div>
@@ -153,7 +153,7 @@
             <hr />
             <h3>  Articulos Disponibles</h3>
             <div class="row ">
-                aca la lista de productos que se pueden llevar
+                @*aca la lista de productos que se pueden llevar*@
                 <div class="col-md-5 ">
                     <table class="table table-bordered table-sm" id="tbproducto">
                         <thead>
@@ -173,7 +173,7 @@
                         </tbody>
                     </table>
                 </div>
-                aca la lista que actualmente se lleva
+                @*aca la lista que actualmente se lleva*@
                 <div class="col-md-6 ">
                     <table class="table table-bordered table-sm">
                         <thead>
@@ -274,8 +274,6 @@
         //NuevaCompra.DCompras = articulosComprados;
         OnValidSubmit.InvokeAsync();
     }
-
-
 
 
     private void Cancelar()

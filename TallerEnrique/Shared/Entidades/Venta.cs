@@ -29,7 +29,7 @@ namespace TallerEnrique.Shared.Entidades
         public bool Estado { get; set; } = true;
         public decimal SubTotal { get { return DVentas.Sum(x => (x.Cantidad * x.PrecioVenta) ); } set { } }
         public decimal IVA { get { return SubTotal + (SubTotal * (15M / 100M)); } set { } }
-        public decimal Total { get { return DVentas.Sum(x => IVA - (IVA * (x.Descuento / 100M) + ManoObra)); } set { } }
+        public decimal Total { get { return DVentas.Sum(x => IVA - (IVA * (x.Descuento / 100M))); } set { } }
 
         //Estableciendo la relacion entre tablas
         public int VehiculoId { get; set; }
@@ -49,6 +49,6 @@ namespace TallerEnrique.Shared.Entidades
         //Maestro detallle 28 de octubre 2022 2:25 PM
         //public List<DVentaArticulo> DVentaArticulos { get; set; } = new List<DVentaArticulo>();
         //public List<DVentaServicio> dVentaServicios { get; set; } = new List<DVentaServicio>();
-        public List<DVenta> DVentas { get; set; }
+        public List<DVenta> DVentas { get; set; } = new List<DVenta>();
     }
 }
