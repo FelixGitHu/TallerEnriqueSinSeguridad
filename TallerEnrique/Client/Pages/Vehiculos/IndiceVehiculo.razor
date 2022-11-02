@@ -29,7 +29,7 @@
                 @foreach (var item in Vehiculos)
                 {
                     <tr>
-                        <td>
+                        <td class="col-sm-2">
                             <a href="/vehiculos/editar/@item.Id" class="btn btn-success">Editar</a>
                             <button @onclick="@(() => BorrarVehiculo(item))" class="btn btn-danger">Borrar</button>
                         </td>
@@ -38,8 +38,8 @@
                         <td>@item.Color</td>
                         <td>@item.YearCar</td>
                         <td>@item.Placa</td>
-                        <td>@item.FechaEntrada</td>
-                        <td>@item.FechaSalida</td>
+                        <td>@item.FechaEntrada.ToShortDateString()</td>
+                        <td>@item.FechaSalida.ToShortDateString()</td>
                         <td>@item.Kilometraje</td>
                     </tr>
                 }

@@ -29,7 +29,7 @@ namespace TallerEnrique.Shared.Entidades
         public string Placa { get; set; }
 
         [Required(ErrorMessage = "La Fecha de Entrada es Obligatorio ")]
-        public DateTime FechaEntrada { get; set; } = DateTime.Today;
+        public DateTime FechaEntrada { get; set; } = DateTime.Now;
 
         [Required(ErrorMessage = "La Fecha de salida es Obligatorio ")]
         public DateTime FechaSalida { get; set; } = DateTime.Now;

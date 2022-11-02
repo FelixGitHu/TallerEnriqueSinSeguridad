@@ -25,7 +25,7 @@
                 @foreach (var item in Configuracions)
                 {
                     <tr>
-                        <td>
+                        <td class="col-sm-2">
                             <a href="/configuracions/editar/@item.Id" class="btn btn-success">Editar</a>
                             <button @onclick="@(() => BorrarConfiguracion(item))" class="btn btn-danger">Borrar</button>
                         </td>
