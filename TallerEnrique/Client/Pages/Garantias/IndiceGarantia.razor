@@ -12,7 +12,7 @@
     <HayRegistrosCompleto>
         <table class="table table-striped">
             <thead>
-                <tr>
+                <tr >
                     <th>Acción</th>
                     <th>Tiempo de la Garantia en Semanas</th>
                     <th>Políticas de Garantía</th>
@@ -23,7 +23,7 @@
                 @foreach (var item in Garantias)
                 {
                 <tr>
-                    <td>
+                    <td class="col-sm-2">
                         <a href="/garantias/editar/@item.Id" class="btn btn-success">Editar</a>
                         <button @onclick="@(() => BorrarGarantia(item))" class="btn btn-danger">Borrar</button>
                     </td>
