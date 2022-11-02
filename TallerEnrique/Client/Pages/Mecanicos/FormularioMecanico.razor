@@ -7,7 +7,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-4">
-                    <label>Nombre:</label>
+                    <label>Nombres:</label>
                     <div>
                         <InputText class="form-control" @bind-Value="@Mecanico.Nombre" />
                         <ValidationMessage For="@(() => Mecanico.Nombre)" />
@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="form-group col-sm-4">
-                    <label>Apellido:</label>
+                    <label>Apellidos:</label>
                     <div>
                         <InputText class="form-control" @bind-Value="@Mecanico.Apellido" />
                         <ValidationMessage For="@(() => Mecanico.Apellido)" />
@@ -28,6 +28,15 @@
                     <div>
                         <InputText class="form-control" @bind-Value="@Mecanico.Telefono" />
                         <ValidationMessage For="@(() => Mecanico.Telefono)" />
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
+                <div class="form-group col-sm-8">
+                    <label>Dirección:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Mecanico.Direccion" />
+                        <ValidationMessage For="@(() => Mecanico.Direccion)" />
                     </div>
                 </div>
             </div>

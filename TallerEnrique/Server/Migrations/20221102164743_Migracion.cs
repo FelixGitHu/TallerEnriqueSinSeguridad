@@ -2,7 +2,7 @@
 
 namespace TallerEnrique.Server.Migrations
 {
-    public partial class MDVentas : Migration
+    public partial class Migracion : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -114,6 +114,12 @@ namespace TallerEnrique.Server.Migrations
                 oldType: "nvarchar(50)",
                 oldMaxLength: 50);
 
+            migrationBuilder.AddColumn<string>(
+                name: "Direccion",
+                table: "Mecanicos",
+                type: "nvarchar(max)",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "DVentas",
                 columns: table => new
@@ -207,6 +213,10 @@ namespace TallerEnrique.Server.Migrations
             migrationBuilder.DropColumn(
                 name: "Total",
                 table: "Ventas");
+
+            migrationBuilder.DropColumn(
+                name: "Direccion",
+                table: "Mecanicos");
 
             migrationBuilder.RenameColumn(
                 name: "ServicioId",

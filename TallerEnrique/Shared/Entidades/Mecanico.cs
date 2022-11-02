@@ -17,6 +17,7 @@ namespace TallerEnrique.Shared.Entidades
         public string Apellido { get; set; }
         // [Required(ErrorMessage = "El campo {0} es requerido")]
         public string Telefono { get; set; }
+        public string Direccion { get; set; }
         public bool Estado { get; set; } = true;
     }
 }
