@@ -24,11 +24,12 @@
                 @foreach (var item in Servicios)
                 {
                     <tr>
-                        <td>
+                        <td class="col-sm-2">
                             <a href="/servicios/editar/@item.Id" class="btn btn-success">Editar</a>
+
                             <button @onclick="@(() => BorrarServicio(item))" class="btn btn-danger">Borrar</button>
                         </td>
-                        <td>@item.Categoria</td>
+                        <td>@item.Categoria.Nombre</td>
                         <td>@item.Descripcion</td>
                         <td>S$@item.Precio</td>
                     </tr>
@@ -53,6 +54,23 @@
         await Cargar();
     }
 
+    //Paginacion
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+    private async Task Cargar(int pagina = 1)
+    {
+        var responseHttp = await repositorio.Get<List<Servicio>>($"api/servicios?pagina={pagina}");
+        if (!responseHttp.Error)
+        {
+            Servicios = responseHttp.Response;
+            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
+            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+        }
+    }
+
     private async Task Cargar()
     {
         var responseHttp = await repositorio.Get<List<Servicio>>("api/servicios/cargartodos");
@@ -73,20 +91,5 @@
 
     }
 
-    //Paginacion
-    private async Task paginaSeleccionada(int pagina)
-    {
-        paginaActual = pagina;
-        await Cargar(pagina);
-    }
-    private async Task Cargar(int pagina = 1)
-    {
-        var responseHttp = await repositorio.Get<List<Servicio>>($"api/servicios?pagina={pagina}");
-        if (!responseHttp.Error)
-        {
-            Servicios = responseHttp.Response;
-            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
-            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
-        }
-    }
+   
 }
