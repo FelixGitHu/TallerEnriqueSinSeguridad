@@ -43,7 +43,7 @@
             </div>
             <div class="row">
                 <div class="form-group col-sm-12">
-                    <label>Apellidos Cliente:</label>
+                    <label>Descripción:</label>
                     <div>
                         <InputText class="form-control" @bind-Value="@NuevaVenta.Descripcion" />
                         <ValidationMessage For="@(() => NuevaVenta.Descripcion)" />
@@ -129,7 +129,7 @@
                         <ValidationMessage For="@(() => NuevaVenta.CategoriaId)" />
                     </div>
                 </div>
-                <div class="form-group col-sm-6">
+                <div class="form-group col-sm-4">
                     <label>Servicio:</label>
                     <div>
                         <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.ServicioId">
@@ -145,8 +145,15 @@
                 <div class="form-group col-sm-2">
                     <label>IVA:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.IVA" />
+                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.IVA" readonly="readonly"/>
                         <ValidationMessage For="@(() => NuevaVenta.IVA)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label>Total:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.Total" readonly="readonly" />
+                        <ValidationMessage For="@(() => NuevaVenta.Total)" />
                     </div>
                 </div>
             </div>
