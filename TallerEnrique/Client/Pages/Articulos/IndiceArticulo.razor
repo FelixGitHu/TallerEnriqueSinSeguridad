@@ -1,12 +1,25 @@
 ﻿@page "/articulos"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+
 
 <h3>Artículos</h3>
 
 <div class="form-group">
     <a class="btn btn-info" href="articulos/crear">Agregar artículo</a>
+    @*<div class="input-group" style="width:60%">
+        <input class="form-control" type="text" placeholder="Nombre artículo" @bind="NombreArtFiltro" />
+        <div class="input-group-append">
+            <button @onclick="Filtrar" class="btn btn-primary" type="button"><i class="oi oi-magnifying-glass"></i></button>
+            <button @onclick="Limpiar" class="btn btn-danger" type="button"><i class="oi oi-delete"></i></button>
+        </div>
+    </div>*@
 </div>
+
+
+
+
 
 <ListadoGenerico Listado="Articulos">
     <HayRegistrosCompleto>
@@ -23,16 +36,16 @@
             <tbody>
                 @foreach (var item in Articulos)
                 {
-                <tr>
-                    <td>
-                        <a href="/articulos/editar/@item.Id" class="btn btn-success">Editar</a>
-                        <button @onclick="@(() => BorrarArticulo(item))" class="btn btn-danger">Borrar</button>
-                    </td>
-                    <td>@item.Nombre</td>
-                    <td>@item.Marca</td>
-                    <td>@item.PrecioCompra</td>
-                    <td>@item.PrecioVenta</td>
-                </tr>
+                    <tr>
+                        <td>
+                            <a href="/articulos/editar/@item.Id" class="btn btn-success">Editar</a>
+                            <button @onclick="@(() => BorrarArticulo(item))" class="btn btn-danger">Borrar</button>
+                        </td>
+                        <td>@item.Nombre</td>
+                        <td>@item.Marca</td>
+                        <td>@item.PrecioCompra</td>
+                        <td>@item.PrecioVenta</td>
+                    </tr>
                 }
             </tbody>
         </table>
@@ -40,13 +53,14 @@
 </ListadoGenerico>
 @*Paginaccion*@
 <Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-            PaginasTotales="paginasTotales"></Paginaciones>
+              PaginasTotales="paginasTotales"></Paginaciones>
 
 
 @code {
     //Paginacion
     private int paginaActual = 1;
     private int paginasTotales;
+    //private string NombreArtFiltro = String.Empty; //filtros
 
     public List<Articulo> Articulos { get; set; }
     protected async override Task OnInitializedAsync()
@@ -89,4 +103,29 @@
         }
 
     }
+    //buscar por nombre
+    //private async Task Filtrar()
+    //{
+    //    await CargarArticulos();
+    //}
+
+    //private async Task Limpiar()
+    //{
+    //    NombreArtFiltro = string.Empty;
+    //    await CargarArticulos();
+    //}
+    //async Task CargarArticulos()
+    //{
+    //    var httpResponse = await Http.GetAsync($"api/articulos/filtro?nombre={NombreArtFiltro}");
+    //    if (httpResponse.IsSuccessStatusCode)
+    //    {
+    //        var responseString = await httpResponse.Content.ReadAsStringAsync();
+    //        Articulos = JsonSerializer.Deserialize<List<Articulo>>(responseString,
+    //            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+    //    }
+    //    else
+    //    {
+    //        Console.WriteLine("error");
+    //    }
+    //}
 }
