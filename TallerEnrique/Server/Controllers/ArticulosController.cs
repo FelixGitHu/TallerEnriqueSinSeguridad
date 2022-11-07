@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ namespace TallerEnrique.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles ="admin")]
     public class ArticulosController : ControllerBase
     {
         private readonly ApplicationDbContext context;
@@ -29,12 +32,14 @@ namespace TallerEnrique.Server.Controllers
         }
         //General
         [HttpGet("cargartodos")]
+        [AllowAnonymous] //para que cualquier usario logueado o no puede acceder  a este end-ponit
         public async Task<ActionResult<List<Articulo>>> Get()
         {
             return await context.Articulos.ToListAsync();
         }
        
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Articulo>> Get(int id)
         {
             return await context.Articulos.FirstOrDefaultAsync(x => x.Id == id);

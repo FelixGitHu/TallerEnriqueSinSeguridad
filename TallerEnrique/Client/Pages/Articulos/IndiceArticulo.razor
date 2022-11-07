@@ -2,6 +2,8 @@
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
 @inject HttpClient Http
+@attribute [Authorize(Roles ="admin")]
+
 
 
 <h3>Artículos</h3>
@@ -37,10 +39,14 @@
                 @foreach (var item in Articulos)
                 {
                     <tr>
-                        <td>
-                            <a href="/articulos/editar/@item.Id" class="btn btn-success">Editar</a>
-                            <button @onclick="@(() => BorrarArticulo(item))" class="btn btn-danger">Borrar</button>
-                        </td>
+                        <AuthorizeView Roles="admin">
+                            <Authorized>
+                                <td>
+                                    <a href="/articulos/editar/@item.Id" class="btn btn-success">Editar</a>
+                                    <button @onclick="@(() => BorrarArticulo(item))" class="btn btn-danger">Borrar</button>
+                                </td>
+                            </Authorized>
+                        </AuthorizeView>
                         <td>@item.Nombre</td>
                         <td>@item.Marca</td>
                         <td>@item.PrecioCompra</td>

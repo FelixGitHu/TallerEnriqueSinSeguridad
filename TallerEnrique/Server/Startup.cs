@@ -1,13 +1,14 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.Linq;
-using System.Text.Json.Serialization;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
 
 namespace TallerEnrique.Server
 {
@@ -29,6 +30,24 @@ namespace TallerEnrique.Server
              options.UseSqlServer("Server=.;Database=SistemaTallerEnriqueBD;Trusted_Connection=True"));
             services.AddControllersWithViews();
             services.AddRazorPages();
+            //seguridad 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+             .AddEntityFrameworkStores<ApplicationDbContext>()
+             .AddDefaultTokenProviders();
+            //Json web Token
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = false,
+                     ValidateAudience = false,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(Configuration["jwt:key"])),//llave secreta con la que se encripta el token
+                     ClockSkew = TimeSpan.Zero
+                 });
+
 
             //con esta configuracion de Json, se pueden enviar datos con una longitud grande
             //y datos complejos como modelos con referencias 
@@ -56,6 +75,8 @@ namespace TallerEnrique.Server
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

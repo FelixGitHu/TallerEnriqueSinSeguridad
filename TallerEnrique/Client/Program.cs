@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Authorization;
+using TallerEnrique.Client.Auth;
 
 namespace TallerEnrique.Client
 {
@@ -30,6 +32,16 @@ namespace TallerEnrique.Client
         {
             services.AddScoped<IRepositorio, Repositorio>();
             services.AddScoped<IMostrarMensajes, MostrarMensajes>();
+            //sistema de autorizacion
+            services.AddAuthorizationCore();
+
+            services.AddScoped<ProveedorAutenticacionJWT>();
+
+            services.AddScoped<AuthenticationStateProvider, ProveedorAutenticacionJWT>(
+                provider => provider.GetRequiredService<ProveedorAutenticacionJWT>());//
+
+            services.AddScoped<ILoginService, ProveedorAutenticacionJWT>(
+               provider => provider.GetRequiredService<ProveedorAutenticacionJWT>());//
         }
     }
 }
