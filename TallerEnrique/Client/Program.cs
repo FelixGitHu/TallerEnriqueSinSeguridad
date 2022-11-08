@@ -42,6 +42,8 @@ namespace TallerEnrique.Client
 
             services.AddScoped<ILoginService, ProveedorAutenticacionJWT>(
                provider => provider.GetRequiredService<ProveedorAutenticacionJWT>());//
+
+            services.AddScoped<RenovadorToken>();
         }
     }
 }

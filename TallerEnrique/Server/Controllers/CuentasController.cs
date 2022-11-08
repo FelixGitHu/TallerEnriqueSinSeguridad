@@ -48,20 +48,20 @@ namespace TallerEnrique.Server.Controllers
             }
         }
 
-        //[HttpGet("RenovarToken")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        //public async Task<ActionResult<UserToken>> Renovar()
-        //{
-        //    var userInfo = new UserInfo()
-        //    {
-        //        Email = HttpContext.User.Identity.Name
-        //    };
+        [HttpGet("RenovarToken")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult<UserToken>> Renovar()
+        {
+            var userInfo = new UserInfo()
+            {
+                Email = HttpContext.User.Identity.Name
+            };
 
-        //    var usuario = await _userManager.FindByEmailAsync(userInfo.Email);
-        //    var roles = await _userManager.GetRolesAsync(usuario);
+            var usuario = await _userManager.FindByEmailAsync(userInfo.Email);
+            var roles = await _userManager.GetRolesAsync(usuario);
 
-        //    return BuildToken(userInfo, roles);
-        //}
+            return BuildToken(userInfo, roles);
+        }
 
         [HttpPost("Login")]
         public async Task<ActionResult<UserToken>> Login([FromBody] UserInfo userInfo)
