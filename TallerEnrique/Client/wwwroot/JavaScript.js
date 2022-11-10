@@ -51,10 +51,10 @@ $("#btnterminar").on("click", function () {
 
     jQuery.ajax({
     
-        url: '@Url.Action("Index","Home"),
+        url: '@Url.Action("Index","Home")',
         type: "POST",
         data: JSON.stringify(oCompraVM),
-        datatype: "json"
+        datatype: "json",
         ContentType: "application/json;charset=utf-8",
         success: function (data) {
 

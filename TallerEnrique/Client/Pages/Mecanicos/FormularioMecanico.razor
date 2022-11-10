@@ -41,10 +41,12 @@
                 </div>
             </div>
             <div class="row">
-                    <div class="col-6">
-                        <button class="btn btn-success" type="submit">Guardar Cambios</button>
-                        <a href="mecanicos" class="btn btn-success">Cancelar</a>
-                    </div>
+                <div class="col-6">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a href="mecanicos" class="btn btn-success">Cancelar</a>
+                    <InputCheckbox @bind-Value="@Mecanico.Estado"></InputCheckbox>
+                    <label>Dar De Baja</label>
+                </div>
             </div>
         </div>
     </div>

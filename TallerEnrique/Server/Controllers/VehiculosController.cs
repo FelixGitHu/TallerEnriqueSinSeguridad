@@ -30,14 +30,14 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Vehiculo>>> Get()
         {
-            return await context.Vehiculos.ToListAsync();
+            return await context.Vehiculos.Where(x => x.Estado == true).ToListAsync();
         }
         // paginacion
 
         [HttpGet]
         public async Task<ActionResult<List<Vehiculo>>> Get([FromQuery] Paginacion paginacion)
         {
-            var queryable = context.Vehiculos.AsQueryable();
+            var queryable = context.Vehiculos.Where(x => x.Estado == true).AsQueryable();
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
             return await queryable.Paginar(paginacion).ToListAsync();
         }

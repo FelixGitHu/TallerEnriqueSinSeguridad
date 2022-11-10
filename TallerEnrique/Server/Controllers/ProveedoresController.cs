@@ -27,7 +27,7 @@ namespace TallerEnrique.Server.Controllers
             await context.SaveChangesAsync();
             return proveedor.Id;
         }
-        //generico
+        //generico Este metodo esta de mas al igual que los demas get que estan en el resto de contraladores
         [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Proveedor>>> Get()
         {
@@ -63,7 +63,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Proveedor>>> Get([FromQuery] Paginacion paginacion)
         {
-            var queryable = context.Proveedors.AsQueryable();
+            var queryable = context.Proveedors.Where(x => x.Estado == true).AsQueryable();
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
             return await queryable.Paginar(paginacion).ToListAsync();
         }

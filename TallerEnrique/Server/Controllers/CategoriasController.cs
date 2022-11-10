@@ -29,7 +29,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Categoria>>> Get()
         {
-            return await context.Categorias.ToListAsync();
+            return await context.Categorias.Where(x => x.Estado == true).ToListAsync();
         }
 
         [HttpGet("{id}")]

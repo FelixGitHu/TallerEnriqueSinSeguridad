@@ -37,7 +37,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Mecanico>>> Get([FromQuery] Paginacion paginacion)
         {
-            var queryable = context.Mecanicos.AsQueryable();
+            var queryable = context.Mecanicos.Where(x => x.Estado == true).AsQueryable();
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
             return await queryable.Paginar(paginacion).ToListAsync();
         }
@@ -45,7 +45,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Mecanico>> Get(int id)
         {
-            return await context.Mecanicos.FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Mecanicos.Where(x => x.Estado == true).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         [HttpPut]

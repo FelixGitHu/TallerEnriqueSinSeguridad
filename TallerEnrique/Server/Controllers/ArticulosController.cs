@@ -35,9 +35,9 @@ namespace TallerEnrique.Server.Controllers
         [AllowAnonymous] //para que cualquier usario logueado o no puede acceder  a este end-ponit
         public async Task<ActionResult<List<Articulo>>> Get()
         {
-            return await context.Articulos.ToListAsync();
+            return await context.Articulos.Where(x => x.Estado == true).ToListAsync();
         }
-       
+
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<Articulo>> Get(int id)
@@ -72,12 +72,12 @@ namespace TallerEnrique.Server.Controllers
         //        .Where(x => x.Nombre.ToLower().Contains(textoBusqueda)).ToListAsync();
         //}
 
-        // paginacion
+        //paginacion
 
-        [HttpGet]
+       [HttpGet]
         public async Task<ActionResult<List<Articulo>>> Get([FromQuery] Paginacion paginacion)
         {
-            var queryable = context.Articulos.AsQueryable();
+            var queryable = context.Articulos.Where(x => x.Estado == true).AsQueryable();
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
             return await queryable.Paginar(paginacion).ToListAsync();
         }

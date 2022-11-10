@@ -30,7 +30,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Servicio>>> Get()
         {
-            return await context.Servicios.Include("Categoria").ToListAsync();
+            return await context.Servicios.Where(x => x.Estado == true).Include("Categoria").ToListAsync();
         }
 
         [HttpGet("{id}")]
