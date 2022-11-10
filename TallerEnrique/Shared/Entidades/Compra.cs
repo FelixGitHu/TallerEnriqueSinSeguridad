@@ -23,8 +23,8 @@ namespace TallerEnrique.Shared.Entidades
                 return
                 //////DCompras.Sum( x => (SubTotal + IVA-(SubTotal * (x.Descuento / 100M))));
                 DCompras.Sum
-                    (x => (IVA - (IVA * (x.Descuento / 100M))) - SubTotal);
-                                         
+                        //(x => (IVA - (IVA * (x.Descuento / 100M))));
+                        (x => SubTotal + IVA);                
             }
             set { }
         } 
@@ -37,7 +37,7 @@ namespace TallerEnrique.Shared.Entidades
         public decimal IVA
         { get 
             { return 
-                    SubTotal + (SubTotal * (15M / 100M)); 
+                    /*SubTotal +*/ (SubTotal * (15M / 100M)); 
             } set { } }
         //public decimal IVA { get { return SubTotal + (SubTotal * (15M / 100M)); } set { } }
         public bool Estado { get; set; } = true;

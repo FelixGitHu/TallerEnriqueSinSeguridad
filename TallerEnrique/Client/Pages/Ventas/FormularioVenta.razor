@@ -22,7 +22,7 @@
                 <div class="form-group col-sm-4">
                     <label>N° Factura:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.Id" readonly="readonly"/>
+                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.Id" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaVenta.Id)" />
                     </div>
                 </div>
@@ -145,7 +145,7 @@
                 <div class="form-group col-sm-2">
                     <label>IVA:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.IVA" readonly="readonly"/>
+                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.IVA" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaVenta.IVA)" />
                     </div>
                 </div>
@@ -157,60 +157,125 @@
                     </div>
                 </div>
             </div>
-            <hr />
-            <h3>  Articulos Disponibles</h3>
-            <div class="row ">
-                @*aca la lista de productos que se pueden llevar*@
-                <div class="col-md-5 ">
-                    <table class="table table-bordered table-sm" id="tbproducto">
-                        <thead>
-                            <tr class="table-active">
-                                <th>NombreArticulo</th>
-                                <th>Precio</th>
-                                <th>Marca</th>
-                                <th>Agregado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (Articulo ArticuloDisponible in articulosDisponibles)
-                            {
 
-                                <TrArticuloAddVenta ArticuloaddDetail="ArticuloDisponible" addArticuloVenta="addDVenta" />
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                @*aca la lista que actualmente se lleva*@
-                <div class="col-md-6 ">
-                    <table class="table table-bordered table-sm">
-                        <thead>
-                            <tr class="table-active">
-                                <th>NombreArticulo</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>Descuento</th>
-                                <th>SubTotal</th>
+            @*Nuevo formulario*@
 
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (NuevaVenta.DVentas.Count != 0)
-                            {
-                                @foreach (DVenta articuloEnVenta in NuevaVenta.DVentas)
-                                {
-                                
-                                    <TrArticuloInVenta removeArticuloVenta="removeDVenta" calcularSubTotal="calcularSubtotal" ventaDetail="articuloEnVenta" />
-                                }
-                            }
-                            else
-                            {
-                                <h3>sin ventas</h3>
-                            }
-                        </tbody>
-                    </table>
+            <div class="container">
+                <div class="col-md-4 mb-6">
+                    <button type="button" class="btn btn-secondary"
+                            @onclick="@(() => NuevaVenta.DVentas.Add(new DVenta()))">
+                        Agregar Detalles
+                    </button>
+                    <hr />
                 </div>
+                @for (var i = 0; i < NuevaVenta.DVentas.Count; i++)
+                {
+                    var indice = i;
+                    var detalle = NuevaVenta.DVentas[i];
+
+                    <h5>Detalles del producto @(i + 1)</h5>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Productos:</label>
+                            <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
+                                <option value="0" disabled> --- Seleccione un producto ---</option>
+                                @foreach (var item in ProductosSeleccionados)
+                                    {
+                                    <option value="@item.Id">@item.Nombre</option>
+                                    }
+                            </InputSelectNumber>
+                            <ValidationMessage For="@(() => detalle.ArticuloId)" />
+                            @*para validar que sea un Id*@
+                        </div>
+
+
+                        <div class="form-group col-sm-6">
+                            <label>Cantidad:</label>
+                            <div>
+                                <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" />
+                                <ValidationMessage For="@(() => detalle.Cantidad)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-sm-6">
+                            <label>Precio:</label>
+                            <div>
+                                <InputNumber class="form-control" @bind-Value="@detalle.PrecioVenta" />
+                                <ValidationMessage For="@(() => detalle.PrecioVenta)" />
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-6">
+                            <label>Descuento:</label>
+                            <div>
+                                <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
+                                <ValidationMessage For="@(() => detalle.Descuento)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="button" class="btn btn-danger btn-sm"
+                                @onclick="@(() => NuevaVenta.DVentas.RemoveAt(indice))">
+                            Eliminar
+                        </button>
+                    </div>
+                }
             </div>
+
+            <!--<hr />
+    <h3>  Articulos Disponibles</h3>
+    <div class="row ">-->
+            @*aca la lista de productos que se pueden llevar*@
+            <!--<div class="col-md-5 ">
+        <table class="table table-bordered table-sm" id="tbproducto">
+            <thead>
+                <tr class="table-active">
+                    <th>NombreArticulo</th>
+                    <th>Precio</th>
+                    <th>Marca</th>
+                    <th>Agregado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Articulo ArticuloDisponible in articulosDisponibles)
+                {
+
+                    <TrArticuloAddVenta ArticuloaddDetail="ArticuloDisponible" addArticuloVenta="addDVenta" />
+                }
+            </tbody>
+        </table>
+    </div>-->
+            @*aca la lista que actualmente se lleva*@
+            <!--<div class="col-md-6 ">
+            <table class="table table-bordered table-sm">
+                <thead>
+                    <tr class="table-active">
+                        <th>NombreArticulo</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Descuento</th>
+                        <th>SubTotal</th>
+
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (NuevaVenta.DVentas.Count != 0)
+                    {
+                        @foreach (DVenta articuloEnVenta in NuevaVenta.DVentas)
+                        {
+
+                            <TrArticuloInVenta removeArticuloVenta="removeDVenta" calcularSubTotal="calcularSubtotal" ventaDetail="articuloEnVenta" />
+                        }
+                    }
+                    else
+                    {
+                        <h3>sin ventas</h3>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>-->
         </div>
     </div>
 
