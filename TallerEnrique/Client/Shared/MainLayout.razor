@@ -2,6 +2,7 @@
 @inject TallerEnrique.Client.Auth.RenovadorToken renovadorToken
 @inject IJSRuntime js
 @inject NavigationManager navigationManager
+@using Radzen.Blazor
 
 <div class="page">
     <div class="sidebar">
@@ -16,8 +17,14 @@
 
         <div class="content px-4">
             @Body
+
         </div>
+        <RadzenDialog />
+        <RadzenNotification />
+        <RadzenContextMenu />
+        <RadzenTooltip />
     </div>
+    
 </div>
 @code{     
 

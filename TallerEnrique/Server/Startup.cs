@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Radzen;
 using System;
 using System.Text;
 
@@ -30,6 +31,11 @@ namespace TallerEnrique.Server
              options.UseSqlServer("Server=.;Database=SistemaTallerEnriqueBD;Trusted_Connection=True"));
             services.AddControllersWithViews();
             services.AddRazorPages();
+            //radzen
+            services.AddScoped<DialogService>();
+            services.AddScoped<NotificationService>();
+            services.AddScoped<TooltipService>();
+            services.AddScoped<ContextMenuService>();
             //seguridad 
             services.AddIdentity<IdentityUser, IdentityRole>()
              .AddEntityFrameworkStores<ApplicationDbContext>()

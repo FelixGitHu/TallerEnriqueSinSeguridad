@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using TallerEnrique.Client.Auth;
+using Radzen;
 
 namespace TallerEnrique.Client
 {
@@ -24,6 +25,11 @@ namespace TallerEnrique.Client
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             ConfigureServices(builder.Services);
+            //Radzen
+            builder.Services.AddScoped<DialogService>();
+            builder.Services.AddScoped<NotificationService>();
+            builder.Services.AddScoped<TooltipService>();
+            builder.Services.AddScoped<ContextMenuService>();
 
             await builder.Build().RunAsync();
         }
