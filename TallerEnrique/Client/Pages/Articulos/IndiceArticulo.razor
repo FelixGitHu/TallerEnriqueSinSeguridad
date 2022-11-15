@@ -2,7 +2,7 @@
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
 @inject HttpClient Http
-@attribute [Authorize(Roles ="admin")]
+@*@attribute [Authorize(Roles ="admin")]*@
 
 
 
@@ -19,16 +19,16 @@
     </div>*@
 </div>
 
-
-
-
-
 <ListadoGenerico Listado="Articulos">
     <HayRegistrosCompleto>
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Acción</th>
+                    <AuthorizeView Roles="admin">
+                        <Authorized>
+                            <th>Acción</th>
+                        </Authorized>
+                    </AuthorizeView>
                     <th>Nombre</th>
                     <th>Marca</th>
                     <th>Precio Compra</th>
@@ -73,22 +73,7 @@
     {
         await Cargar();
     }
-    //Paginacion
-    private async Task paginaSeleccionada(int pagina)
-    {
-        paginaActual = pagina;
-        await Cargar(pagina);
-    }
-    private async Task Cargar(int pagina = 1)
-    {
-        var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos?pagina={pagina}");
-        if (!responseHttp.Error)
-        {
-            Articulos = responseHttp.Response;
-            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
-            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
-        }
-    }
+
 
     private async Task Cargar()
     {
@@ -109,6 +94,25 @@
         }
 
     }
+
+    //Paginacion
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+    private async Task Cargar(int pagina = 1)
+    {
+        var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos?pagina={pagina}");
+        if (!responseHttp.Error)
+        {
+            Articulos = responseHttp.Response;
+            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
+            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+        }
+    }
+
+
     //buscar por nombre
     //private async Task Filtrar()
     //{

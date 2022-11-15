@@ -5,9 +5,11 @@
 @using Radzen.Blazor
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+    <AuthorizeView>
+        <div class="sidebar">
+            <NavMenu />
+        </div>
+    </AuthorizeView>
 
     <div class="main">
         <div class="top-row px-4">
