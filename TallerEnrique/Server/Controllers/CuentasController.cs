@@ -44,7 +44,7 @@ namespace TallerEnrique.Server.Controllers
             }
             else
             {
-                return BadRequest("Username or password invalid");
+                return BadRequest("Nombre de usuario ó contraseña invalida, la contraseña debe de contener mayusculas, números y caracteres especiales");
             }
         }
 
