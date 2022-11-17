@@ -1,7 +1,9 @@
 ﻿<AuthorizeView>
     <Authorized>
         <span>Bienvenido, @context.User.Identity.Name!</span>
-        <a href="Logout" class="nav-link btn btn-link">Cerrar Sesion</a>
+       
+        <a href="Logout" class="btn btn-sm btn-outline-danger"><i class="oi oi-account-logout"></i>Cerrar Sesion</a>
+        
     </Authorized>
     <NotAuthorized>
         <a href="Registro">Registrase</a>

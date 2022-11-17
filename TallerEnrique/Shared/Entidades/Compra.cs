@@ -21,12 +21,12 @@ namespace TallerEnrique.Shared.Entidades
             get 
             {
                 return
-                //////DCompras.Sum( x => (SubTotal + IVA-(SubTotal * (x.Descuento / 100M))));
+                
                 DCompras.Sum
-                        //(x => (IVA - (IVA * (x.Descuento / 100M))));
+                        
                         (x => SubTotal + IVA);                
             }
-            set { }
+            set { } 
         } 
         public decimal SubTotal
         { get 
