@@ -27,9 +27,27 @@ namespace TallerEnrique.Shared.Entidades
         public decimal Descuento { get; set; }
         public decimal ManoObra { get; set; }
         public bool Estado { get; set; } = true;
-        public decimal SubTotal { get { return DVentas.Sum(x => (x.Cantidad * x.PrecioVenta) ); } set { } }
-        public decimal IVA { get { return SubTotal + (SubTotal * (15M / 100M)); } set { } }
-        public decimal Total { get { return DVentas.Sum(x => IVA - (IVA * (x.Descuento / 100M)) + ManoObra); } set { } }
+        public decimal SubTotal
+        {
+            get
+            {
+                return DVentas.Sum
+                      (x => (x.Cantidad * x.PrecioVenta) - ((x.Cantidad * x.PrecioVenta) * x.Descuento / 100));
+            }
+            set { }
+        }
+        public decimal IVA
+        {
+            get
+            {
+
+                return DVentas.Sum
+                     (x => (x.Cantidad * x.PrecioVenta) * (15M / 100M));
+            }
+            set { }
+        }
+        public decimal Total { get; set; }
+        
 
         //Estableciendo la relacion entre tablas
         public int VehiculoId { get; set; }

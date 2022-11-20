@@ -166,12 +166,16 @@
                             @onclick="@(() => NuevaVenta.DVentas.Add(new DVenta()))">
                         Agregar Detalles
                     </button>
+                    <button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
+                        Calcular Total
+                    </button>
                     <hr />
                 </div>
                 @for (var i = 0; i < NuevaVenta.DVentas.Count; i++)
                 {
                     var indice = i;
                     var detalle = NuevaVenta.DVentas[i];
+                    articulosVendidos = NuevaVenta.DVentas;
 
                     <h5>Detalles del producto @(i + 1)</h5>
                     <div class="row">
@@ -282,22 +286,24 @@
 </EditForm>
 
 @code {
-    [Parameter] public Venta NuevaVenta { get; set; }
-    //probando si guarda los datos
+        [Parameter] public Venta NuevaVenta { get; set; } = new Venta();
 
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
-    [Parameter] public List<Vehiculo> VehiculoSeleccionados { get; set; } = new List<Vehiculo>();
-    [Parameter] public List<Moneda> MonedaSeleccionados { get; set; } = new List<Moneda>();
-    [Parameter] public List<Mecanico> MecanicoSeleccionados { get; set; } = new List<Mecanico>();
-    [Parameter] public List<Servicio> ServicioSeleccionados { get; set; } = new List<Servicio>();
-    [Parameter] public List<Categoria> CategoriaSeleccionados { get; set; } = new List<Categoria>();
-    [Parameter] public List<Articulo> ProductosSeleccionados { get; set; } = new List<Articulo>();
+        //probando si guarda los datos
+
+        [Parameter] public EventCallback OnValidSubmit { get; set; }
+        [Parameter] public List<Vehiculo> VehiculoSeleccionados { get; set; } = new List<Vehiculo>();
+        [Parameter] public List<Moneda> MonedaSeleccionados { get; set; } = new List<Moneda>();
+        [Parameter] public List<Mecanico> MecanicoSeleccionados { get; set; } = new List<Mecanico>();
+        [Parameter] public List<Servicio> ServicioSeleccionados { get; set; } = new List<Servicio>();
+        [Parameter] public List<Categoria> CategoriaSeleccionados { get; set; } = new List<Categoria>();
+        [Parameter] public List<Articulo> ProductosSeleccionados { get; set; } = new List<Articulo>();
     private Articulo Articulo = new Articulo();
     private List<Articulo> ListArticulos = new List<Articulo>();
 
     //variablesD
     private List<Articulo> articulosDisponibles = new List<Articulo>();
-    private List<DVenta> articulosVendidos = new List<DVenta>();
+    private List<DVenta> articulosVendidos { get; set; } = new List<DVenta>();
+    
     decimal subTotal;
 
     string valorSelect = "";
@@ -339,6 +345,11 @@
     {
         subTotal = (decimal)articulosVendidos.Select(x => (x.PrecioVenta * x.Cantidad) - ((x.PrecioVenta * x.Cantidad)) * (x.Descuento / 100)).Sum();
 
+    }
+    decimal CalcularTotal()
+    {
+        NuevaVenta.Total += NuevaVenta.SubTotal + NuevaVenta.IVA + NuevaVenta.ManoObra;
+        return NuevaVenta.Total;
     }
 
     public void enviarVenta()

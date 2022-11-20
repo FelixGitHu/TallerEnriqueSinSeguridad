@@ -12,7 +12,7 @@
                 <div class="col-md-8 mb-8">
                     <a href="compras" class="btn btn-success">Volver</a>
                     <button class="btn btn-success" type="submit">
-                        Guardar Cambios
+                        Realizar Compra
                     </button>
                     <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Compra</button>
                 </div>
@@ -65,7 +65,7 @@
                 <div class="form-group col-sm-4">
                     <label>Total:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@NuevaCompra.CostoTotal" readonly="readonly" />
+                        <InputNumber @onclick="@(() => CalcularTotal())" class="form-control" @bind-Value="@NuevaCompra.CostoTotal" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaCompra.CostoTotal)" />
                     </div>
                 </div>
@@ -78,12 +78,16 @@
                             @onclick="@(() => NuevaCompra.DCompras.Add(new DCompra()))">
                         Agregar Detalles
                     </button>
+                    <button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
+                        Calcular Total
+                    </button>
                     <hr />
                 </div>
                 @for (var i = 0; i < NuevaCompra.DCompras.Count; i++)
                 {
                     var indice = i;
                     var detalle = NuevaCompra.DCompras[i];
+                    articulosComprados = NuevaCompra.DCompras;
 
                     <h5>Detalles del producto @(i + 1)</h5>
                     <div class="row">
@@ -194,7 +198,8 @@
 </EditForm>
 
 @code {
-    [Parameter] public Compra NuevaCompra { get; set; }
+    [Parameter] public Compra NuevaCompra { get; set; } = new Compra();
+
     //probando si guarda los datos
 
     [Parameter] public EventCallback OnValidSubmit { get; set; }
@@ -205,8 +210,9 @@
 
     //variablesD
     private List<Articulo> articulosDisponibles = new List<Articulo>();
-    private List<DCompra> articulosComprados = new List<DCompra>();
-    decimal subTotal;
+    public List<DCompra> articulosComprados { get; set; } = new List<DCompra>();
+
+    //decimal subTotal;
 
     string valorSelect = "";
 
@@ -244,57 +250,66 @@
     //    subTotal = (decimal)articulosComprados.Select(x => (x.PrecioUnitario * x.Cantidad) - ((x.PrecioUnitario * x.Cantidad)) * (x.Descuento / 100)).Sum();
 
     //}
+
+
+
+
     decimal CalcularTotal()
+    {
+        NuevaCompra.CostoTotal += NuevaCompra.SubTotal + NuevaCompra.IVA;
+        return NuevaCompra.CostoTotal;
+    }
+    @*decimal CalcularTotal()
     {
         NuevaCompra.CostoTotal = 0;
         if (articulosComprados.Count > 0)
         {
             @for (int i = 0; i < articulosComprados.Count; i++)
             {
-                NuevaCompra.CostoTotal += NuevaCompra.CostoTotal;
+                NuevaCompra.CostoTotal += NuevaCompra.SubTotal + NuevaCompra.IVA;
             }
         }
         return NuevaCompra.CostoTotal;
-    }
+    }*@
 
-    public void enviarCompra()
-    {
-        //NuevaCompra.DCompras = articulosComprados;
-        OnValidSubmit.InvokeAsync();
-    }
-
-
+public void enviarCompra()
+{
+    //NuevaCompra.DCompras = articulosComprados;
+    OnValidSubmit.InvokeAsync();
+}
 
 
-    private void Cancelar()
-    {
-        NuevaCompra = new Compra();
-    }
-
-    private async Task ObtenerProveedores()
-    {
-        var httpResponse = await repositorio.Get<List<Proveedor>>("api/proveedores/cargartodos");
-        ProveedoresSeleccionados = httpResponse.Response;
-    }
 
 
-    private async Task ObtenerProductos()
-    {
-        var httpResponse = await repositorio.Get<List<Articulo>>("api/articulos/cargartodos");
-        ProductosSeleccionados = httpResponse.Response;
-    }
-    private async Task<IEnumerable<Articulo>> BuscarProductos(string searchText)
-    {
-        var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos/buscar/{searchText}"); //aqui busca el método "buscar" en el controlador de producto
-        return responseHttp.Response;
-    }
+private void Cancelar()
+{
+    NuevaCompra = new Compra();
+}
 
-    //No se para que es esto
-    void OnChange(object value)
-    {
-        var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+private async Task ObtenerProveedores()
+{
+    var httpResponse = await repositorio.Get<List<Proveedor>>("api/proveedores/cargartodos");
+    ProveedoresSeleccionados = httpResponse.Response;
+}
 
-        Console.WriteLine($"Value changed to {str}");
-    }
+
+private async Task ObtenerProductos()
+{
+    var httpResponse = await repositorio.Get<List<Articulo>>("api/articulos/cargartodos");
+    ProductosSeleccionados = httpResponse.Response;
+}
+private async Task<IEnumerable<Articulo>> BuscarProductos(string searchText)
+{
+    var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos/buscar/{searchText}"); //aqui busca el método "buscar" en el controlador de producto
+    return responseHttp.Response;
+}
+
+//No se para que es esto
+void OnChange(object value)
+{
+    var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+
+    Console.WriteLine($"Value changed to {str}");
+}
 
 }
