@@ -1,0 +1,68 @@
+﻿@page "/inventarios"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+
+<h3>Inventario</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="inventarios/crear">Agregar al Inventario</a>
+</div>
+
+<ListadoGenerico Listado="Inventarios">
+    <HayRegistrosCompleto>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Existencia</th>
+                    @*<th>Dirección</th>
+                    <th>Telefono</th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Inventarios)
+                {
+                    <tr>
+                        
+                        <td>@item.Articulo.Nombre</td>
+                        <td>@item.Articulo.Marca</td>
+                        <td>@item.Existencia</td>
+                        @*<td>@item.Direccion</td>
+                        <td>@item.Telefono</td>*@
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+
+@code {
+    public List<Inventario> Inventarios { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Inventario>>("api/inventarios/Cargar");
+        Inventarios = responseHttp.Response;
+    }
+
+    private async Task BorrarInventario(Inventario inventario)
+    {
+        var responseHttp = await repositorio.Delete($"api/inventarios/{inventario.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+}
