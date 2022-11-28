@@ -23,8 +23,11 @@ namespace TallerEnrique.Server
             //    modelBuilder.Entity<PeliculaActor>().HasKey(x => new { x.PeliculaId, x.PersonaId });
             var roleAdmin = new IdentityRole()
             { Id = "9a821084-bb87-4287-9b4d-5f7101b75063", Name = "admin", NormalizedName = "admin" };
+            var rolVendedor = new IdentityRole()
+            { Id = "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", Name = "vendedor", NormalizedName = "vendedor" };
 
             modelBuilder.Entity<IdentityRole>().HasData(roleAdmin);
+            modelBuilder.Entity<IdentityRole>().HasData(rolVendedor);
             base.OnModelCreating(modelBuilder);
 
         }

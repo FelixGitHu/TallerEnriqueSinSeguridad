@@ -1,8 +1,9 @@
 ﻿@page "/usuarios"
+@page "/auth"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
 
-<h3>Indice Usuarios</h3>
+<h3>Usuarios</h3>
 
 
 
@@ -12,7 +13,9 @@
             <thead>
                 <tr>
                     <th></th>
-                    <th>Usuario</th>
+                   <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>E-Mail</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,11 +23,13 @@
                 {
                     <tr>
                         <td>
-                            <a href="/usuarios/editar/@usuario.UserId" class="btn btn-success">Editar</a>
+                            <a href="/usuarios/editar/@usuario.UserId" class="btn btn-success">Asignar Rol</a>
+                            <button @onclick="@(() => BorrarUsuario(usuario))" class="btn btn-danger">Borrar</button>
                         </td>
-                        <td>
-                            @usuario.Email
-                        </td>
+                        <td>@usuario.UserName</td>
+                        <td>@usuario.UserLastName</td>
+                        <td>@usuario.Email</td>
+
                     </tr>
                 }
             </tbody>
@@ -58,6 +63,26 @@
             Usuarios = httpResponse.Response;
         }
         //await Cargar();
+    }
+    //Eliminando un Usuario
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<UsuarioDTO>>("api/usuarios");
+        Usuarios = responseHttp.Response;
+    }
+
+    private async Task BorrarUsuario(UsuarioDTO usuario)
+    {
+        var responseHttp = await repositorio.Delete($"api/usuarios/{usuario.UserId}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
     }
 
     //private async Task Cargar()

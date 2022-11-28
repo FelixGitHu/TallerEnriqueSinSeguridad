@@ -36,7 +36,7 @@ namespace TallerEnrique.Server.Controllers
             var queryable = context.Users.AsQueryable();
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
             return await queryable.Paginar(paginacion)
-                .Select(x => new UsuarioDTO { Email = x.Email, UserId = x.Id }).ToListAsync();
+                .Select(x => new UsuarioDTO { Email = x.Email, UserId = x.Id, UserName = x.UserName, UserLastName = x.NormalizedUserName }).ToListAsync();
         }
 
         [HttpGet("roles")]//Listado de Roles
@@ -59,6 +59,15 @@ namespace TallerEnrique.Server.Controllers
         {
             var usuario = await userManager.FindByIdAsync(editarRolDTO.UserId);
             await userManager.RemoveFromRoleAsync(usuario, editarRolDTO.RoleId);
+            return NoContent();
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            var existe = await context.Users.AnyAsync(x => x.Id == id);
+            if (!existe) { return NotFound(); }
+            context.Remove(new IdentityUser { Id = id });
+            await context.SaveChangesAsync();
             return NoContent();
         }
     }

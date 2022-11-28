@@ -515,7 +515,12 @@ namespace TallerEnrique.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "5e88c2dd-5a90-4732-9269-c0f5a15c9eba", "admin", "admin" });
+                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "5af4c7aa-4bd6-46f2-b8fe-5f241fd9c11b", "admin", "admin" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "0387f549-3b78-4614-8115-43733b65449b", "vendedor", "vendedor" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

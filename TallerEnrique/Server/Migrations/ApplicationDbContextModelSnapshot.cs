@@ -49,9 +49,16 @@ namespace TallerEnrique.Server.Migrations
                         new
                         {
                             Id = "9a821084-bb87-4287-9b4d-5f7101b75063",
-                            ConcurrencyStamp = "5e88c2dd-5a90-4732-9269-c0f5a15c9eba",
+                            ConcurrencyStamp = "5af4c7aa-4bd6-46f2-b8fe-5f241fd9c11b",
                             Name = "admin",
                             NormalizedName = "admin"
+                        },
+                        new
+                        {
+                            Id = "28f70cf5-6654-48f9-a9d3-0e772cce4bd9",
+                            ConcurrencyStamp = "0387f549-3b78-4614-8115-43733b65449b",
+                            Name = "vendedor",
+                            NormalizedName = "vendedor"
                         });
                 });
 
