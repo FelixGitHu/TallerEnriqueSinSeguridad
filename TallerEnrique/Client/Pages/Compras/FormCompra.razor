@@ -8,16 +8,7 @@
             Compras
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-8 mb-8">
-                    <a href="compras" class="btn btn-success">Volver</a>
-                    <button class="btn btn-success" type="submit">
-                        Realizar Compra
-                    </button>
-                    <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Compra</button>
-                </div>
-
-            </div>
+            
             <div class="row">
                 <div class="form-group col-sm-4">
                     <label>N° Factura:</label>
@@ -73,15 +64,23 @@
             @*Nuevo formulario*@
 
             <div class="container">
-                <div class="col-md-4 mb-6">
-                    <button type="button" class="btn btn-secondary"
-                            @onclick="@(() => NuevaCompra.DCompras.Add(new DCompra()))">
-                        Agregar Detalles
-                    </button>
-                    <button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
-                        Calcular Total
-                    </button>
-                    <hr />
+                <div class="row">
+                    <div class="col-6">
+                        <button type="button" class="btn btn-secondary"
+                                @onclick="@(() => NuevaCompra.DCompras.Add(new DCompra()))">
+                            Agregar Detalles
+                        </button>
+                        <button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
+                            Calcular Total
+                        </button>
+                        <hr />
+                    </div>
+                    <div class="col-6">
+                        <a href="ventas" class="btn btn-success">Volver</a>
+                        <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                        <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Venta</button>
+                        <hr />
+                    </div>
                 </div>
                 @for (var i = 0; i < NuevaCompra.DCompras.Count; i++)
                 {

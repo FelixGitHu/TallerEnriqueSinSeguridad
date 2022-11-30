@@ -8,16 +8,7 @@
             Ventas
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-md-8 mb-8">
-                    <a href="ventas" class="btn btn-success">Volver</a>
-                    <button class="btn btn-success" type="submit">
-                        Guardar Cambios
-                    </button>
-                    <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Venta</button>
-                </div>
-
-            </div>
+            
             <div class="row">
                 <div class="form-group col-sm-4">
                     <label>N° Factura:</label>
@@ -160,8 +151,9 @@
 
             @*Nuevo formulario*@
 
-            <div class="container">
-                <div class="col-md-4 mb-6">
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
                     <button type="button" class="btn btn-secondary"
                             @onclick="@(() => NuevaVenta.DVentas.Add(new DVenta()))">
                         Agregar Detalles
@@ -171,60 +163,69 @@
                     </button>
                     <hr />
                 </div>
-                @for (var i = 0; i < NuevaVenta.DVentas.Count; i++)
-                {
-                    var indice = i;
-                    var detalle = NuevaVenta.DVentas[i];
-                    articulosVendidos = NuevaVenta.DVentas;
-
-                    <h5>Detalles del producto @(i + 1)</h5>
-                    <div class="row">
-                        <div class="form-group col-sm-6">
-                            <label>Productos:</label>
-                            <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
-                                <option value="0" disabled> --- Seleccione un producto ---</option>
-                                @foreach (var item in ProductosSeleccionados)
-                                    {
-                                    <option value="@item.Id">@item.Nombre</option>
-                                    }
-                            </InputSelectNumber>
-                            <ValidationMessage For="@(() => detalle.ArticuloId)" />
-                            @*para validar que sea un Id*@
-                        </div>
-
-
-                        <div class="form-group col-sm-6">
-                            <label>Cantidad:</label>
-                            <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" />
-                                <ValidationMessage For="@(() => detalle.Cantidad)" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-sm-6">
-                            <label>Precio:</label>
-                            <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.PrecioVenta" />
-                                <ValidationMessage For="@(() => detalle.PrecioVenta)" />
-                            </div>
-                        </div>
-                        <div class="form-group col-sm-6">
-                            <label>Descuento:</label>
-                            <div>
-                                <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
-                                <ValidationMessage For="@(() => detalle.Descuento)" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <button type="button" class="btn btn-danger btn-sm"
-                                @onclick="@(() => NuevaVenta.DVentas.RemoveAt(indice))">
-                            Eliminar
-                        </button>
-                    </div>
-                }
+                <div class="col-6">
+                    <a href="ventas" class="btn btn-success">Volver</a>
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Venta</button>
+                    <hr />
+                </div>
             </div>
+            
+            
+            @for (var i = 0; i < NuevaVenta.DVentas.Count; i++)
+            {
+                var indice = i;
+                var detalle = NuevaVenta.DVentas[i];
+                articulosVendidos = NuevaVenta.DVentas;
+
+                <h5>Detalles del producto @(i + 1)</h5>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label>Productos:</label>
+                        <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
+                            <option value="0" disabled> --- Seleccione un producto ---</option>
+                            @foreach (var item in ProductosSeleccionados)
+                                {
+                                <option value="@item.Id">@item.Nombre</option>
+                                }
+                        </InputSelectNumber>
+                        <ValidationMessage For="@(() => detalle.ArticuloId)" />
+                        @*para validar que sea un Id*@
+                    </div>
+
+
+                    <div class="form-group col-sm-6">
+                        <label>Cantidad:</label>
+                        <div>
+                            <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" />
+                            <ValidationMessage For="@(() => detalle.Cantidad)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-6">
+                        <label>Precio:</label>
+                        <div>
+                            <InputNumber class="form-control" @bind-Value="@detalle.PrecioVenta" />
+                            <ValidationMessage For="@(() => detalle.PrecioVenta)" />
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <label>Descuento:</label>
+                        <div>
+                            <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
+                            <ValidationMessage For="@(() => detalle.Descuento)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <button type="button" class="btn btn-danger btn-sm"
+                            @onclick="@(() => NuevaVenta.DVentas.RemoveAt(indice))">
+                        Eliminar
+                    </button>
+                </div>
+            }
+        </div>
 
             <!--<hr />
     <h3>  Articulos Disponibles</h3>
