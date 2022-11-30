@@ -1,0 +1,111 @@
+﻿@page "/clientes"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@*@attribute [Authorize(Roles ="admin")]*@
+
+<h3>Clientes</h3>
+
+<div class="form-group">
+    <a class="btn btn-info" href="clientes/crear">Agregar Cliente</a>
+    
+</div>
+
+<ListadoGenerico Listado="Clientes">
+    <HayRegistrosCompleto>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <AuthorizeView Roles="admin">
+                        <Authorized>
+                            <th>Acción</th>
+                        </Authorized>
+                    </AuthorizeView>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Ciudad</th>
+                    <th>Departamento</th>
+                    <th>Teléfono</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Clientes)
+                {
+                    <tr>
+                        <AuthorizeView Roles="admin">
+                            <Authorized>
+                                <td>
+                                    <a href="/clientes/editar/@item.Id" class="btn btn-success">Editar</a>
+                                    <button @onclick="@(() => BorrarCliente(item))" class="btn btn-danger">Borrar</button>
+                                </td>
+                            </Authorized>
+                        </AuthorizeView>
+                        <td>@item.Nombres</td>
+                        <td>@item.Apellidos</td>
+                        <td>@item.Ciudad</td>
+                        <td>@item.Departamento</td>
+                        <td>@item.Telefono</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </HayRegistrosCompleto>
+</ListadoGenerico>
+@*Paginaccion*@
+<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
+              PaginasTotales="paginasTotales"></Paginaciones>
+
+
+@code {
+    //Paginacion
+    private int paginaActual = 1;
+    private int paginasTotales;
+    //private string NombreArtFiltro = String.Empty; //filtros
+
+    public List<Cliente> Clientes { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+
+    private async Task Cargar()
+    {
+        var responseHttp = await repositorio.Get<List<Cliente>>("api/clientes");
+        Clientes = responseHttp.Response;
+    }
+
+    private async Task BorrarCliente(Cliente clientes)
+    {
+        var responseHttp = await repositorio.Delete($"api/clientes/{clientes.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
+
+    //Paginacion
+    private async Task paginaSeleccionada(int pagina)
+    {
+        paginaActual = pagina;
+        await Cargar(pagina);
+    }
+    private async Task Cargar(int pagina = 1)
+    {
+        var responseHttp = await repositorio.Get<List<Cliente>>($"api/clientes?pagina={pagina}");
+        if (!responseHttp.Error)
+        {
+            Clientes = responseHttp.Response;
+            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
+            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+        }
+    }
+
+
+    
+}

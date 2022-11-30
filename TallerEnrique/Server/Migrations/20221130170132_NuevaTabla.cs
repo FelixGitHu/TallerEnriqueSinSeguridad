@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TallerEnrique.Server.Migrations
 {
-    public partial class Roles : Migration
+    public partial class NuevaTabla : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -79,6 +79,24 @@ namespace TallerEnrique.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Clientes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombres = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Apellidos = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ciudad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Departamento = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Telefono = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Estado = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clientes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Configuracions",
                 columns: table => new
                 {
@@ -144,27 +162,6 @@ namespace TallerEnrique.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Proveedors", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Vehiculos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Marca = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Modelo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Placa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FechaEntrada = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FechaSalida = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    YearCar = table.Column<int>(type: "int", nullable: false),
-                    Kilometraje = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Estado = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vehiculos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -314,6 +311,35 @@ namespace TallerEnrique.Server.Migrations
                         principalTable: "Categorias",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vehiculos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Marca = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Modelo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Placa = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FechaEntrada = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaSalida = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    YearCar = table.Column<int>(type: "int", nullable: false),
+                    Kilometraje = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Estado = table.Column<bool>(type: "bit", nullable: false),
+                    ClienteId = table.Column<int>(type: "int", nullable: false)
+                    
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vehiculos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vehiculos_Clientes_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Clientes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -515,12 +541,12 @@ namespace TallerEnrique.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "5af4c7aa-4bd6-46f2-b8fe-5f241fd9c11b", "admin", "admin" });
+                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "a96da2c0-cf11-4432-abad-f1bef96a2e53", "admin", "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "0387f549-3b78-4614-8115-43733b65449b", "vendedor", "vendedor" });
+                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "d58ce5b0-3679-4c40-aa4f-8670e7d0b6d9", "vendedor", "vendedor" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -617,6 +643,11 @@ namespace TallerEnrique.Server.Migrations
                 column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Vehiculos_ClientesId",
+                table: "Vehiculos",
+                column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ventas_CategoriaId",
                 table: "Ventas",
                 column: "CategoriaId");
@@ -709,6 +740,9 @@ namespace TallerEnrique.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categorias");
+
+            migrationBuilder.DropTable(
+                name: "Clientes");
         }
     }
 }

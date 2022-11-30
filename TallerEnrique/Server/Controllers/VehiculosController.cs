@@ -30,7 +30,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Vehiculo>>> Get()
         {
-            return await context.Vehiculos.Where(x => x.Estado == true).ToListAsync();
+            return await context.Vehiculos.Where(x => x.Estado == true).Include("Cliente").ToListAsync();
         }
         // paginacion
 

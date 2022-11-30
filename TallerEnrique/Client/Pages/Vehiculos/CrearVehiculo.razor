@@ -2,6 +2,7 @@
 @inject IRepositorio repositorio
 @inject NavigationManager navigationManager
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient httclient
 
 <h3>Nuevo Auto</h3>
 
@@ -21,6 +22,23 @@
         else
         {
             navigationManager.NavigateTo("/vehiculos");
+        }
+    }
+
+    /////////
+    private async Task OnvalidSubmit()
+    {
+        var respuesta = await httclient.PostAsJsonAsync("api/vehiculos", Vehiculo);
+        var cuerpoRespuesta = await respuesta.Content.ReadAsStringAsync();
+
+        if (respuesta.IsSuccessStatusCode)
+        {
+            navigationManager.NavigateTo("vehiculos");
+        }
+        else
+        {
+            Console.WriteLine(cuerpoRespuesta);
+            Console.WriteLine((int)respuesta.StatusCode);
         }
     }
 }

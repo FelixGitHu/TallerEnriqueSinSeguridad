@@ -1,0 +1,65 @@
+﻿<EditForm Model="Clientes" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header">
+            Clientes
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Nombres:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Clientes.Nombres" />
+                        <ValidationMessage For="@(() => Clientes.Nombres)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Apellidos:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Clientes.Apellidos" />
+                        <ValidationMessage For="@(() => Clientes.Apellidos)" />
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-4">
+                    <label>Ciudad:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Clientes.Ciudad" />
+                        <ValidationMessage For="@(() => Clientes.Ciudad)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-4">
+                    <label>Departamento:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Clientes.Departamento" />
+                        <ValidationMessage For="@(() => Clientes.Departamento)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Teléfono:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Clientes.Telefono" />
+                        <ValidationMessage For="@(() => Clientes.Telefono)" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-9">
+                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <a href="clientes" class="btn btn-success">Cancelar</a>
+                    <InputCheckbox @bind-Value="@Clientes.Estado"></InputCheckbox>
+                    <label>Dar De Baja</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+    [Parameter] public Cliente Clientes { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

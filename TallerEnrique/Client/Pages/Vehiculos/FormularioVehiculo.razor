@@ -1,5 +1,5 @@
 ﻿
-
+@inject IRepositorio repositorio
 
 <EditForm Model="Vehiculo" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -60,6 +60,19 @@
             </div>
             <div class="row">
                 <div class="form-group col-sm-4">
+                    <label>Cliente:</label>
+                    <div>
+                        <InputSelectNumber class="form-control" @bind-Value="Vehiculo.ClienteId">
+                            <option value="0">--Cliente--</option>
+                            @foreach (var item in ClienteSeleccionados)
+                            {
+                                <option value="@item.Id">@item.Nombres @*&nbsp; @item.Descripcion*@</option>
+                            }
+                        </InputSelectNumber>
+                        <ValidationMessage For="@(() => Vehiculo.ClienteId)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
                     <label>Año del Auto:</label>
                     <div>
                         <InputNumber class="form-control" @bind-Value="@Vehiculo.YearCar" />
@@ -89,11 +102,22 @@
 
 
 @code {
-   
+
 
     [Parameter] public Vehiculo Vehiculo { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
 
-    
+    [Parameter] public List<Cliente> ClienteSeleccionados { get; set; } = new List<Cliente>();
 
+    protected override async Task OnInitializedAsync()
+    {
+       
+        await ObtenerClientes();
+    }
+
+    private async Task ObtenerClientes()
+    {
+        var httpResponse = await repositorio.Get<List<Cliente>>("api/clientes/cargartodos");
+        ClienteSeleccionados = httpResponse.Response;
+    }
 }

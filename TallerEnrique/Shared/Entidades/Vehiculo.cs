@@ -42,5 +42,10 @@ namespace TallerEnrique.Shared.Entidades
         //[StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
         public string Kilometraje { get; set; }
         public bool Estado { get; set; } = true;
+
+        //Relacion con la tabla Clienta
+        public int ClienteId { get; set; }
+        public Cliente Cliente { get; set; }
+
     }
 }

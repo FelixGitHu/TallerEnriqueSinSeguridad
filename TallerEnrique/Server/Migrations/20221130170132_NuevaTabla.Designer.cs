@@ -10,8 +10,8 @@ using TallerEnrique.Server;
 namespace TallerEnrique.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221128153519_Roles")]
-    partial class Roles
+    [Migration("20221130170132_NuevaTabla")]
+    partial class NuevaTabla
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,14 +51,14 @@ namespace TallerEnrique.Server.Migrations
                         new
                         {
                             Id = "9a821084-bb87-4287-9b4d-5f7101b75063",
-                            ConcurrencyStamp = "5af4c7aa-4bd6-46f2-b8fe-5f241fd9c11b",
+                            ConcurrencyStamp = "a96da2c0-cf11-4432-abad-f1bef96a2e53",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
                             Id = "28f70cf5-6654-48f9-a9d3-0e772cce4bd9",
-                            ConcurrencyStamp = "0387f549-3b78-4614-8115-43733b65449b",
+                            ConcurrencyStamp = "d58ce5b0-3679-4c40-aa4f-8670e7d0b6d9",
                             Name = "vendedor",
                             NormalizedName = "vendedor"
                         });
@@ -314,6 +314,40 @@ namespace TallerEnrique.Server.Migrations
                     b.HasIndex("VentaId");
 
                     b.ToTable("Cierre");
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Clientes", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Apellidos")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ciudad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Departamento")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nombres")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefono")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>
@@ -633,6 +667,11 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ClienteId")
+                        .HasColumnType("int");
+
+                    
+
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -666,6 +705,8 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Vehiculos");
                 });
@@ -892,6 +933,15 @@ namespace TallerEnrique.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Categoria");
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Vehiculo", b =>
+                {
+                    b.HasOne("TallerEnrique.Shared.Entidades.Clientes", "Clientes")
+                        .WithMany()
+                        .HasForeignKey("ClienteId");
+
+                    b.Navigation("Clientes");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Venta", b =>

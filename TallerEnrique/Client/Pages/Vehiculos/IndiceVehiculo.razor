@@ -15,6 +15,7 @@
             <thead>
                 <tr>
                     <th>Acción</th>
+                    <th>Cliente</th>
                     <th>Marca</th>
                     <th>Modelo</th>
                     <th>Color</th>
@@ -33,6 +34,7 @@
                             <a href="/vehiculos/editar/@item.Id" class="btn btn-success">Editar</a>
                             <button @onclick="@(() => BorrarVehiculo(item))" class="btn btn-danger">Borrar</button>
                         </td>
+                        <td>@item.Cliente.Nombres</td>
                         <td>@item.Marca</td>
                         <td>@item.Modelo</td>
                         <td>@item.Color</td>
@@ -58,6 +60,7 @@
     private int paginasTotales;
 
     public List<Vehiculo> Vehiculos { get; set; }
+    public List<Cliente> Clientes { get; set; } = new List<Cliente>();
 
     protected async override Task OnInitializedAsync()
     {
