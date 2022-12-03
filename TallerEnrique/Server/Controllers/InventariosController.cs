@@ -24,5 +24,6 @@ namespace TallerEnrique.Server.Controllers
         {
             return await context.Inventarios.Include("Articulo").ToListAsync();
         }
+
     }
 }

@@ -49,8 +49,8 @@
                         </AuthorizeView>
                         <td>@item.Nombre</td>
                         <td>@item.Marca</td>
-                        <td>@item.PrecioCompra</td>
-                        <td>@item.PrecioVenta</td>
+                        <td>C$ @Math.Round(item.PrecioCompra, 2)</td>
+                        <td>C$ @Math.Round(item.PrecioVenta, 2)</td>
                     </tr>
                 }
             </tbody>

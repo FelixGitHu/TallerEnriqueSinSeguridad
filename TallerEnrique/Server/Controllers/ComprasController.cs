@@ -41,6 +41,9 @@ namespace TallerEnrique.Server.Controllers
                     //y extrae la variable Existencia para asignar el valor de existencia mas la cantidad nueva
                     //del articulo que se compra
                     context.Inventarios.Find(inventario.Id).Existencia = context.Inventarios.Find(inventario.Id).Existencia + dCompra.Cantidad;
+                    var lista_articulo = await context.Articulos.ToListAsync();
+                    var articulo = lista_articulo.First(x => x.Id == dCompra.ArticuloId);
+                    articulo.PrecioCompra = dCompra.PrecioUnitario;
 
                 }
                 else

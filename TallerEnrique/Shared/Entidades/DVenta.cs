@@ -20,7 +20,7 @@ namespace TallerEnrique.Shared.Entidades
 
         public int ArticuloId { get; set; }
         public int VentaId { get; set; }
-        //public int VehiculoId { get; set; }
+        public int? InventarioId { get; set; }
         //public int ServicioId { get; set; }
         //public int MonedaId { get; set; }
         //public int MecanicoId { get; set; }
@@ -28,7 +28,7 @@ namespace TallerEnrique.Shared.Entidades
 
         public Articulo Articulo { get; set; }
         public Venta Venta { get; set; }
-        //public Vehiculo Vehiculo { get; set; }
+        public Inventario Inventario { get; set; }
         //public Servicio Servicio { get; set; }
         //public Moneda Moneda { get; set; }
         //public Mecanico Mecanico { get; set; }

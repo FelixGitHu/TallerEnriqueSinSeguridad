@@ -42,7 +42,9 @@ namespace TallerEnrique.Server.Controllers
                     //y extrae la variable Existencia para asignar el valor de existencia mas la cantidad nueva
                     //del articulo que se compra
                     context.Inventarios.Find(inventario.Id).Existencia = context.Inventarios.Find(inventario.Id).Existencia - dVenta.Cantidad;
-
+                    //var lista_articulo = await context.Articulos.ToListAsync();
+                    //var articulo = lista_articulo.First(x => x.Id == dVenta.ArticuloId);
+                    //articulo.PrecioVenta = dVenta.PrecioVenta;
                 }
                 else
                 {
@@ -74,7 +76,7 @@ namespace TallerEnrique.Server.Controllers
         public async Task<ActionResult<List<Venta>>> Get()
         {
             //return await context.Compras.ToListAsync();
-           return await context.Ventas.Include("Vehiculo").Include("Moneda").Include("Servicio").Include("Mecanico").Include("Categoria").Include("DVentas").ToListAsync();
+           return await context.Ventas.Include("Vehiculo").Include("Moneda").Include("Servicio").Include("Mecanico").Include("Categoria").Include("DVentas").Include("Cliente").ToListAsync();
         }
 
         //[HttpGet("{id}")]

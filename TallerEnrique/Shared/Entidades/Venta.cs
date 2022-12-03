@@ -13,11 +13,11 @@ namespace TallerEnrique.Shared.Entidades
         public int Id { get; set; }
         //public long  NFactura { get; set; }
 
-        [Required(ErrorMessage = "Los Nombres del Cliente son Obligatorio ")]
-        public string NombresCliente { get; set; }
+        //[Required(ErrorMessage = "Los Nombres del Cliente son Obligatorio ")]
+        //public string NombresCliente { get; set; }
 
-        [Required(ErrorMessage = "Los Apellidos del Cliente son Obligatorio ")]
-        public string ApellidosCliente { get; set; }
+        //[Required(ErrorMessage = "Los Apellidos del Cliente son Obligatorio ")]
+        //public string ApellidosCliente { get; set; }
 
         [Required(ErrorMessage = "La Descripcion es Obligatorio ")]
         public string Descripcion { get; set; }
@@ -52,14 +52,14 @@ namespace TallerEnrique.Shared.Entidades
         //Estableciendo la relacion entre tablas
         public int VehiculoId { get; set; }
         public int MonedaId { get; set; }
-        //public int InventarioId { get; set; }
+        public int ClienteId { get; set; }
         public int MecanicoId { get; set; }
         public int ServicioId { get; set; }
         public int? CategoriaId { get; set; }
 
         public Vehiculo Vehiculo { get; set; }
         public Moneda Moneda { get; set; }
-        //public Inventario Inventario { get; set; }
+        public Cliente Cliente { get; set; }
         public Mecanico Mecanico { get; set; }
         public Servicio Servicio  { get; set; }
         public Categoria Categoria { get; set; }

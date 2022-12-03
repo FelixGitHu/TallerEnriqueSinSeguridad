@@ -16,8 +16,8 @@
                 <tr>
                     <th>Acciones</th>
                     <th>N° Factura</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
+                    <th>Cliente</th>
+                    @*<th>Apellidos</th>*@
                     <th>Descripción</th>
                     <th>Fecha</th>
                     <th>Descuento</th>
@@ -41,8 +41,8 @@
                         <button @onclick="@(() => BorrarVenta(ventaRealizada))" class="btn btn-danger">Borrar</button>
                     </td>
                     <td>@ventaRealizada.Id</td>
-                    <td>@ventaRealizada.NombresCliente</td>
-                    <td>@ventaRealizada.ApellidosCliente</td>
+                    <td>@ventaRealizada.Cliente.Nombres</td>
+                    @*<td>@ventaRealizada.ApellidosCliente</td>*@
                     <td>@ventaRealizada.Descripcion</td>
                     <td>@ventaRealizada.Fecha.ToShortDateString()</td>
                     <td>@ventaRealizada.Descuento</td>
@@ -52,9 +52,9 @@
                     <td>@ventaRealizada.Moneda.TipoMoneda</td>
                     <td>@ventaRealizada.Categoria.Nombre</td>
                     <td>@ventaRealizada.Servicio.Descripcion</td>
-                    <td>$ @Math.Round(ventaRealizada.SubTotal, 2)</td>
-                    <td>$ @Math.Round(ventaRealizada.IVA, 2)</td>
-                    <td>$ @Math.Round(ventaRealizada.Total, 2)</td>
+                    <td>C$ @Math.Round(ventaRealizada.SubTotal, 2)</td>
+                    <td>C$ @Math.Round(ventaRealizada.IVA, 2)</td>
+                    <td>C$ @Math.Round(ventaRealizada.Total, 2)</td>
                 </tr>
                 }
             </tbody>

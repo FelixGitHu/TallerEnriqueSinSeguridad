@@ -13,8 +13,8 @@
                     <th>Nombre</th>
                     <th>Marca</th>
                     <th>Existencia</th>
-                    @*<th>Dirección</th>
-                    <th>Telefono</th>*@
+                    <th>Precio de Compra</th>
+                    <th>Precio de Venta</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,8 +25,8 @@
                         <td>@item.Articulo.Nombre</td>
                         <td>@item.Articulo.Marca</td>
                         <td>@item.Existencia</td>
-                        @*<td>@item.Direccion</td>
-                        <td>@item.Telefono</td>*@
+                        <td>C$ @Math.Round(item.Articulo.PrecioCompra, 2)</td>
+                        <td>C$ @Math.Round(item.Articulo.PrecioVenta, 2)</td>
                     </tr>
                 }
             </tbody>

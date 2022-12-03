@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TallerEnrique.Server.Migrations
 {
-    public partial class NuevaTabla : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace TallerEnrique.Server.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nombre = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Marca = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    PrecioCompra = table.Column<float>(type: "real", nullable: false),
+                    PrecioCompra = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PrecioVenta = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -329,7 +329,6 @@ namespace TallerEnrique.Server.Migrations
                     Kilometraje = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false),
                     ClienteId = table.Column<int>(type: "int", nullable: false)
-                    
                 },
                 constraints: table =>
                 {
@@ -339,7 +338,7 @@ namespace TallerEnrique.Server.Migrations
                         column: x => x.ClienteId,
                         principalTable: "Clientes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -395,8 +394,6 @@ namespace TallerEnrique.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NombresCliente = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApellidosCliente = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Descuento = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -407,6 +404,7 @@ namespace TallerEnrique.Server.Migrations
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     VehiculoId = table.Column<int>(type: "int", nullable: false),
                     MonedaId = table.Column<int>(type: "int", nullable: false),
+                    ClienteId = table.Column<int>(type: "int", nullable: false),
                     MecanicoId = table.Column<int>(type: "int", nullable: false),
                     ServicioId = table.Column<int>(type: "int", nullable: false),
                     CategoriaId = table.Column<int>(type: "int", nullable: true)
@@ -420,6 +418,12 @@ namespace TallerEnrique.Server.Migrations
                         principalTable: "Categorias",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Ventas_Clientes_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Clientes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Ventas_Mecanicos_MecanicoId",
                         column: x => x.MecanicoId,
@@ -443,7 +447,7 @@ namespace TallerEnrique.Server.Migrations
                         column: x => x.VehiculoId,
                         principalTable: "Vehiculos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -519,7 +523,8 @@ namespace TallerEnrique.Server.Migrations
                     Descuento = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
                     ArticuloId = table.Column<int>(type: "int", nullable: false),
-                    VentaId = table.Column<int>(type: "int", nullable: false)
+                    VentaId = table.Column<int>(type: "int", nullable: false),
+                    InventarioId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -531,6 +536,12 @@ namespace TallerEnrique.Server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_DVentas_Inventarios_InventarioId",
+                        column: x => x.InventarioId,
+                        principalTable: "Inventarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_DVentas_Ventas_VentaId",
                         column: x => x.VentaId,
                         principalTable: "Ventas",
@@ -541,12 +552,12 @@ namespace TallerEnrique.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "a96da2c0-cf11-4432-abad-f1bef96a2e53", "admin", "admin" });
+                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "bc538e75-4028-49ac-8ebe-f12636ba9c54", "admin", "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "d58ce5b0-3679-4c40-aa4f-8670e7d0b6d9", "vendedor", "vendedor" });
+                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "b45973ae-359e-4999-b96e-f4cfad3d0821", "vendedor", "vendedor" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -623,6 +634,11 @@ namespace TallerEnrique.Server.Migrations
                 column: "ArticuloId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DVentas_InventarioId",
+                table: "DVentas",
+                column: "InventarioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DVentas_VentaId",
                 table: "DVentas",
                 column: "VentaId");
@@ -643,7 +659,7 @@ namespace TallerEnrique.Server.Migrations
                 column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vehiculos_ClientesId",
+                name: "IX_Vehiculos_ClienteId",
                 table: "Vehiculos",
                 column: "ClienteId");
 
@@ -651,6 +667,11 @@ namespace TallerEnrique.Server.Migrations
                 name: "IX_Ventas_CategoriaId",
                 table: "Ventas",
                 column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ventas_ClienteId",
+                table: "Ventas",
+                column: "ClienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ventas_MecanicoId",
@@ -712,19 +733,19 @@ namespace TallerEnrique.Server.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Inventarios");
+                name: "Compras");
 
             migrationBuilder.DropTable(
-                name: "Compras");
+                name: "Inventarios");
 
             migrationBuilder.DropTable(
                 name: "Ventas");
 
             migrationBuilder.DropTable(
-                name: "Articulos");
+                name: "Proveedors");
 
             migrationBuilder.DropTable(
-                name: "Proveedors");
+                name: "Articulos");
 
             migrationBuilder.DropTable(
                 name: "Mecanicos");

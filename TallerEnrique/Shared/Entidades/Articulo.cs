@@ -18,8 +18,8 @@ namespace TallerEnrique.Shared.Entidades
         [StringLength(100, ErrorMessage = "{0} la marca debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
         public string Marca { get; set; }
         [Required(ErrorMessage = "El Precio  es obligatorio ")]
-        public float PrecioCompra { get; set; }
-        public decimal PrecioVenta { get; set; }
+        public decimal PrecioCompra { get; set; }
+        public decimal PrecioVenta { get { return PrecioCompra + (PrecioCompra * (12M / 100M)); } set { } }
         public bool Estado { get; set; } = true;
 
         public List<DCompra> DCompras { get; set; } = new List<DCompra>();//Maestro detalle

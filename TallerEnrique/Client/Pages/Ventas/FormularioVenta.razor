@@ -18,30 +18,18 @@
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
-                    <label>Nombres Cliente:</label>
+                    <label>Cliente:</label>
                     <div>
-                        <InputText class="form-control" @bind-Value="@NuevaVenta.NombresCliente" />
-                        <ValidationMessage For="@(() => NuevaVenta.NombresCliente)" />
+                        <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.ClienteId">
+                            <option value="0" disabled>--Seleccione Cliente--</option>
+                            @foreach (var item in ClienteSeleccionados)
+                            {
+                                <option value="@item.Id">@item.Nombres &nbsp; @item.Apellidos</option>
+                            }
+                        </InputSelectNumber>
+                        <ValidationMessage For="@(() => NuevaVenta.ClienteId)" />
                     </div>
                 </div>
-                <div class="form-group col-sm-4">
-                    <label>Apellidos Cliente:</label>
-                    <div>
-                        <InputText class="form-control" @bind-Value="@NuevaVenta.ApellidosCliente" />
-                        <ValidationMessage For="@(() => NuevaVenta.ApellidosCliente)" />
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-sm-12">
-                    <label>Descripción:</label>
-                    <div>
-                        <InputText class="form-control" @bind-Value="@NuevaVenta.Descripcion" />
-                        <ValidationMessage For="@(() => NuevaVenta.Descripcion)" />
-                    </div>
-                </div>
-            </div>
-            <div class=" row">
                 <div class="form-group col-sm-4">
                     <label>Fecha:</label>
                     <div>
@@ -49,8 +37,19 @@
                         <ValidationMessage For="@(() => NuevaVenta.Fecha)" />
                     </div>
                 </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-12">
+                    <label>Descripción:</label>
+                    <div>
+                        <InputTextArea class="form-control" @bind-Value="@NuevaVenta.Descripcion" />
+                        <ValidationMessage For="@(() => NuevaVenta.Descripcion)" />
+                    </div>
+                </div>
+            </div>
+            <div class=" row">
                 <div class="form-group col-sm-4">
-                    <label>Descuento:</label>
+                    <label>Descuento por Venta:</label>
                     <div>
                         <InputNumber class="form-control" @bind-Value="@NuevaVenta.Descuento" />
                         <ValidationMessage For="@(() => NuevaVenta.Descuento)" />
@@ -63,8 +62,6 @@
                         <ValidationMessage For="@(() => NuevaVenta.ManoObra)" />
                     </div>
                 </div>
-            </div>
-            <div class=" row">
                 <div class="form-group col-sm-4">
                     <label>Vehiculo:</label>
                     <div>
@@ -78,6 +75,8 @@
                         <ValidationMessage For="@(() => NuevaVenta.VehiculoId)" />
                     </div>
                 </div>
+            </div>
+            <div class=" row">
                 <div class="form-group col-sm-4">
                     <label>Mecanico a Cargo:</label>
                     <div>
@@ -104,9 +103,6 @@
                         <ValidationMessage For="@(() => NuevaVenta.MonedaId)" />
                     </div>
                 </div>
-            </div>
-            <div class=" row">
-
                 <div class="form-group col-sm-4">
                     <label>Categoria:</label>
                     <div>
@@ -120,7 +116,9 @@
                         <ValidationMessage For="@(() => NuevaVenta.CategoriaId)" />
                     </div>
                 </div>
-                <div class="form-group col-sm-4">
+            </div>
+            <div class=" row">
+                <div class="form-group col-sm-6">
                     <label>Servicio:</label>
                     <div>
                         <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.ServicioId">
@@ -138,6 +136,13 @@
                     <div>
                         <InputNumber class="form-control" @bind-Value="@NuevaVenta.IVA" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaVenta.IVA)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-2">
+                    <label>SubTotal:</label>
+                    <div>
+                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.SubTotal" readonly="readonly" />
+                        <ValidationMessage For="@(() => NuevaVenta.SubTotal)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-2">
@@ -182,14 +187,18 @@
                 <div class="row">
                     <div class="form-group col-sm-6">
                         <label>Productos:</label>
-                        <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
+                        <InputSelectNumber class="form-control" @bind-Value="detalle.InventarioId">
                             <option value="0" disabled> --- Seleccione un producto ---</option>
-                            @foreach (var item in ProductosSeleccionados)
+                            @foreach (var item in InventarioSeleccionado)
                                 {
-                                <option value="@item.Id">@item.Nombre</option>
+                                    if (item.Existencia > 0)
+                                    {
+                                    <option value="@item.Id">@item.Articulo.Nombre</option>
+                                    }
+
                                 }
                         </InputSelectNumber>
-                        <ValidationMessage For="@(() => detalle.ArticuloId)" />
+                        <ValidationMessage For="@(() => detalle.InventarioId)" />
                         @*para validar que sea un Id*@
                     </div>
 
@@ -287,24 +296,32 @@
 </EditForm>
 
 @code {
-        [Parameter] public Venta NuevaVenta { get; set; } = new Venta();
+    [Parameter] public Venta NuevaVenta { get; set; } = new Venta();
 
-        //probando si guarda los datos
+    //probando si guarda los datos
 
-        [Parameter] public EventCallback OnValidSubmit { get; set; }
-        [Parameter] public List<Vehiculo> VehiculoSeleccionados { get; set; } = new List<Vehiculo>();
-        [Parameter] public List<Moneda> MonedaSeleccionados { get; set; } = new List<Moneda>();
-        [Parameter] public List<Mecanico> MecanicoSeleccionados { get; set; } = new List<Mecanico>();
-        [Parameter] public List<Servicio> ServicioSeleccionados { get; set; } = new List<Servicio>();
-        [Parameter] public List<Categoria> CategoriaSeleccionados { get; set; } = new List<Categoria>();
-        [Parameter] public List<Articulo> ProductosSeleccionados { get; set; } = new List<Articulo>();
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public List<Vehiculo> VehiculoSeleccionados { get; set; } = new List<Vehiculo>();
+    [Parameter] public List<Cliente> ClienteSeleccionados { get; set; } = new List<Cliente>();
+    [Parameter] public List<Moneda> MonedaSeleccionados { get; set; } = new List<Moneda>();
+    [Parameter] public List<Mecanico> MecanicoSeleccionados { get; set; } = new List<Mecanico>();
+    [Parameter] public List<Servicio> ServicioSeleccionados { get; set; } = new List<Servicio>();
+    [Parameter] public List<Categoria> CategoriaSeleccionados { get; set; } = new List<Categoria>();
+    //esta lista ya no la estoy usando por que estoy mandando a llamar al inentario
+    [Parameter] public List<Articulo> ProductosSeleccionados { get; set; } = new List<Articulo>();
+    /// </summary>
+    [Parameter] public List<Inventario> InventarioSeleccionado { get; set; } = new List<Inventario>();
+
+
+    /// <summary>
+
     private Articulo Articulo = new Articulo();
     private List<Articulo> ListArticulos = new List<Articulo>();
 
     //variablesD
     private List<Articulo> articulosDisponibles = new List<Articulo>();
     private List<DVenta> articulosVendidos { get; set; } = new List<DVenta>();
-    
+
     decimal subTotal;
 
     string valorSelect = "";
@@ -317,6 +334,8 @@
         await ObtenerMecanicos();
         await ObtenerServicios();
         await ObtenerCategorias();
+        await ObtenerInventario();
+        await ObtenerCliente();
 
         //extraer los articulos disponibles para comprar
         await GetArticulosDisponibles();
@@ -401,6 +420,17 @@
     {
         var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos/buscar/{searchText}"); //aqui busca el método "buscar" en el controlador de producto
         return responseHttp.Response;
+    }
+
+    private async Task ObtenerInventario()
+    {
+        var httpResponse = await repositorio.Get<List<Inventario>>("api/inventarios/Cargar");
+        InventarioSeleccionado = httpResponse.Response;
+    }
+    private async Task ObtenerCliente()
+    {
+        var httpResponse = await repositorio.Get<List<Cliente>>("api/clientes/cargartodos");
+        ClienteSeleccionados = httpResponse.Response;
     }
 
     //No se para que es esto
