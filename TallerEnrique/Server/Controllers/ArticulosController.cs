@@ -63,18 +63,18 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
         //para buscar articulos
-        //[HttpGet("buscar/{textoBusqueda}")]
-        //public async Task<ActionResult<List<Articulo>>> Get(string textoBusqueda)
-        //{
-        //    if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Articulo>(); }
-        //    textoBusqueda = textoBusqueda.ToLower();
-        //    return await context.Articulos
-        //        .Where(x => x.Nombre.ToLower().Contains(textoBusqueda)).ToListAsync();
-        //}
+        [HttpGet("buscar/{textoBusqueda}")]
+        public async Task<ActionResult<List<Articulo>>> Get(string textoBusqueda)
+        {
+            if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Articulo>(); }
+            textoBusqueda = textoBusqueda.ToLower();
+            return await context.Articulos
+                .Where(x => x.Nombre.ToLower().Contains(textoBusqueda)).ToListAsync();
+        }
 
         //paginacion
 
-       [HttpGet]
+        [HttpGet]
         public async Task<ActionResult<List<Articulo>>> Get([FromQuery] Paginacion paginacion)
         {
             var queryable = context.Articulos.Where(x => x.Estado == true).AsQueryable();

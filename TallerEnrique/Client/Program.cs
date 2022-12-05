@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components.Authorization;
 using TallerEnrique.Client.Auth;
 using Radzen;
+using MudBlazor.Services;
 
 namespace TallerEnrique.Client
 {
@@ -30,7 +31,7 @@ namespace TallerEnrique.Client
             builder.Services.AddScoped<NotificationService>();
             builder.Services.AddScoped<TooltipService>();
             builder.Services.AddScoped<ContextMenuService>();
-
+            builder.Services.AddMudServices();
             await builder.Build().RunAsync();
         }
 
