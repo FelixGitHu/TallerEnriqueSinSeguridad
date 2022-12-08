@@ -2,18 +2,64 @@
 @page "/auth"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
-<h3>Usuarios</h3>
 
+@if (Usuarios == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Usuarios.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron artículos.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Usuarios" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<UsuarioDTO, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Usuarios</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar Usuario..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
 
+            <MudTh Class="thead-dark">Nombre</MudTh>
+            <MudTh>Apellido</MudTh>
+            <MudTh>E-Mail</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombre">@context.UserLastName</MudTd>
+            <MudTd DataLabel="Apellido">@context.UserName</MudTd>
+            <MudTd DataLabel="Email">@context.Email</MudTd>
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/usuarios/editar/{context.UserId}"))" />
+                <a href="/usuarios/editar/@context.UserId" class="btn btn-success">Asignar rol</a>
+            </MudTd>
 
-<ListadoGenerico Listado="Usuarios">
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+@*<ListadoGenerico Listado="Usuarios">
     <HayRegistrosCompleto>
         <table class="table">
             <thead>
                 <tr>
                     <th></th>
-                   <th>Nombre</th>
+                    <th>Nombre</th>
                     <th>Apellido</th>
                     <th>E-Mail</th>
                 </tr>
@@ -35,11 +81,18 @@
             </tbody>
         </table>
     </HayRegistrosCompleto>
-</ListadoGenerico>
+</ListadoGenerico>*@
 @*<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-              PaginasTotales="paginasTotales"></Paginaciones>*@
+    PaginasTotales="paginasTotales"></Paginaciones>*@
 
 @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private UsuarioDTO selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
     List<UsuarioDTO> Usuarios;
 
     //private int paginaActual = 1;
@@ -65,10 +118,25 @@
         //await Cargar();
     }
     //Eliminando un Usuario
+    //private async Task Cargar()
+    //{
+    //    var responseHttp = await repositorio.Get<List<UsuarioDTO>>("api/usuarios");
+    //    Usuarios = responseHttp.Response;
+    //}
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<UsuarioDTO>>("api/usuarios");
-        Usuarios = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/usuarios");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Usuarios = JsonSerializer.Deserialize<List<UsuarioDTO>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
     }
 
     private async Task BorrarUsuario(UsuarioDTO usuario)
@@ -83,6 +151,33 @@
             await Cargar();
         }
 
+    }
+    ///Buscar por nombre
+    private bool FilterFunc1(UsuarioDTO element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(UsuarioDTO element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.UserName.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.UserLastName.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Email.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
     }
 
     //private async Task Cargar()

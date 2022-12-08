@@ -71,5 +71,15 @@ namespace TallerEnrique.Server.Controllers
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
             return await queryable.Paginar(paginacion).ToListAsync();
         }
+
+        //para buscar articulos
+        [HttpGet("buscar/{textoBusqueda}")]
+        public async Task<ActionResult<List<Cliente>>> Get(string textoBusqueda)
+        {
+            if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Cliente>(); }
+            textoBusqueda = textoBusqueda.ToLower();
+            return await context.Clientes
+                .Where(x => x.Nombres.ToLower().Contains(textoBusqueda)).ToListAsync();
+        }
     }
 }

@@ -1,53 +1,93 @@
 ﻿@page "/categorias"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@using System.Text.Json
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
 
-<h3>Categorías</h3>
 
 <div class="form-group">
-    <a class="btn btn-info" href="categorias/crear">Agregar categoría</a>
+    <a class="btn btn-info" href="categorias/crear">Agregar categoria</a>
 </div>
 
-<ListadoGenerico Listado="Categorias">
-    <HayRegistrosCompleto>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Acción</th>
-                    <th>Nombre</th>
-                    <th>Descripcion</th>
-                   
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Categorias)
-                {
-                    <tr>
-                        <td>
-                            <a href="/categorias/editar/@item.Id" class="btn btn-success">Editar</a>
-                            <button @onclick="@(() => BorrarCategoria(item))" class="btn btn-danger">Borrar</button>
-                        </td>
-                        <td>@item.Nombre</td>
-                        <td>@item.Descripcion</td>
-                       
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
+@if (Categorias == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Categorias.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron Categorias.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Categorias" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Categoria, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Categorias</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar categoría..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+
+            <MudTh Class="thead-dark">Nombre</MudTh>
+            <MudTh>Descripción</MudTh>
+            
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombra">@context.Nombre</MudTd>
+            <MudTd DataLabel="Marca">@context.Descripcion</MudTd>
+            
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/categorias/editar/{context.Id}"))" />
+                <a href="/categorias/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
+
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
 
 @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Categoria selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
+
+
     public List<Categoria> Categorias { get; set; }
     protected async override Task OnInitializedAsync()
     {
         await Cargar();
     }
 
+   
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Categoria>>("api/categorias/cargartodos");
-        Categorias = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/categorias/cargartodos");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Categorias = JsonSerializer.Deserialize<List<Categoria>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
     }
 
     private async Task BorrarCategoria(Categoria categoria)
@@ -62,5 +102,31 @@
             await Cargar();
         }
 
+    }
+
+    ///Buscar por nombre
+    private bool FilterFunc1(Categoria element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Categoria element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Descripcion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
     }
 }

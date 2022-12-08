@@ -2,59 +2,80 @@
 @page "/vehiculos"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
-
-<h3>Vehiculos</h3>
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
 <div class="form-group">
     <a class="btn btn-info" href="vehiculos/crear">Agregar Vehiculo</a>
 </div>
 
-<ListadoGenerico Listado="Vehiculos">
-    <HayRegistrosCompleto>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Acción</th>
-                    <th>Cliente</th>
-                    <th>Marca</th>
-                    <th>Modelo</th>
-                    <th>Color</th>
-                    <th>Año</th>
-                    <th>Placa</th>
-                    <th>Fecha de Entrada</th>
-                    <th>Fecha de Salida</th>
-                    <th>Kilometraje</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Vehiculos)
-                {
-                    <tr>
-                        <td class="col-sm-2">
-                            <a href="/vehiculos/editar/@item.Id" class="btn btn-success">Editar</a>
-                            <button @onclick="@(() => BorrarVehiculo(item))" class="btn btn-danger">Borrar</button>
-                        </td>
-                        <td>@item.Cliente.Nombres</td>
-                        <td>@item.Marca</td>
-                        <td>@item.Modelo</td>
-                        <td>@item.Color</td>
-                        <td>@item.YearCar</td>
-                        <td>@item.Placa</td>
-                        <td>@item.FechaEntrada.ToShortDateString()</td>
-                        <td>@item.FechaSalida.ToShortDateString()</td>
-                        <td>@item.Kilometraje</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
+@if (Vehiculos == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Vehiculos.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron registros.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Vehiculos" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Vehiculo, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Vehiculos</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar vehículo..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>Cliente</MudTh>
+            <MudTh Class="thead-dark">Marca</MudTh>
+            <MudTh>Modelo</MudTh>
+            <MudTh>Color</MudTh>
+            <MudTh>Placa</MudTh>
+            <MudTh>Año</MudTh>
+            <MudTh>Kilometraje</MudTh>
+            <MudTh>Fecha Entrada</MudTh>
+            <MudTh>Fecha Salida</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Marca">@context.Cliente.Nombres</MudTd>
+            <MudTd DataLabel="Marca">@context.Marca</MudTd>
+            <MudTd DataLabel="modelo">@context.Modelo</MudTd>
+            <MudTd DataLabel="Color">@context.Color</MudTd>
+            <MudTd DataLabel="Placa">@context.Placa</MudTd>
+            <MudTd DataLabel="Año">@context.YearCar</MudTd>
+            <MudTd DataLabel="Kilometraje">@context.Kilometraje</MudTd>
+            <MudTd DataLabel="Fecha Entrada">@context.FechaEntrada.ToShortDateString()</MudTd>
+            <MudTd DataLabel="Fecha Salida">@context.FechaSalida.ToShortDateString()</MudTd>
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/vehiculos/editar/{context.Id}"))" />
+                <a href="/vehiculos/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
 
-@*Paginaccion*@
-<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-              PaginasTotales="paginasTotales"></Paginaciones>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
 
 @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Vehiculo selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
     //Paginacion
     private int paginaActual = 1;
     private int paginasTotales;
@@ -69,8 +90,18 @@
 
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Vehiculo>>("api/vehiculos/cargartodos");
-        Vehiculos = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/vehiculos/cargartodos");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Vehiculos = JsonSerializer.Deserialize<List<Vehiculo>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
     }
 
     private async Task BorrarVehiculo(Vehiculo vehiculo)
@@ -102,5 +133,42 @@
             var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
             paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
         }
+    }
+    ///Buscar por nombre
+    private bool FilterFunc1(Vehiculo element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Vehiculo element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Marca.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Modelo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Color.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Placa.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.FechaEntrada.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.FechaSalida.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.YearCar.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Kilometraje.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
     }
 }

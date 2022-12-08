@@ -1,48 +1,74 @@
 ﻿@page "/mecanicos"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
-<h3>Mecánicos</h3>
+
 
 <div class="form-group">
     <a class="btn btn-info" href="mecanicos/crear">Agregar mecánico</a>
 </div>
 
-<ListadoGenerico Listado="Mecanicos">
-    <HayRegistrosCompleto>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Acción</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Teléfono</th>
-                    <th>Dirección</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Mecanicos)
-                {
-                    <tr>
-                        <td>
-                            <a href="/mecanicos/editar/@item.Id" class="btn btn-success">Editar</a>
-                            <button @onclick="@(() => BorrarMecanico(item))" class="btn btn-danger">Borrar</button>
-                        </td>
-                        <td>@item.Nombre</td>
-                        <td>@item.Apellido</td>
-                        <td>@item.Telefono</td>
-                        <td>@item.Direccion</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
-@*Paginaccion*@
-<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-              PaginasTotales="paginasTotales"></Paginaciones>
+@if (Mecanicos == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Mecanicos.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron mecánicos.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Mecanicos" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Mecanico, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Mecánicos</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar mecánico..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+
+            <MudTh Class="thead-dark">Nombre</MudTh>
+            <MudTh>Apellido</MudTh>
+            <MudTh>Teléfono</MudTh>
+            <MudTh>Dirrección</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
+            <MudTd DataLabel="Apellido">@context.Apellido</MudTd>
+            <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
+            <MudTd DataLabel="Direccion">@context.Direccion</MudTd>
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/mecanicos/editar/{context.Id}"))" />
+                <a href="/mecanicos/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
+
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
 
 @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Mecanico selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
+
     //Paginacion
     private int paginaActual = 1;
     private int paginasTotales;
@@ -72,8 +98,18 @@
 
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Mecanico>>("api/mecanicos");
-        Mecanicos = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/mecanicos");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Mecanicos = JsonSerializer.Deserialize<List<Mecanico>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
     }
 
     private async Task BorrarMecanico(Mecanico mecanico)
@@ -88,5 +124,35 @@
             await Cargar();
         }
 
+    }
+
+    ///Buscar por nombre
+    private bool FilterFunc1(Mecanico element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Mecanico element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Apellido.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
     }
 }

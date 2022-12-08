@@ -1,0 +1,63 @@
+﻿<link href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" rel="stylesheet">
+
+
+<MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
+    <MudNavMenu Rounded="true" Margin="Margin.Dense" Color="Color.Primary" Class="mud-width-full">
+        <div class="top-row pl-4 navbar navbar-dark" style="background-color: black">
+            <a class="navbar-brand" href="" style="color:white" >
+                @*<img src="flow.png" width="30" height="30" class="d-inline-block align-top" alt="Logo Taller">*@
+                <br />
+                <b>Taller Enrique Peña</b>
+
+            </a>
+
+            <button class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        @*<MudText Typo="Typo.h6" Class="px-4">Taller Enrique</MudText>*@
+        <MudDivider Class="my-2" />
+        <MudNavLink Href="/" Icon="@Icons.Filled.Dashboard">Inicio</MudNavLink>
+        @*<MudNavLink Href="/estadisticas" Icon="@Icons.Filled.QueryStats">Estadísticas</MudNavLink>*@
+        <MudNavGroup Title="Transacciones" Icon="@Icons.Filled.ShoppingCart" Expanded="false">
+            <MudNavLink Href="/compras" Icon="@Icons.Filled.ShoppingCart">Compras</MudNavLink>
+            <MudNavLink Href="/ventas" Icon="@Icons.Filled.PointOfSale">Ventas</MudNavLink>
+        </MudNavGroup>
+
+        <MudNavGroup Title="Catálogos" Icon="@Icons.Filled.Category" Expanded="false">
+            <MudNavLink Href="/mecanicos" Icon="@Icons.Filled.People">Mecanicos</MudNavLink>
+            <MudNavLink Href="/clientes" Icon="@Icons.Filled.People">Clientes</MudNavLink>
+            <MudNavLink Href="/articulos" Icon="@Icons.Filled.ProductionQuantityLimits">Articulos</MudNavLink>
+            <MudNavLink Href="/vehiculos" Icon="@Icons.Filled.DialerSip">Vehiculos</MudNavLink>
+            <MudNavLink Href="/usuarios" Icon="@Icons.Filled.People">Usuarios</MudNavLink>
+        </MudNavGroup>
+        <MudNavLink Href="/inventarios" Icon="@Icons.Filled.Inventory">Inventario</MudNavLink>
+        <MudNavLink Href="/proveedores" Icon="@Icons.Filled.People">Proveedores</MudNavLink>
+
+        <MudNavGroup Title="Nuestros Servicios" Icon="@Icons.Filled.ShoppingBag" Expanded="false">
+            <MudNavLink Href="/categorias" Icon="@Icons.Filled.ListAlt">Categorias</MudNavLink>
+            <MudNavLink Href="/servicios" Icon="@Icons.Filled.ListAlt">Servicios</MudNavLink>
+        </MudNavGroup>
+
+
+        <MudNavLink Href="/Configuracions" Icon="@Icons.Filled.Settings">Empresa</MudNavLink>
+    </MudNavMenu>
+</MudPaper>
+
+
+@code {
+    //[Parameter]
+    //public bool SideBarOpen { get; set; }
+
+    /////
+    ///
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+}

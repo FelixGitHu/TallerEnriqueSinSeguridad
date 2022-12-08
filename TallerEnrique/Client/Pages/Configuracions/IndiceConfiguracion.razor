@@ -1,47 +1,76 @@
 ﻿@page "/configuracions"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
-<h3>Configuraciones</h3>
 
 <div class="form-group">
     <a class="btn btn-info" href="configuracions/crear">Modificar Configuarción</a>
 </div>
 
-<ListadoGenerico Listado="Configuracions">
-    <HayRegistrosCompleto>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Acción</th>
-                    <th>Encabezado</th>
-                    <th>Nombre Taller</th>
-                    <th>Descripción Servicios</th>
-                    <th>Dirección</th>
-                    <th>Telefono</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Configuracions)
-                {
-                    <tr>
-                        <td class="col-sm-2">
-                            <a href="/configuracions/editar/@item.Id" class="btn btn-success">Editar</a>
-                            <button @onclick="@(() => BorrarConfiguracion(item))" class="btn btn-danger">Borrar</button>
-                        </td>
-                        <td>@item.Encabezado</td>
-                        <td>@item.NombreNegocio</td>
-                        <td>@item.DescripcionServicios</td>
-                        <td>@item.Direccion</td>
-                        <td>@item.Telefono</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
+@if (Configuracions == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Configuracions.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron registros.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Configuracions" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Configuracion, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6"> Información Empresa</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar ..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+
+            <MudTh Class="thead-dark">Enabezado</MudTh>
+            <MudTh>Nombre</MudTh>
+            <MudTh>Descripcion</MudTh>
+            <MudTh>Dirección</MudTh>
+            <MudTh>Teléfono</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombra">@context.Encabezado</MudTd>
+            <MudTd DataLabel="Marca">@context.NombreNegocio</MudTd>
+            <MudTd DataLabel="Nombra">@context.DescripcionServicios</MudTd>
+            <MudTd DataLabel="Marca">@context.Direccion</MudTd>
+            <MudTd DataLabel="Marca">@context.Telefono</MudTd>
+            <MudTd Class="col-2">
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/configuracions/editar/{context.Id}"))" />
+                <a href="/configuracions/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
+
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
 
 @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Configuracion selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
+
+
     public List<Configuracion> Configuracions { get; set; }
     protected async override Task OnInitializedAsync()
     {
@@ -50,8 +79,18 @@
 
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Configuracion>>("api/configuracions");
-        Configuracions = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/configuracions");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Configuracions = JsonSerializer.Deserialize<List<Configuracion>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
     }
 
     private async Task BorrarConfiguracion(Configuracion configuracion)
@@ -66,5 +105,37 @@
             await Cargar();
         }
 
+    }
+
+    ///Buscar por nombre
+    private bool FilterFunc1(Configuracion element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Configuracion element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Encabezado.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.NombreNegocio.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.DescripcionServicios.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
     }
 }

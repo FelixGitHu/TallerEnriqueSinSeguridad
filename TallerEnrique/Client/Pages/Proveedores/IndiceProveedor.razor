@@ -1,99 +1,166 @@
 ﻿@page "/proveedores"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
-<h3>Proveedores</h3>
 
 <div class="form-group">
     <a class="btn btn-info" href="proveedores/crear">Agregar Proveedor</a>
 </div>
 
-<ListadoGenerico Listado="Proveedores">
-    <HayRegistrosCompleto>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Acción</th>
-                    <th>Nombre Empresa</th>
-                    <th>Nombre Contácto</th>
-                    <th>Dirección</th>
-                    <th>Departamento</th>
-                    <th>Ciudad</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Proveedores)
-                {
-                    <tr>
-                        <td class="col-sm-2">
-                            <a href="/proveedores/editar/@item.Id" class="btn btn-success">Editar</a>
-                            <button @onclick="@(() => BorrarProveedor(item))" class="btn btn-danger">Borrar</button>
-                        </td>
-                        <td>@item.NombreEmpresa</td>
-                        <td>@item.NombreContacto</td>
-                        <td>@item.Direccion</td>
-                        <td>@item.Departamento</td>
-                        <td>@item.Ciudad</td>
-                        <td>@item.Email</td>
-                        <td>@item.Telefono</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
+@if (Proveedores == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Proveedores.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron registros.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Proveedores" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Proveedor, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Proveedores</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar proveedor..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
 
-@*Paginaccion*@
-<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-            PaginasTotales="paginasTotales"></Paginaciones>
+            <MudTh Class="thead-dark">Empresa</MudTh>
+            <MudTh>Contácto</MudTh>
+            <MudTh></MudTh>
+            <MudTh>Precio Venta</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombre">@context.NombreEmpresa</MudTd>
+            <MudTd DataLabel="Contacto">@context.NombreContacto</MudTd>
+            <MudTd DataLabel="Direccion">@context.Direccion</MudTd>
+            <MudTd DataLabel="Departamento">@context.Departamento</MudTd>
+            <MudTd DataLabel="Ciudad">@context.Ciudad</MudTd>
+            <MudTh DataLabel="Email">@context.Email</MudTh>
+            <MudTd DataLabel="Marca">@context.Telefono</MudTd>
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/articulos/editar/{context.Id}"))" />
+                <a href="/articulos/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
 
-@code {
-    //Paginacion
-    private int paginaActual = 1;
-    private int paginasTotales;
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+   
 
-    //Paginacion
-    private async Task paginaSeleccionada(int pagina)
-    {
-        paginaActual = pagina;
-        await Cargar(pagina);
-    }
-    private async Task Cargar(int pagina = 1)
-    {
-        var responseHttp = await repositorio.Get<List<Proveedor>>($"api/proveedores?pagina={pagina}");
-        if (!responseHttp.Error)
+    @code {
+        private bool dense = false;
+        private bool hover = true;
+        private bool striped = true;
+        private bool bordered = true;
+        private Proveedor selectedItem1 = null;
+        private string searchString1 = "";
+        private string NombreArtFiltro = String.Empty; //filtros
+        //Paginacion
+        private int paginaActual = 1;
+        private int paginasTotales;
+
+        //Paginacion
+        private async Task paginaSeleccionada(int pagina)
         {
-            Proveedores = responseHttp.Response;
-            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
-            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+            paginaActual = pagina;
+            await Cargar(pagina);
         }
-    }
-
-    public List<Proveedor> Proveedores { get; set; }
-    protected async override Task OnInitializedAsync()
-    {
-        await Cargar();
-    }
-
-    private async Task Cargar()
-    {
-        var responseHttp = await repositorio.Get<List<Proveedor>>("api/proveedores");
-        Proveedores = responseHttp.Response;
-    }
-
-    private async Task BorrarProveedor(Proveedor proveedor)
-    {
-        var responseHttp = await repositorio.Delete($"api/proveedores/{proveedor.Id}");
-        if (responseHttp.Error)
+        private async Task Cargar(int pagina = 1)
         {
-            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+            var responseHttp = await repositorio.Get<List<Proveedor>>($"api/proveedores?pagina={pagina}");
+            if (!responseHttp.Error)
+            {
+                Proveedores = responseHttp.Response;
+                var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
+                paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
+            }
         }
-        else
+
+        public List<Proveedor> Proveedores { get; set; }
+        protected async override Task OnInitializedAsync()
         {
             await Cargar();
         }
 
+        private async Task Cargar()
+        {
+            var httpResponse = await Http.GetAsync($"api/proveedores");
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                var responseString = await httpResponse.Content.ReadAsStringAsync();
+                Proveedores = JsonSerializer.Deserialize<List<Proveedor>>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            }
+            else
+            {
+                //Console.WriteLine("error");
+                await mostrarMensajes.MostrarMensajeError("NO se pudo cargar el listado");
+            }
+
+        }
+
+        private async Task BorrarProveedor(Proveedor proveedor)
+        {
+            var responseHttp = await repositorio.Delete($"api/proveedores/{proveedor.Id}");
+            if (responseHttp.Error)
+            {
+                await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+            }
+            else
+            {
+                await Cargar();
+            }
+
+        }
+        ///Buscar por nombre
+        private bool FilterFunc1(Proveedor element) => FilterFunc(element, searchString1);
+
+        private bool FilterFunc(Proveedor element, string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+                return true;
+            if (element.NombreEmpresa.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.NombreContacto.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Departamento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Ciudad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Email.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }
+
+        private async Task Filtrar()
+        {
+            await Cargar();
+        }
+
+        private async Task Limpiar()
+        {
+            NombreArtFiltro = string.Empty;
+            await Cargar();
+        }
     }
-}

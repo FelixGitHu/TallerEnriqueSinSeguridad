@@ -5,12 +5,18 @@
 @using Radzen.Blazor
 
 <div class="page">
+
+
     <AuthorizeView>
         <div class="sidebar">
             <NavMenu />
         </div>
     </AuthorizeView>
-
+    @*<AuthorizeView>
+        <div >
+            <NavBar />
+        </div>
+    </AuthorizeView>*@
     <div class="main">
         <div class="top-row px-4">
             <EnlacesLogin></EnlacesLogin>
@@ -29,9 +35,9 @@
         <MudDialogProvider />
         <MudSnackbarProvider />
     </div>
-    
+
 </div>
-@code{     
+@code{
 
     [CascadingParameter] public Task<AuthenticationState> AuthenticationState { get; set; }
 
@@ -45,9 +51,12 @@
     public async Task Logout()
     {
         var authState = await AuthenticationState;
-        if(authState.User.Identity.IsAuthenticated)
+        if (authState.User.Identity.IsAuthenticated)
         {
             navigationManager.NavigateTo("logout");
         }
     }
+    
+       
+   
 }

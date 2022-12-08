@@ -56,7 +56,7 @@ namespace TallerEnrique.Server.Controllers
                         Estado = true
                     });
                 }
-                dVenta.Articulo = null;
+                dVenta.Inventario = null;
             }
             venta.Vehiculo = null;
             venta.Moneda = null;
@@ -79,6 +79,7 @@ namespace TallerEnrique.Server.Controllers
             //return await context.Compras.ToListAsync();
            return await context.Ventas.Include("Vehiculo").Include("Moneda").Include("Servicio").Include("Mecanico").Include("Categoria").Include("DVentas").Include("Cliente").ToListAsync();
         }
+
 
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Compra>> Get(int id)

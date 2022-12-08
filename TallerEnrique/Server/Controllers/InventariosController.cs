@@ -24,6 +24,15 @@ namespace TallerEnrique.Server.Controllers
         {
             return await context.Inventarios.Include("Articulo").ToListAsync();
         }
+        //para buscar articulos
+        [HttpGet("buscar/{textoBusqueda}")]
+        public async Task<ActionResult<List<Inventario>>> Get(string textoBusqueda)
+        {
+            if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Inventario>(); }
+            textoBusqueda = textoBusqueda.ToLower();
+            return await context.Inventarios
+                .Where(x => x.Articulo.Nombre.ToLower().Contains(textoBusqueda)).ToListAsync();
+        }
 
     }
 }

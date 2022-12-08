@@ -54,5 +54,14 @@ namespace TallerEnrique.Server.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
+        //para buscar articulos
+        [HttpGet("buscar/{textoBusqueda}")]
+        public async Task<ActionResult<List<Garantia>>> Get(string textoBusqueda)
+        {
+            if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Garantia>(); }
+            textoBusqueda = textoBusqueda.ToLower();
+            return await context.Garantias
+                .Where(x => x.Politicas.ToLower().Contains(textoBusqueda)).ToListAsync();
+        }
     }
 }

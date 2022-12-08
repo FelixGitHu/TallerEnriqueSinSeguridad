@@ -1,42 +1,49 @@
 ﻿
 
     <div class="top-row pl-4 navbar navbar-dark">
-        <a class="navbar-brand" href="">Taller Enrique Peña</a>
+        <a class="navbar-brand" href="">
+            Taller Enrique Peña
+            @*<img src="flow.png" width="30" height="30" class="d-inline-block align-top" alt="Logo Taller">*@
+
+
+        </a>
+
         <button class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
     </div>
 
-    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu" >
-        <ul class="nav flex-column">
+    <div class="@NavMenuCssClass" @onclick="ToggleNavMenu" style="font-size:small">
+        <ul class="nav flex-column" >
+           
             <li class="nav-item px-3">
                 <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                     <span class="oi oi-home" aria-hidden="true"></span> Home
                 </NavLink>
             </li>
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="/clientes">
+            <li class="nav-item px-3" >
+                <NavLink class="nav-link" href="/clientes" Match="NavLinkMatch.All">
                     <span class="oi oi-people" aria-hidden="true"></span> Clientes
                 </NavLink>
             </li>
             <AuthorizeView Roles="admin">
                 <Authorized>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/mecanicos">
+                        <NavLink class="nav-link" href="/mecanicos" Match="NavLinkMatch.All">
                             <span class="oi oi-people" aria-hidden="true"></span> Mecánicos
                         </NavLink>
                     </li>
                 </Authorized>
             </AuthorizeView>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="/articulos">
+                <NavLink class="nav-link" href="/articulos" Match="NavLinkMatch.All">
                     <span class="oi oi-list" aria-hidden="true"></span> Artículos
                 </NavLink>
             </li>
             <AuthorizeView Roles="admin">
                 <Authorized>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/categorias">
+                        <NavLink class="nav-link" href="/categorias" Match="NavLinkMatch.All">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> Categorías
                         </NavLink>
                     </li>
@@ -46,7 +53,7 @@
             @*<AuthorizeView Roles="admin">
         <Authorized>*@
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="usuarios">
+                <NavLink class="nav-link" href="usuarios" Match="NavLinkMatch.All">
                     <span class="oi oi-person" aria-hidden="true"></span> Usuarios
                 </NavLink>
             </li>
@@ -56,7 +63,7 @@
             <AuthorizeView Roles="admin">
                 <Authorized>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/servicios">
+                        <NavLink class="nav-link" href="/servicios" Match="NavLinkMatch.All">
                             <span class="oi oi-list-rich" aria-hidden="true"></span> Servicios
                         </NavLink>
                     </li>
@@ -74,12 +81,12 @@
             </AuthorizeView>*@
 
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="/compras">
+                <NavLink class="nav-link" href="/compras" Match="NavLinkMatch.All">
                     <span class="oi oi-cart" aria-hidden="true"></span> Compras
                 </NavLink>
             </li>
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="/ventas">
+                <NavLink class="nav-link" href="/ventas" Match="NavLinkMatch.All">
                     <span class="oi oi-cart" aria-hidden="true"></span> Ventas
                 </NavLink>
             </li>
@@ -91,7 +98,7 @@
             <AuthorizeView Roles="admin">
                 <Authorized>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/Proveedores">
+                        <NavLink class="nav-link" href="/Proveedores" Match="NavLinkMatch.All">
                             <span class="oi oi-people" aria-hidden="true"></span> Proveedores
                         </NavLink>
                     </li>
@@ -99,7 +106,7 @@
             </AuthorizeView>
 
             <li class="nav-item px-3">
-                <NavLink class="nav-link" href="/vehiculos">
+                <NavLink class="nav-link" href="/vehiculos" Match="NavLinkMatch.All">
                     <span class="oi oi-dial" aria-hidden="true"></span> Vehiculos
                 </NavLink>
             </li>
@@ -107,7 +114,7 @@
             <AuthorizeView Roles="admin">
                 <Authorized>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/inventarios">
+                        <NavLink class="nav-link" href="/inventarios" Match="NavLinkMatch.All">
                             <span class="oi oi-graph" aria-hidden="true"></span> Inventario
                         </NavLink>
                     </li>
@@ -117,7 +124,7 @@
             <AuthorizeView Roles="admin">
                 <Authorized>
                     <li class="nav-item px-3">
-                        <NavLink class="nav-link" href="/Configuracions">
+                        <NavLink class="nav-link" href="/Configuracions" Match="NavLinkMatch.All">
                             <span class="oi oi-cog" aria-hidden="true"></span> Empresa
                         </NavLink>
                     </li>

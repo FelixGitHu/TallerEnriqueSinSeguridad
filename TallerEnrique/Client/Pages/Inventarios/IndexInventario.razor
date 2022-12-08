@@ -1,40 +1,67 @@
 ﻿@page "/inventarios"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
-<h3>Repuestos Disponibles en Inventario</h3>
+<h4>Repuestos Disponibles en Inventario</h4>
 
-<ListadoGenerico Listado="Inventarios">
-    <HayRegistrosCompleto>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    
-                    <th>Nombre</th>
-                    <th>Marca</th>
-                    <th>Existencia</th>
-                    <th>Precio de Compra</th>
-                    <th>Precio de Venta</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Inventarios)
-                {
-                    <tr>
-                        
-                        <td>@item.Articulo.Nombre</td>
-                        <td>@item.Articulo.Marca</td>
-                        <td>@item.Existencia</td>
-                        <td>C$ @Math.Round(item.Articulo.PrecioCompra, 2)</td>
-                        <td>C$ @Math.Round(item.Articulo.PrecioVenta, 2)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
+@if (Inventarios == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Inventarios.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron artículos.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Inventarios" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Inventario, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Artículos</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar articulos..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
 
-@code {
+            <MudTh Class="thead-dark">Nombre</MudTh>
+            <MudTh>Marca</MudTh>
+            <MudTh>Precio Compra</MudTh>
+            <MudTh>Precio Venta</MudTh>
+            <MudTh>Stock</MudTh>
+            
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombre">@context.Articulo.Nombre</MudTd>
+            <MudTd DataLabel="Marca">@context.Articulo.Marca</MudTd>
+            <MudTd DataLabel="Precio Compra">C$ @Math.Round(@context.Articulo.PrecioCompra, 2)</MudTd>
+            <MudTd DataLabel="Precio Venta"> C$ @Math.Round(@context.Articulo.PrecioVenta, 2)</MudTd>
+            <MudTd DataLabel="Existencia">@context.Existencia</MudTd>
+            
+
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+    @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Inventario selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
+
     public List<Inventario> Inventarios { get; set; }
 
     protected async override Task OnInitializedAsync()
@@ -44,8 +71,18 @@
 
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Inventario>>("api/inventarios/Cargar");
-        Inventarios = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/inventarios/Cargar");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Inventarios = JsonSerializer.Deserialize<List<Inventario>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
     }
 
     private async Task BorrarInventario(Inventario inventario)
@@ -61,4 +98,31 @@
         }
 
     }
-}
+
+        ///Buscar por nombre
+        private bool FilterFunc1(Inventario element) => FilterFunc(element, searchString1);
+
+        private bool FilterFunc(Inventario element, string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+                return true;
+            if (element.Articulo.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Articulo.Marca.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+          
+
+            return false;
+        }
+
+        private async Task Filtrar()
+        {
+            await Cargar();
+        }
+
+        private async Task Limpiar()
+        {
+            NombreArtFiltro = string.Empty;
+            await Cargar();
+        }
+    }

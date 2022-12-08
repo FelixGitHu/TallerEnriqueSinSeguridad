@@ -1,48 +1,72 @@
 ﻿@page "/servicios"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
-<h3>Servicios</h3>
 
 <div class="form-group">
     <a class="btn btn-info" href="servicios/crear">Agregar Servicio</a>
 </div>
 
-<ListadoGenerico Listado="Servicios">
-    <HayRegistrosCompleto>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Acción</th>
-                    <th>Categoria</th>
-                    <th>Descripcion</th>
-                    <th>Precio</th>
+@if (Servicios == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Servicios.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron registros.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Servicios" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Servicio, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Servicios</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar servicios..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
 
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Servicios)
-                {
-                    <tr>
-                        <td class="col-sm-2">
-                            <a href="/servicios/editar/@item.Id" class="btn btn-success">Editar</a>
+            <MudTh Class="thead-dark">Nombre</MudTh>
+            <MudTh>Descripción</MudTh>
+            <MudTh>Precio</MudTh>
+            
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombre categoría">@context.Categoria.Nombre</MudTd>
+            <MudTd DataLabel="Descrioción">@context.Descripcion</MudTd>
+            <MudTd DataLabel="Precio">C$ @context.Precio</MudTd>
+           
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/servicios/editar/{context.Id}"))" />
+                <a href="/servicios/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
 
-                            <button @onclick="@(() => BorrarServicio(item))" class="btn btn-danger">Borrar</button>
-                        </td>
-                        <td>@item.Categoria.Nombre</td>
-                        <td>@item.Descripcion</td>
-                        <td>S$@item.Precio</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
-@*Paginaccion*@
-<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-              PaginasTotales="paginasTotales"></Paginaciones>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
 
 @code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Servicio selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
     //Paginacion
     private int paginaActual = 1;
     private int paginasTotales;
@@ -73,8 +97,18 @@
 
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Servicio>>("api/servicios/cargartodos");
-        Servicios = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/servicios/cargartodos");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Servicios = JsonSerializer.Deserialize<List<Servicio>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
     }
 
     private async Task BorrarServicio(Servicio servicio)
@@ -90,6 +124,32 @@
         }
 
     }
+    ///Buscar por nombre
+    private bool FilterFunc1(Servicio element) => FilterFunc(element, searchString1);
 
-   
+    private bool FilterFunc(Servicio element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Categoria.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Descripcion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Precio.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
+    }
+
 }

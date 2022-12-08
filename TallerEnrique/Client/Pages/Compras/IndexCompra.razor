@@ -1,55 +1,75 @@
 ﻿@page "/compras"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
-
-<h3>Compras</h3>
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
 <div class="form-group">
     <a class="btn btn-info" href="compras/crear">Agregar Compras</a>
 </div>
 
-<ListadoGenerico Listado="ComprasRealizadas">
-    <HayRegistrosCompleto>
-        
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Acciones</th>
-                    <th>N° Factura</th>
-                    <th>Fecha</th>
-                    <th>Proveedor</th>
-                    <th>Impuesto</th>
-                    <th>Subtotal</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Compra compraRealizada in ComprasRealizadas)
-                {
-                    <tr>
-                        <td>
-                            <a href="/compras/editar/@compraRealizada.Id" class="btn btn-success">Editar</a>
-                            <button @onclick="@(() => BorrarCompra(compraRealizada))" class="btn btn-danger">Borrar</button>
-                        </td>
-                        <td>@compraRealizada.NFactura</td>
-                        <td>@compraRealizada.Fecha.ToShortDateString()</td>
-                        <td>@compraRealizada.Proveedor.NombreEmpresa</td>
-                        <td>C$ @Math.Round(compraRealizada.IVA, 2)</td>
-                        <td>C$ @Math.Round(compraRealizada.SubTotal, 2)</td>
-                        <td>C$ @Math.Round(compraRealizada.CostoTotal, 2)</td>
-                    </tr>
-                 }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
+@if (ComprasRealizadas == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (ComprasRealizadas.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron artículos.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@ComprasRealizadas" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Compra, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Compras</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar compra..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
 
-@*Paginaccion*@
-<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-              PaginasTotales="paginasTotales"></Paginaciones>
+            <MudTh Class="thead-dark">N° Factura</MudTh>
+            <MudTh>Fecha</MudTh>
+            <MudTh>Proveedor</MudTh>
+            <MudTh>Impuesto</MudTh>
+            <MudTh>Sub Total</MudTh>
+            <MudTh>Total</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Factura">@context.NFactura</MudTd>
+            <MudTd DataLabel="Fecha">@context.Fecha</MudTd>
+            <MudTd DataLabel="Empresa">@context.Proveedor.NombreEmpresa</MudTd>
+            <MudTd DataLabel="IVA">@Math.Round(@context.IVA, 2)</MudTd>
+            <MudTd DataLabel="Sub Total">C$ @Math.Round(@context.SubTotal, 2)</MudTd>
+            <MudTd DataLabel="Total"> C$ @Math.Round(@context.CostoTotal, 2)</MudTd>
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/compras/editar/{context.Id}"))" />
+                <a href="/compras/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
 
-
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
 @code {
+
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Compra selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
 
     //Paginacion
     private int paginaActual = 1;
@@ -64,10 +84,25 @@
         //extraccion de datos al iniciar la pagina
         await getComprasRealizadas();
     }
+    //private async Task getComprasRealizadas()
+    //{
+    //    var responseHttp = await repositorio.Get<List<Compra>>("api/compras/cargartodo");
+    //    ComprasRealizadas = responseHttp.Response;
+
+    //}
     private async Task getComprasRealizadas()
     {
-        var responseHttp = await repositorio.Get<List<Compra>>("api/compras/cargartodo");
-        ComprasRealizadas = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/compras/cargartodo");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            ComprasRealizadas = JsonSerializer.Deserialize<List<Compra>>(responseString,
+            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
 
     }
 
@@ -100,5 +135,40 @@
             var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
             paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
         }
+    }
+    ///Buscar por nombre
+    private bool FilterFunc1(Compra element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Compra element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Fecha.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Proveedor.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.IVA.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.SubTotal.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.CostoTotal.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.NFactura.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Proveedor.NombreEmpresa.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
     }
 }

@@ -69,7 +69,11 @@
                             <option value="0" disabled>--Seleccione Auto--</option>
                             @foreach (var item in VehiculoSeleccionados)
                             {
-                                <option value="@item.Id">@item.Placa &nbsp; @item.Color</option>
+                                if (NuevaVenta.ClienteId == item.ClienteId)
+                                {
+                        <option value="@item.Id">@item.Placa &nbsp; @item.Color &nbsp; @item.Marca</option>
+                                }
+
                             }
                         </InputSelectNumber>
                         <ValidationMessage For="@(() => NuevaVenta.VehiculoId)" />
@@ -106,17 +110,18 @@
                 <div class="form-group col-sm-4">
                     <label>Categoria:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.CategoriaId">
+                        <InputSelect class="form-control" @bind-Value="NuevaVenta.CategoriaId">
                             <option value="0" disabled>--Seleccione Categoria--</option>
                             @foreach (var item in CategoriaSeleccionados)
                             {
                                 <option value="@item.Id">@item.Nombre </option>
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => NuevaVenta.CategoriaId)" />
                     </div>
                 </div>
             </div>
+            
             <div class=" row">
                 <div class="form-group col-sm-6">
                     <label>Servicio:</label>
@@ -347,7 +352,7 @@
         await ObtenerCliente();
 
         //extraer los articulos disponibles para comprar
-        await GetArticulosDisponibles();
+        //await GetArticulosDisponibles();
         //instancia de lista dcompra
         NuevaVenta.DVentas = new List<DVenta>();
     }

@@ -2,65 +2,80 @@
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
 @inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 @*@attribute [Authorize(Roles ="admin")]*@
 
-<h3>Clientes</h3>
 
 <div class="form-group">
     <a class="btn btn-info" href="clientes/crear">Agregar Cliente</a>
-    
+
 </div>
 
-<ListadoGenerico Listado="Clientes">
-    <HayRegistrosCompleto>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <AuthorizeView Roles="admin">
-                        <Authorized>
-                            <th>Acción</th>
-                        </Authorized>
-                    </AuthorizeView>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Ciudad</th>
-                    <th>Departamento</th>
-                    <th>Teléfono</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Clientes)
-                {
-                    <tr>
-                        <AuthorizeView Roles="admin">
-                            <Authorized>
-                                <td>
-                                    <a href="/clientes/editar/@item.Id" class="btn btn-success">Editar</a>
-                                    <button @onclick="@(() => BorrarCliente(item))" class="btn btn-danger">Borrar</button>
-                                </td>
-                            </Authorized>
-                        </AuthorizeView>
-                        <td>@item.Nombres</td>
-                        <td>@item.Apellidos</td>
-                        <td>@item.Ciudad</td>
-                        <td>@item.Departamento</td>
-                        <td>@item.Telefono</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
-@*Paginaccion*@
-<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-              PaginasTotales="paginasTotales"></Paginaciones>
+@if (Clientes == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Clientes.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron clientes.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Clientes" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Cliente, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Clientes</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar clientes..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
 
+            <MudTh Class="thead-dark">Nombres</MudTh>
+            <MudTh>Apellidos</MudTh>
+            <MudTh>Ciudad</MudTh>
+            <MudTh>Departamento</MudTh>
+            <MudTh>Teléfono</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombres">@context.Nombres</MudTd>
+            <MudTd DataLabel="Apellidos">@context.Apellidos</MudTd>
+            <MudTd DataLabel="Ciudad">@context.Ciudad</MudTd>
+            <MudTd DataLabel="Departamento">@context.Departamento</MudTd>
+            <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/clientes/editar/{context.Id}"))" />
+                <a href="/clientes/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
+
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
 
 @code {
     //Paginacion
     private int paginaActual = 1;
     private int paginasTotales;
-    //private string NombreArtFiltro = String.Empty; //filtros
+
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Cliente selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
+
 
     public List<Cliente> Clientes { get; set; }
     protected async override Task OnInitializedAsync()
@@ -69,10 +84,25 @@
     }
 
 
+    //private async Task Cargar()
+    //{
+    //    var responseHttp = await repositorio.Get<List<Cliente>>("api/clientes");
+    //    Clientes = responseHttp.Response;
+    //}
     private async Task Cargar()
     {
-        var responseHttp = await repositorio.Get<List<Cliente>>("api/clientes");
-        Clientes = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/clientes");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Clientes = JsonSerializer.Deserialize<List<Cliente>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
     }
 
     private async Task BorrarCliente(Cliente clientes)
@@ -94,6 +124,7 @@
     {
         paginaActual = pagina;
         await Cargar(pagina);
+
     }
     private async Task Cargar(int pagina = 1)
     {
@@ -106,6 +137,36 @@
         }
     }
 
+    ///Buscar por nombre
+    private bool FilterFunc1(Cliente element) => FilterFunc(element, searchString1);
 
-    
+    private bool FilterFunc(Cliente element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Nombres.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Apellidos.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Ciudad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Departamento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
+    }
+
+
 }
