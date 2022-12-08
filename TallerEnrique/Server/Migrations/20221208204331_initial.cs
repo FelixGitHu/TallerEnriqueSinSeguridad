@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TallerEnrique.Server.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -522,9 +522,9 @@ namespace TallerEnrique.Server.Migrations
                     PrecioVenta = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Descuento = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Cantidad = table.Column<int>(type: "int", nullable: false),
-                    ArticuloId = table.Column<int>(type: "int", nullable: false),
+                    ArticuloId = table.Column<int>(type: "int", nullable: true),
                     VentaId = table.Column<int>(type: "int", nullable: false),
-                    InventarioId = table.Column<int>(type: "int", nullable: true)
+                    InventarioId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -534,13 +534,13 @@ namespace TallerEnrique.Server.Migrations
                         column: x => x.ArticuloId,
                         principalTable: "Articulos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DVentas_Inventarios_InventarioId",
                         column: x => x.InventarioId,
                         principalTable: "Inventarios",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DVentas_Ventas_VentaId",
                         column: x => x.VentaId,
@@ -552,12 +552,12 @@ namespace TallerEnrique.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "bc538e75-4028-49ac-8ebe-f12636ba9c54", "admin", "admin" });
+                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "6b961523-bd8d-4a3b-b014-10685cbd4caf", "admin", "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "b45973ae-359e-4999-b96e-f4cfad3d0821", "vendedor", "vendedor" });
+                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "4ae73857-b9d0-4332-aefc-56082d66346e", "vendedor", "vendedor" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

@@ -49,14 +49,14 @@ namespace TallerEnrique.Server.Migrations
                         new
                         {
                             Id = "9a821084-bb87-4287-9b4d-5f7101b75063",
-                            ConcurrencyStamp = "bc538e75-4028-49ac-8ebe-f12636ba9c54",
+                            ConcurrencyStamp = "6b961523-bd8d-4a3b-b014-10685cbd4caf",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
                             Id = "28f70cf5-6654-48f9-a9d3-0e772cce4bd9",
-                            ConcurrencyStamp = "b45973ae-359e-4999-b96e-f4cfad3d0821",
+                            ConcurrencyStamp = "4ae73857-b9d0-4332-aefc-56082d66346e",
                             Name = "vendedor",
                             NormalizedName = "vendedor"
                         });
@@ -456,7 +456,7 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ArticuloId")
+                    b.Property<int?>("ArticuloId")
                         .HasColumnType("int");
 
                     b.Property<int>("Cantidad")
@@ -465,7 +465,7 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<decimal>("Descuento")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("InventarioId")
+                    b.Property<int>("InventarioId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PrecioVenta")
@@ -887,13 +887,13 @@ namespace TallerEnrique.Server.Migrations
                 {
                     b.HasOne("TallerEnrique.Shared.Entidades.Articulo", "Articulo")
                         .WithMany("DVentas")
-                        .HasForeignKey("ArticuloId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ArticuloId");
 
                     b.HasOne("TallerEnrique.Shared.Entidades.Inventario", "Inventario")
                         .WithMany()
-                        .HasForeignKey("InventarioId");
+                        .HasForeignKey("InventarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TallerEnrique.Shared.Entidades.Venta", "Venta")
                         .WithMany("DVentas")

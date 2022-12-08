@@ -1,73 +1,95 @@
 ﻿@page "/ventas"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
 
-<h3>Ventas</h3>
+
 
 <div class="form-group">
     <a class="btn btn-info" href="ventas/crear">Agregar Ventas</a>
 </div>
 
-<ListadoGenerico Listado="VentasRealizadas">
-    <HayRegistrosCompleto>
+@if (VentasRealizadas == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (VentasRealizadas.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron registros.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@VentasRealizadas" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Venta, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Ventas</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar ventas..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
 
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Acciones</th>
-                    <th>N° Factura</th>
-                    <th>Cliente</th>
-                    @*<th>Apellidos</th>*@
-                    <th>Descripción</th>
-                    <th>Fecha</th>
-                    <th>Descuento</th>
-                    <th>Mano Obra</th>
-                    <th>Vehiculo</th>
-                    <th>Mecanico</th>
-                    <th>Tipo Pago</th>
-                    <th>Categoria</th>
-                    <th>Servicio</th>
-                    <th>SubTotal</th>
-                    <th>Impuesto</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Venta ventaRealizada in VentasRealizadas)
-                {
-                <tr>
-                    <td>
-                        <a href="/ventas/editar/@ventaRealizada.Id" class="btn btn-success">Editar</a>
-                        <button @onclick="@(() => BorrarVenta(ventaRealizada))" class="btn btn-danger">Borrar</button>
-                    </td>
-                    <td>@ventaRealizada.Id</td>
-                    <td>@ventaRealizada.Cliente.Nombres</td>
-                    @*<td>@ventaRealizada.ApellidosCliente</td>*@
-                    <td>@ventaRealizada.Descripcion</td>
-                    <td>@ventaRealizada.Fecha.ToShortDateString()</td>
-                    <td>@ventaRealizada.Descuento</td>
-                    <td>@ventaRealizada.ManoObra</td>
-                    <td>@ventaRealizada.Vehiculo.Placa</td>
-                    <td>@ventaRealizada.Mecanico.Nombre</td>
-                    <td>@ventaRealizada.Moneda.TipoMoneda</td>
-                    <td>@ventaRealizada.Categoria.Nombre</td>
-                    <td>@ventaRealizada.Servicio.Descripcion</td>
-                    <td>C$ @Math.Round(ventaRealizada.SubTotal, 2)</td>
-                    <td>C$ @Math.Round(ventaRealizada.IVA, 2)</td>
-                    <td>C$ @Math.Round(ventaRealizada.Total, 2)</td>
-                </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>
+            <MudTh Class="thead-dark">N° Factura</MudTh>
+            <MudTh>Cliente</MudTh>
+            @*<MudTh>Descripción</MudTh>*@
+            <MudTh>Fecha</MudTh>
+            <MudTh>Placa</MudTh>
+            <MudTh>Mécanico</MudTh>
+            <MudTh>Tipo Pago</MudTh>
+            <MudTh>Categoria Servicio</MudTh>
+            @*<MudTh>Servicio</MudTh>*@
+            <MudTh>Mano Obra</MudTh>
+            <MudTh>IVA</MudTh>
+            <MudTh>SubTotal</MudTh>
+            <MudTh>Total</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Factura">@context.Id</MudTd>
+            <MudTd DataLabel="Cliente">@context.Cliente.Nombres</MudTd>
+            @*<MudTd DataLabel="Descripcion" Class="col-2">@context.Descripcion</MudTd>*@
+            <MudTd DataLabel="Fecha">@context.Fecha.ToShortDateString()</MudTd>
+            <MudTd DataLabel="Placa">@context.Vehiculo.Placa</MudTd>
+            <MudTd DataLabel="Mecanico">@context.Mecanico.Nombre</MudTd>
+            <MudTd DataLabel="Pago">@context.Moneda.TipoMoneda</MudTd>
+            <MudTd DataLabel="Categoria">@context.Categoria.Nombre</MudTd>
+            @*<MudTd DataLabel="Servicio" Class="col-3">@context.Servicio.Descripcion</MudTd>*@
+            <MudTd DataLabel="Mano Obra"> C$ @Math.Round(@context.ManoObra, 2)</MudTd>
+            <MudTd DataLabel="IVA">C$ @Math.Round(@context.IVA, 2)</MudTd>
+            <MudTd DataLabel="SubTotal"> C$ @Math.Round(@context.SubTotal, 2)</MudTd>
+            <MudTd DataLabel="Total"> C$ @Math.Round(@context.Total, 2)</MudTd>
+            <MudTd Class="col-2">
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/ventas/editar/{context.Id}"))" />
+                <a href="/ventas/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
 
-@*Paginaccion*@
-<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-              PaginasTotales="paginasTotales"></Paginaciones>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+
+
 
 
 @code {
+
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Venta selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
 
     //Paginacion
     private int paginaActual = 1;
@@ -86,10 +108,25 @@
         //extraccion de datos al iniciar la pagina
         await getVentasRealizadas();
     }
+    //private async Task getVentasRealizadas()
+    //{
+    //    var responseHttp = await repositorio.Get<List<Venta>>("api/ventas/cargartodo");
+    //    VentasRealizadas = responseHttp.Response;
+
+    //}
     private async Task getVentasRealizadas()
     {
-        var responseHttp = await repositorio.Get<List<Venta>>("api/ventas/cargartodo");
-        VentasRealizadas = responseHttp.Response;
+        var httpResponse = await Http.GetAsync($"api/ventas/cargartodo");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            VentasRealizadas = JsonSerializer.Deserialize<List<Venta>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
 
     }
 
@@ -105,6 +142,38 @@
             await getVentasRealizadas();
         }
 
+    }
+
+    ///Buscar por nombre
+    private bool FilterFunc1(Venta element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Venta element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Cliente.Nombres.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Descripcion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Fecha.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Vehiculo.Placa.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Mecanico.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
     }
 
     //Paginacion

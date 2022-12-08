@@ -18,9 +18,9 @@ namespace TallerEnrique.Shared.Entidades
         //public decimal Total { get; set; }
 
 
-        public int ArticuloId { get; set; }
+        public int? ArticuloId { get; set; }
         public int VentaId { get; set; }
-        public int? InventarioId { get; set; }
+        public int InventarioId { get; set; }
         //public int ServicioId { get; set; }
         //public int MonedaId { get; set; }
         //public int MecanicoId { get; set; }

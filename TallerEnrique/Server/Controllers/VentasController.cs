@@ -34,7 +34,7 @@ namespace TallerEnrique.Server.Controllers
             foreach (DVenta dVenta in venta.DVentas)
             {
                 //extrae el registro del inventario que contiene el articulo a comprar, sino es igual a null
-                Inventario inventario = context.Inventarios.FirstOrDefault(inv => inv.ArticuloId == dVenta.ArticuloId);
+                Inventario inventario = context.Inventarios.FirstOrDefault(inv => inv.ArticuloId == dVenta.InventarioId);
                 //si el existe un registro con el inventario :
                 if (inventario != null)
                 {
@@ -51,7 +51,7 @@ namespace TallerEnrique.Server.Controllers
                     //sino existe ninmgun registro, es mas facil porque solo creamos uno nuevo
                     context.Inventarios.Add(new Inventario()
                     {
-                        ArticuloId = dVenta.ArticuloId,
+                        ArticuloId = dVenta.InventarioId,
                         Existencia = dVenta.Cantidad,
                         Estado = true
                     });
