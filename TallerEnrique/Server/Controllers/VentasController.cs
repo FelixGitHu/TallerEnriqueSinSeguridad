@@ -63,6 +63,7 @@ namespace TallerEnrique.Server.Controllers
             venta.Mecanico = null;
             venta.Servicio = null;
             venta.Categoria = null;
+            venta.Cliente = null;
             //una vez se agregan o modifican los registros de invenmtario, se guarda la compra
             //context.Compras.Add(compra);
             venta = context.Add(venta).Entity;

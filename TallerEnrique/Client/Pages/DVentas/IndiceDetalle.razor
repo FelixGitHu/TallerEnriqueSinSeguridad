@@ -1,0 +1,141 @@
+﻿@page "/dVentas"
+@inject IRepositorio repositorio
+@inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
+@using System.Text.Json
+@inject NavigationManager NavigationManager
+@*@attribute [Authorize(Roles ="admin")]*@
+
+
+@*<MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Create" Color="Color.Success" Size="Size.Medium">
+        <a style="text-decoration:none; color:#fff;" @onclick="CrearArticulo">Agregar Artículo</a>
+    </MudButton>*@
+
+
+@if (Detalles == null)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <div class="spinner-grow text-success" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+}
+else if (Detalles.Count == 0)
+{
+    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+        <text>No se encontraron Detalles de venta.</text>
+    </div>
+}
+else
+{
+    <MudTable Items="@Detalles" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<DVenta, bool>(FilterFunc1)"
+              @bind-SelectedItem="selectedItem1">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Detalles de Ventas</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar detalle..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+
+            <MudTh Class="thead-dark">Nombre</MudTh>
+            <MudTh>Marca</MudTh>
+            <MudTh>Cantidad</MudTh>
+            <MudTh>Descuento</MudTh>
+            <MudTh>Precio Venta</MudTh>
+            <MudTh>Acciones</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Nombra">@context.Articulo.Nombre</MudTd>
+            <MudTd DataLabel="Marca">@context.Articulo.Marca</MudTd>
+            <MudTd DataLabel="Cantidad">@context.Cantidad</MudTd>
+            <MudTd DataLabel="Precio Venta"> C$ @Math.Round(@context.PrecioVenta, 2)</MudTd>
+            <MudTd>
+                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/articulos/editar/{context.Id}"))" />
+                <a href="/articulos/editar/@context.Id" class="btn btn-success">Editar</a>
+            </MudTd>
+
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+}
+
+
+
+@code {
+    //Paginacion
+    private int paginaActual = 1;
+    private int paginasTotales;
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private DVenta selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
+
+    public List<DVenta> Detalles { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+
+
+    private async Task Cargar()
+    {
+        var httpResponse = await Http.GetAsync($"api/dVentas");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Detalles = JsonSerializer.Deserialize<List<DVenta>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
+    }
+
+
+
+
+
+    void CrearArticulo()
+    {
+        NavigationManager.NavigateTo("creararticulo");
+    }
+
+    ///Buscar por nombre
+    private bool FilterFunc1(DVenta element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(DVenta element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.PrecioVenta.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Descuento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cantidad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Articulo.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private async Task Filtrar()
+    {
+        await Cargar();
+    }
+
+    private async Task Limpiar()
+    {
+        NombreArtFiltro = string.Empty;
+        await Cargar();
+    }
+}

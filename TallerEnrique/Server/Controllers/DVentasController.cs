@@ -30,7 +30,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<DVenta>>> Get()
         {
-            return await context.DVentas.ToListAsync();
+            return await context.DVentas.Include("Articulo").ToListAsync();
         }
 
         [HttpGet("{id}")]
