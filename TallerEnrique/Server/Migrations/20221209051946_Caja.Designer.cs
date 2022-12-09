@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TallerEnrique.Server;
 
 namespace TallerEnrique.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221209051946_Caja")]
+    partial class Caja
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,14 +51,14 @@ namespace TallerEnrique.Server.Migrations
                         new
                         {
                             Id = "9a821084-bb87-4287-9b4d-5f7101b75063",
-                            ConcurrencyStamp = "857cd12d-5d93-47a5-b45b-cc0101d5e0e2",
+                            ConcurrencyStamp = "44cf11a7-a626-4502-a48f-b55c64dd241a",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
                             Id = "28f70cf5-6654-48f9-a9d3-0e772cce4bd9",
-                            ConcurrencyStamp = "cb90868e-c1bd-4886-9527-89ea794254de",
+                            ConcurrencyStamp = "48d5a115-0589-40f8-84f5-1ce9275a4c52",
                             Name = "vendedor",
                             NormalizedName = "vendedor"
                         });
@@ -294,6 +296,9 @@ namespace TallerEnrique.Server.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Egresos")
                         .HasColumnType("decimal(18,2)");
 
@@ -303,10 +308,22 @@ namespace TallerEnrique.Server.Migrations
                     b.Property<decimal>("Ingresos")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("InventarioId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Saldo")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("VentaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.HasIndex("InventarioId");
+
+                    b.HasIndex("VentaId");
 
                     b.ToTable("Cierre");
                 });
@@ -825,6 +842,31 @@ namespace TallerEnrique.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("TallerEnrique.Shared.Entidades.Cierre", b =>
+                {
+                    b.HasOne("TallerEnrique.Shared.Entidades.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TallerEnrique.Shared.Entidades.Inventario", "Inventario")
+                        .WithMany()
+                        .HasForeignKey("InventarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TallerEnrique.Shared.Entidades.Venta", "Venta")
+                        .WithMany()
+                        .HasForeignKey("VentaId");
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Inventario");
+
+                    b.Navigation("Venta");
                 });
 
             modelBuilder.Entity("TallerEnrique.Shared.Entidades.Compra", b =>

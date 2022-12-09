@@ -45,6 +45,7 @@ namespace TallerEnrique.Server.Controllers
                     //var lista_articulo = await context.Articulos.ToListAsync();
                     //var articulo = lista_articulo.First(x => x.Id == dVenta.ArticuloId);
                     //articulo.PrecioVenta = dVenta.PrecioVenta;
+                    
                 }
                 else
                 {
@@ -68,6 +69,7 @@ namespace TallerEnrique.Server.Controllers
             //context.Compras.Add(compra);
             venta = context.Add(venta).Entity;
             await context.SaveChangesAsync();
+            await GuardarEnCaja(venta);
             return venta.Id;
         }
 
@@ -154,7 +156,17 @@ namespace TallerEnrique.Server.Controllers
             await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
             return await queryable.Paginar(paginacion).ToListAsync();
         }
-
+       // Cierre
+        private async Task GuardarEnCaja(Venta venta)
+        {
+            CierresController cc = new CierresController(context);
+            Cierre cajas = new Cierre()
+            {
+                Fecha = venta.Fecha,
+                Ingresos = Convert.ToDecimal(venta.Total),
+            };
+            await cc.Post(cajas);
+        }
 
     }
 }
