@@ -1,18 +1,11 @@
-﻿@page "/compras"
+﻿@page "/compras/inactiva"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
 
-<div class="form-group">
-    <a class="btn btn-info" href="compras/crear">Agregar Compras</a>
-</div>
-<div class="btn-group" style="font-size:medium">
-    <a href="/compras/inactiva" style="background:none; border:none">
-        &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
-    </a>
-</div>
+
 
 @if (ComprasRealizadas == null)
 {
@@ -77,20 +70,20 @@ else
     private string NombreArtFiltro = String.Empty; //filtros
 
     public List<Proveedor> Proveedores { get; set; } = new List<Proveedor>();
-    
+
     public List<Compra> ComprasRealizadas = new List<Compra>();
 
     protected async override Task OnInitializedAsync()
     {
-        
+
         await getComprasRealizadas();
     }
-   
+
 
     //}
     private async Task getComprasRealizadas()
     {
-        var httpResponse = await Http.GetAsync($"api/compras/cargartodo");
+        var httpResponse = await Http.GetAsync($"api/compras/comprasinactivas");
         if (httpResponse.IsSuccessStatusCode)
         {
             var responseString = await httpResponse.Content.ReadAsStringAsync();
@@ -118,7 +111,7 @@ else
 
     }
 
-   
+
     ///Buscar por nombre
     private bool FilterFunc1(Compra element) => FilterFunc(element, searchString1);
 
@@ -144,5 +137,5 @@ else
         return false;
     }
 
-   
+
 }

@@ -68,10 +68,16 @@ namespace TallerEnrique.Server.Controllers
         public async Task<ActionResult<List<Compra>>> Get()
         {
           
-            return await context.Compras.Include("Proveedor").Include("DCompras").ToListAsync();
+            return await context.Compras.Where(x=> x.Estado == true).Include("Proveedor").Include("DCompras").ToListAsync();
+        }
+        [HttpGet("comprasinactivas")]
+        public async Task<ActionResult<List<Compra>>> GetInactivos()
+        {
+
+            return await context.Compras.Where(x => x.Estado == false).Include("Proveedor").Include("DCompras").ToListAsync();
         }
 
-       
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Compra>> GetPol(int id)
         {

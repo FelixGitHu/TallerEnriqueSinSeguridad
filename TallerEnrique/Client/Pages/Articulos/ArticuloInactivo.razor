@@ -1,21 +1,18 @@
-﻿@page "/categorias"
+﻿@page "/articulos/inactivos"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-@inject HttpClient Http
+@*@attribute [Authorize(Roles ="admin")]*@
 
-
-<div class="form-group">
-    <a class="btn btn-info" href="categorias/crear">Agregar categoria</a>
-</div>
-<div class="btn-group" style="font-size:medium">
-    <a href="/categorias/inactivas" style="background:none; border:none">
+<div class="btn-group">
+    <a href="/lista-articulos-bajas" style="background:none; border:none">
         &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
     </a>
 </div>
 
-@if (Categorias == null)
+@if (Articulos == null)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">
         <div class="spinner-grow text-success" role="status">
@@ -23,36 +20,38 @@
         </div>
     </div>
 }
-else if (Categorias.Count == 0)
+else if (Articulos.Count == 0)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">
-        <text>No se encontraron Categorias.</text>
+        <text>No se encontraron artículos.</text>
     </div>
 }
 else
 {
-    <MudTable Items="@Categorias" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Categoria, bool>(FilterFunc1)"
+    <MudTable Items="@Articulos" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Articulo, bool>(FilterFunc1)"
               @bind-SelectedItem="selectedItem1">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Categorias</MudText>
+            <MudText Typo="Typo.h6">Artículos Inactivos</MudText>
             <MudSpacer />
-            <MudTextField @bind-Value="searchString1" Placeholder="Buscar categoría..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar artículo..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
 
             <MudTh Class="thead-dark">Nombre</MudTh>
-            <MudTh>Descripción</MudTh>
-            
+            <MudTh>Marca</MudTh>
+            <MudTh>Precio Compra</MudTh>
+            <MudTh>Precio Venta</MudTh>
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nombra">@context.Nombre</MudTd>
-            <MudTd DataLabel="Marca">@context.Descripcion</MudTd>
-            
+            <MudTd DataLabel="Marca">@context.Marca</MudTd>
+            <MudTd DataLabel="Precio Compra">C$ @Math.Round(@context.PrecioCompra, 2)</MudTd>
+            <MudTd DataLabel="Precio Venta"> C$ @Math.Round(@context.PrecioVenta, 2)</MudTd>
             <MudTd>
                 <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/categorias/editar/{context.Id}"))" />
-                <a href="/categorias/editar/@context.Id" class="btn btn-success">Editar</a>
+                        @onclick="@(() => NavigationManager.NavigateTo($"/articulos/editar/{context.Id}"))" />
+                <a href="/articulos/editar/@context.Id" class="btn btn-success">Editar</a>
             </MudTd>
 
         </RowTemplate>
@@ -62,30 +61,32 @@ else
     </MudTable>
 }
 
+
+
 @code {
+
     private bool dense = false;
     private bool hover = true;
     private bool striped = true;
     private bool bordered = true;
-    private Categoria selectedItem1 = null;
+    private Articulo selectedItem1 = null;
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
 
-
-    public List<Categoria> Categorias { get; set; }
+    public List<Articulo> Articulos { get; set; }
     protected async override Task OnInitializedAsync()
     {
         await Cargar();
     }
 
-   
+
     private async Task Cargar()
     {
-        var httpResponse = await Http.GetAsync($"api/categorias/cargartodos");
+        var httpResponse = await Http.GetAsync($"api/articulos/articulosinactivos");
         if (httpResponse.IsSuccessStatusCode)
         {
             var responseString = await httpResponse.Content.ReadAsStringAsync();
-            Categorias = JsonSerializer.Deserialize<List<Categoria>>(responseString,
+            Articulos = JsonSerializer.Deserialize<List<Articulo>>(responseString,
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
         else
@@ -95,9 +96,9 @@ else
 
     }
 
-    private async Task BorrarCategoria(Categoria categoria)
+    private async Task BorrarArticulo(Articulo articulo)
     {
-        var responseHttp = await repositorio.Delete($"api/categorias/{categoria.Id}");
+        var responseHttp = await repositorio.Delete($"api/articulos/{articulo.Id}");
         if (responseHttp.Error)
         {
             await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
@@ -109,16 +110,22 @@ else
 
     }
 
-    ///Buscar por nombre
-    private bool FilterFunc1(Categoria element) => FilterFunc(element, searchString1);
 
-    private bool FilterFunc(Categoria element, string searchString)
+    void CrearArticulo()
+    {
+        NavigationManager.NavigateTo("creararticulo");
+    }
+
+    ///Buscar por nombre
+    private bool FilterFunc1(Articulo element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Articulo element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
         if (element.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.Descripcion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Marca.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;

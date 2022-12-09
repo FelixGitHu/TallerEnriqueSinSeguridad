@@ -31,6 +31,11 @@ namespace TallerEnrique.Server.Controllers
         {
             return await context.Categorias.Where(x => x.Estado == true).ToListAsync();
         }
+        [HttpGet("categoriasinactivas")]
+        public async Task<ActionResult<List<Categoria>>> GetInactivos()
+        {
+            return await context.Categorias.Where(x => x.Estado == false).ToListAsync();
+        }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Categoria>> Get(int id)

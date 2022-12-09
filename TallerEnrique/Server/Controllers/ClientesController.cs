@@ -36,6 +36,12 @@ namespace TallerEnrique.Server.Controllers
         {
             return await context.Clientes.Where(x => x.Estado == true).ToListAsync();
         }
+        [HttpGet("clientesinactivos")]
+        [AllowAnonymous] //para que cualquier usario logueado o no puede acceder  a este end-ponit
+        public async Task<ActionResult<List<Cliente>>> GetInactivos()
+        {
+            return await context.Clientes.Where(x => x.Estado == false).ToListAsync();
+        }
 
         [HttpGet("{id}")]
         [AllowAnonymous]

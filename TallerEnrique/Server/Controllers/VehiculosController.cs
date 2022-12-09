@@ -32,7 +32,12 @@ namespace TallerEnrique.Server.Controllers
         {
             return await context.Vehiculos.Where(x => x.Estado == true).Include("Cliente").ToListAsync();
         }
-        
+        [HttpGet("vehiculosinactivos")]
+        public async Task<ActionResult<List<Vehiculo>>> GetInactivos()
+        {
+            return await context.Vehiculos.Where(x => x.Estado == false).Include("Cliente").ToListAsync();
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Vehiculo>> Get(int id)

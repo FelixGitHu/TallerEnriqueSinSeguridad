@@ -9,6 +9,11 @@
 <div class="form-group">
     <a class="btn btn-info" href="proveedores/crear">Agregar Proveedor</a>
 </div>
+<div class="btn-group" style="font-size:medium">
+    <a href="/proveedores/inactivos" style="background:none; border:none">
+        &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
+    </a>
+</div>
 
 @if (Proveedores == null)
 {
@@ -51,8 +56,8 @@ else
             <MudTd DataLabel="Marca">@context.Telefono</MudTd>
             <MudTd>
                 <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/articulos/editar/{context.Id}"))" />
-                <a href="/articulos/editar/@context.Id" class="btn btn-success">Editar</a>
+                        @onclick="@(() => NavigationManager.NavigateTo($"/proveedores/editar/{context.Id}"))" />
+                <a href="/proveedores/editar/@context.Id" class="btn btn-success">Editar</a>
             </MudTd>
 
         </RowTemplate>

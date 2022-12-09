@@ -31,7 +31,12 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Mecanico>>> Get()
         {
-            return await context.Mecanicos.ToListAsync();
+            return await context.Mecanicos.Where(x=> x.Estado == true).ToListAsync();
+        }
+        [HttpGet("mecanicoinactivo")]
+        public async Task<ActionResult<List<Mecanico>>> GetInactivo()
+        {
+            return await context.Mecanicos.Where(x => x.Estado == false).ToListAsync();
         }
 
         [HttpGet]

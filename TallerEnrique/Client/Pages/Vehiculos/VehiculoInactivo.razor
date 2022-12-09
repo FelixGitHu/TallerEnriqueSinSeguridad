@@ -1,19 +1,12 @@
 ﻿
-@page "/vehiculos"
+@page "/vehiculos/inactivos"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
 
-<div class="form-group">
-    <a class="btn btn-info" href="vehiculos/crear">Agregar Vehiculo</a>
-</div>
-<div class="btn-group" style="font-size:medium">
-    <a href="/vehiculos/inactivos" style="background:none; border:none">
-        &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
-    </a>
-</div>
+
 
 @if (Vehiculos == null)
 {
@@ -81,7 +74,7 @@ else
     private Vehiculo selectedItem1 = null;
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
-    
+
 
     public List<Vehiculo> Vehiculos { get; set; }
     public List<Cliente> Clientes { get; set; } = new List<Cliente>();
@@ -93,7 +86,7 @@ else
 
     private async Task Cargar()
     {
-        var httpResponse = await Http.GetAsync($"api/vehiculos/cargartodos");
+        var httpResponse = await Http.GetAsync($"api/vehiculos/vehiculosinactivos");
         if (httpResponse.IsSuccessStatusCode)
         {
             var responseString = await httpResponse.Content.ReadAsStringAsync();
@@ -121,7 +114,7 @@ else
 
     }
 
-    
+
     ///Buscar por nombre
     private bool FilterFunc1(Vehiculo element) => FilterFunc(element, searchString1);
 
@@ -149,5 +142,5 @@ else
         return false;
     }
 
-   
+
 }

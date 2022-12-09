@@ -1,21 +1,12 @@
-﻿@page "/categorias"
+﻿@page "/mecanicos/inactivos"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-@inject HttpClient Http
 
 
-<div class="form-group">
-    <a class="btn btn-info" href="categorias/crear">Agregar categoria</a>
-</div>
-<div class="btn-group" style="font-size:medium">
-    <a href="/categorias/inactivas" style="background:none; border:none">
-        &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
-    </a>
-</div>
-
-@if (Categorias == null)
+@if (Mecanicos == null)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">
         <div class="spinner-grow text-success" role="status">
@@ -23,36 +14,38 @@
         </div>
     </div>
 }
-else if (Categorias.Count == 0)
+else if (Mecanicos.Count == 0)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">
-        <text>No se encontraron Categorias.</text>
+        <text>No se encontraron mecánicos.</text>
     </div>
 }
 else
 {
-    <MudTable Items="@Categorias" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Categoria, bool>(FilterFunc1)"
+    <MudTable Items="@Mecanicos" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Mecanico, bool>(FilterFunc1)"
               @bind-SelectedItem="selectedItem1">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Categorias</MudText>
+            <MudText Typo="Typo.h6">Mecánicos</MudText>
             <MudSpacer />
-            <MudTextField @bind-Value="searchString1" Placeholder="Buscar categoría..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar mecánico..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
 
             <MudTh Class="thead-dark">Nombre</MudTh>
-            <MudTh>Descripción</MudTh>
-            
+            <MudTh>Apellido</MudTh>
+            <MudTh>Teléfono</MudTh>
+            <MudTh>Dirrección</MudTh>
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Nombra">@context.Nombre</MudTd>
-            <MudTd DataLabel="Marca">@context.Descripcion</MudTd>
-            
+            <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
+            <MudTd DataLabel="Apellido">@context.Apellido</MudTd>
+            <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
+            <MudTd DataLabel="Direccion">@context.Direccion</MudTd>
             <MudTd>
                 <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/categorias/editar/{context.Id}"))" />
-                <a href="/categorias/editar/@context.Id" class="btn btn-success">Editar</a>
+                        @onclick="@(() => NavigationManager.NavigateTo($"/mecanicos/editar/{context.Id}"))" />
+                <a href="/mecanicos/editar/@context.Id" class="btn btn-success">Editar</a>
             </MudTd>
 
         </RowTemplate>
@@ -67,25 +60,27 @@ else
     private bool hover = true;
     private bool striped = true;
     private bool bordered = true;
-    private Categoria selectedItem1 = null;
+    private Mecanico selectedItem1 = null;
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
 
 
-    public List<Categoria> Categorias { get; set; }
+
+    public List<Mecanico> Mecanicos { get; set; }
     protected async override Task OnInitializedAsync()
     {
         await Cargar();
     }
 
-   
+
+
     private async Task Cargar()
     {
-        var httpResponse = await Http.GetAsync($"api/categorias/cargartodos");
+        var httpResponse = await Http.GetAsync($"api/mecanicos/mecanicoinactivo");
         if (httpResponse.IsSuccessStatusCode)
         {
             var responseString = await httpResponse.Content.ReadAsStringAsync();
-            Categorias = JsonSerializer.Deserialize<List<Categoria>>(responseString,
+            Mecanicos = JsonSerializer.Deserialize<List<Mecanico>>(responseString,
                 new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
         else
@@ -95,9 +90,9 @@ else
 
     }
 
-    private async Task BorrarCategoria(Categoria categoria)
+    private async Task BorrarMecanico(Mecanico mecanico)
     {
-        var responseHttp = await repositorio.Delete($"api/categorias/{categoria.Id}");
+        var responseHttp = await repositorio.Delete($"api/mecanicos/{mecanico.Id}");
         if (responseHttp.Error)
         {
             await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
@@ -110,18 +105,23 @@ else
     }
 
     ///Buscar por nombre
-    private bool FilterFunc1(Categoria element) => FilterFunc(element, searchString1);
+    private bool FilterFunc1(Mecanico element) => FilterFunc(element, searchString1);
 
-    private bool FilterFunc(Categoria element, string searchString)
+    private bool FilterFunc(Mecanico element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
         if (element.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.Descripcion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Apellido.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;
     }
+
 
 }

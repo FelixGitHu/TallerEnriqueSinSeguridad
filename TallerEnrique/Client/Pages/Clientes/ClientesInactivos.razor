@@ -1,4 +1,4 @@
-﻿@page "/clientes"
+﻿@page "/clientes/inactivos"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
 @inject HttpClient Http
@@ -7,15 +7,7 @@
 @*@attribute [Authorize(Roles ="admin")]*@
 
 
-<div class="form-group">
-    <a class="btn btn-info" href="clientes/crear">Agregar Cliente</a>
 
-</div>
-<div class="btn-group" style="font-size:medium">
-    <a href="/clientes/inactivos" style="background:none; border:none">
-        &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
-    </a>
-</div>
 
 @if (Clientes == null)
 {
@@ -69,7 +61,7 @@ else
 }
 
 @code {
-   
+
 
     private bool dense = false;
     private bool hover = true;
@@ -88,7 +80,7 @@ else
 
     private async Task Cargar()
     {
-        var httpResponse = await Http.GetAsync($"api/clientes/cargartodos");
+        var httpResponse = await Http.GetAsync($"api/clientes/clientesinactivos");
         if (httpResponse.IsSuccessStatusCode)
         {
             var responseString = await httpResponse.Content.ReadAsStringAsync();
@@ -116,7 +108,7 @@ else
 
     }
 
-   
+
 
     ///Buscar por nombre
     private bool FilterFunc1(Cliente element) => FilterFunc(element, searchString1);
@@ -138,6 +130,6 @@ else
 
         return false;
     }
-    
+
 
 }
