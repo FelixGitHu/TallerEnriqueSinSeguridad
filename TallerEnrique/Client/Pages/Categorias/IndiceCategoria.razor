@@ -119,14 +119,4 @@ else
         return false;
     }
 
-    private async Task Filtrar()
-    {
-        await Cargar();
-    }
-
-    private async Task Limpiar()
-    {
-        NombreArtFiltro = string.Empty;
-        await Cargar();
-    }
 }

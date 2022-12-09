@@ -13,11 +13,7 @@ namespace TallerEnrique.Shared.Entidades
         public int Id { get; set; }
         //public long  NFactura { get; set; }
 
-        //[Required(ErrorMessage = "Los Nombres del Cliente son Obligatorio ")]
-        //public string NombresCliente { get; set; }
-
-        //[Required(ErrorMessage = "Los Apellidos del Cliente son Obligatorio ")]
-        //public string ApellidosCliente { get; set; }
+        
 
         [Required(ErrorMessage = "La Descripcion es Obligatorio ")]
         public string Descripcion { get; set; }
@@ -64,9 +60,6 @@ namespace TallerEnrique.Shared.Entidades
         public Servicio Servicio  { get; set; }
         public Categoria Categoria { get; set; }
 
-        //Maestro detallle 28 de octubre 2022 2:25 PM
-        //public List<DVentaArticulo> DVentaArticulos { get; set; } = new List<DVentaArticulo>();
-        //public List<DVentaServicio> dVentaServicios { get; set; } = new List<DVentaServicio>();
         public List<DVenta> DVentas { get; set; } = new List<DVenta>();
     }
 }

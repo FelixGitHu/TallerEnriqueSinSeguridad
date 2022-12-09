@@ -58,13 +58,13 @@ namespace TallerEnrique.Server.Controllers
         }
 
         //para buscar articulos
-        [HttpGet("buscar/{textoBusqueda}")]
-        public async Task<ActionResult<List<Configuracion>>> Get(string textoBusqueda)
-        {
-            if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Configuracion>(); }
-            textoBusqueda = textoBusqueda.ToLower();
-            return await context.Configuracions
-                .Where(x => x.NombreNegocio.ToLower().Contains(textoBusqueda)).ToListAsync();
-        }
+        //[HttpGet("buscar/{textoBusqueda}")]
+        //public async Task<ActionResult<List<Configuracion>>> Get(string textoBusqueda)
+        //{
+        //    if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Configuracion>(); }
+        //    textoBusqueda = textoBusqueda.ToLower();
+        //    return await context.Configuracions
+        //        .Where(x => x.NombreNegocio.ToLower().Contains(textoBusqueda)).ToListAsync();
+        //}
     }
 }

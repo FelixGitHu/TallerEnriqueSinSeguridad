@@ -206,14 +206,7 @@
                         <ValidationMessage For="@(() => detalle.InventarioId)" />
                         @*para validar que sea un Id*@
                     </div>
-                    @*@foreach (var art in InventarioSeleccionado)
-                    {
-                        if (detalle.ArticuloId == art.Articulo.Id)
-                        {
-
-                            detalle.PrecioVenta = art.Articulo.PrecioVenta;
-                        }
-                    }*@
+                   
 
                     <div class="form-group col-sm-6">
                         <label>Cantidad:</label>

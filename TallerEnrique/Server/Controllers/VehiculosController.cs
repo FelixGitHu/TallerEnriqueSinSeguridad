@@ -32,22 +32,7 @@ namespace TallerEnrique.Server.Controllers
         {
             return await context.Vehiculos.Where(x => x.Estado == true).Include("Cliente").ToListAsync();
         }
-
-        //[HttpGet("cargarvehiculosclientes")]
-        //public async Task<ActionResult<List<Vehiculo>>> Getvehiculosclientes()
-        //{
-        //    var Venta = new Venta();
-        //    return await context.Vehiculos.Where(x => x.Estado == true && Venta.Cliente.Id == x.Cliente.Id).ToListAsync();
-        //}
-        // paginacion
-
-        [HttpGet]
-        public async Task<ActionResult<List<Vehiculo>>> Get([FromQuery] Paginacion paginacion)
-        {
-            var queryable = context.Vehiculos.Where(x => x.Estado == true).AsQueryable();
-            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
-            return await queryable.Paginar(paginacion).ToListAsync();
-        }
+        
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Vehiculo>> Get(int id)

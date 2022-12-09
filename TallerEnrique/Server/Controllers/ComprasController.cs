@@ -21,12 +21,7 @@ namespace TallerEnrique.Server.Controllers
             this.context = context;
         }
 
-        //public async Task<ActionResult<int>> Post(Compra compra)
-        //{
-        //    context.Add(compra);
-        //    await context.SaveChangesAsync();
-        //    return compra.Id;
-        //}
+        
         [HttpPost]
         public async Task<ActionResult<int>> Post(Compra compra)
         {
@@ -34,12 +29,10 @@ namespace TallerEnrique.Server.Controllers
             {
                 //extrae el registro del inventario que contiene el articulo a comprar, sino es igual a null
                 Inventario inventario = context.Inventarios.FirstOrDefault(inv => inv.ArticuloId == dCompra.ArticuloId);
-                //si el existe un registro con el inventario :
+               
                 if (inventario != null)
                 {
-                    //busca nuevamente el registro en la base de datos (ya sabemos q existe)
-                    //y extrae la variable Existencia para asignar el valor de existencia mas la cantidad nueva
-                    //del articulo que se compra
+                    
                     context.Inventarios.Find(inventario.Id).Existencia = context.Inventarios.Find(inventario.Id).Existencia + dCompra.Cantidad;
                     var lista_articulo = await context.Articulos.ToListAsync();
                     var articulo = lista_articulo.First(x => x.Id == dCompra.ArticuloId);
@@ -56,7 +49,7 @@ namespace TallerEnrique.Server.Controllers
                         Estado = true
 
                     });
-                    //await GuardarEnCaja(compra);
+                   
                 }
                 dCompra.Articulo = null;
             }
@@ -71,18 +64,14 @@ namespace TallerEnrique.Server.Controllers
 
         
 
-        [HttpGet("cargartodo")] //Original(este no lo tiene D
+        [HttpGet("cargartodo")] 
         public async Task<ActionResult<List<Compra>>> Get()
         {
-            //return await context.Compras.ToListAsync();
+          
             return await context.Compras.Include("Proveedor").Include("DCompras").ToListAsync();
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Compra>> Get(int id)
-        //{
-        //    return await context.Compras.FirstOrDefaultAsync(x => x.Id == id);
-        //}
+       
         [HttpGet("{id}")]
         public async Task<ActionResult<Compra>> GetPol(int id)
         {
@@ -96,13 +85,7 @@ namespace TallerEnrique.Server.Controllers
             return compra;
         }
 
-        //[HttpPut]
-        //public async Task<ActionResult> Put(Compra compra)
-        //{
-        //    context.Attach(compra).State = EntityState.Modified;
-        //    await context.SaveChangesAsync();
-        //    return NoContent();
-        //}
+       
 
         [HttpPut]
         public async Task<ActionResult> Put(Compra compra)
@@ -140,15 +123,7 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
 
-        // paginacion
-
-        [HttpGet]
-        public async Task<ActionResult<List<Compra>>> Get([FromQuery] Paginacion paginacion)
-        {
-            var queryable = context.Compras.AsQueryable();
-            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
-            return await queryable.Paginar(paginacion).ToListAsync();
-        }
+        
         //Cierre
         private async Task GuardarEnCaja(Compra Compra)
         {

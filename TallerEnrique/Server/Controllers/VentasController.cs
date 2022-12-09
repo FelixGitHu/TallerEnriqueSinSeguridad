@@ -21,13 +21,6 @@ namespace TallerEnrique.Server.Controllers
             this.context = context;
         }
 
-
-        //public async Task<ActionResult<int>> Post(Compra compra)
-        //{
-        //    context.Add(compra);
-        //    await context.SaveChangesAsync();
-        //    return compra.Id;
-        //}
         [HttpPost]
         public async Task<ActionResult<int>> Post(Venta venta)
         {
@@ -35,12 +28,9 @@ namespace TallerEnrique.Server.Controllers
             {
                 //extrae el registro del inventario que contiene el articulo a comprar, sino es igual a null
                 Inventario inventario = context.Inventarios.FirstOrDefault(inv => inv.ArticuloId == dVenta.InventarioId);
-                //si el existe un registro con el inventario :
+               
                 if (inventario != null)
                 {
-                    //busca nuevamente el registro en la base de datos (ya sabemos q existe)
-                    //y extrae la variable Existencia para asignar el valor de existencia mas la cantidad nueva
-                    //del articulo que se compra
                     context.Inventarios.Find(inventario.Id).Existencia = context.Inventarios.Find(inventario.Id).Existencia - dVenta.Cantidad;
                     //var lista_articulo = await context.Articulos.ToListAsync();
                     //var articulo = lista_articulo.First(x => x.Id == dVenta.ArticuloId);
@@ -75,25 +65,18 @@ namespace TallerEnrique.Server.Controllers
 
 
 
-        [HttpGet("cargartodo")] //Original(este no lo tiene D
+        [HttpGet("cargartodo")] 
         public async Task<ActionResult<List<Venta>>> Get()
         {
-            //return await context.Compras.ToListAsync();
+           
            return await context.Ventas.Include("Vehiculo").Include("Moneda").Include("Servicio").Include("Mecanico").Include("Categoria").Include("DVentas").Include("Cliente").ToListAsync();
         }
 
-
-        //[HttpGet("{id}")]
-        //public async Task<ActionResult<Compra>> Get(int id)
-        //{
-        //    return await context.Compras.FirstOrDefaultAsync(x => x.Id == id);
-        //}
         [HttpGet("{id}")]
         public async Task<ActionResult<Venta>> GetPol(int id)
         {
-            //var compra = await context.Compras
+            
             var venta = await context.Ventas
-               // .Include(x => x.DCompras)
                .Include(x => x.DVentas)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (venta == null)
@@ -103,13 +86,6 @@ namespace TallerEnrique.Server.Controllers
             return venta;
         }
 
-        //[HttpPut]
-        //public async Task<ActionResult> Put(Compra compra)
-        //{
-        //    context.Attach(compra).State = EntityState.Modified;
-        //    await context.SaveChangesAsync();
-        //    return NoContent();
-        //}
 
         [HttpPut]
         public async Task<ActionResult> Put(Venta venta)
@@ -147,15 +123,6 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
 
-        // paginacion
-
-        [HttpGet]
-        public async Task<ActionResult<List<Venta>>> Get([FromQuery] Paginacion paginacion)
-        {
-            var queryable = context.Ventas.AsQueryable();
-            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
-            return await queryable.Paginar(paginacion).ToListAsync();
-        }
        // Cierre
         private async Task GuardarEnCaja(Venta venta)
         {

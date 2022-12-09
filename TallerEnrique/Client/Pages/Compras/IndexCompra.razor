@@ -71,23 +71,16 @@ else
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
 
-    //Paginacion
-    private int paginaActual = 1;
-    private int paginasTotales;
-
     public List<Proveedor> Proveedores { get; set; } = new List<Proveedor>();
-    //variablesD
+    
     public List<Compra> ComprasRealizadas = new List<Compra>();
 
     protected async override Task OnInitializedAsync()
     {
-        //extraccion de datos al iniciar la pagina
+        
         await getComprasRealizadas();
     }
-    //private async Task getComprasRealizadas()
-    //{
-    //    var responseHttp = await repositorio.Get<List<Compra>>("api/compras/cargartodo");
-    //    ComprasRealizadas = responseHttp.Response;
+   
 
     //}
     private async Task getComprasRealizadas()
@@ -120,22 +113,7 @@ else
 
     }
 
-    //Paginacion
-    private async Task paginaSeleccionada(int pagina)
-    {
-        paginaActual = pagina;
-        await Cargar(pagina);
-    }
-    private async Task Cargar(int pagina = 1)
-    {
-        var responseHttp = await repositorio.Get<List<Compra>>($"api/compras?pagina={pagina}");
-        if (!responseHttp.Error)
-        {
-            ComprasRealizadas = responseHttp.Response;
-            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
-            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
-        }
-    }
+   
     ///Buscar por nombre
     private bool FilterFunc1(Compra element) => FilterFunc(element, searchString1);
 
@@ -161,14 +139,5 @@ else
         return false;
     }
 
-    private async Task Filtrar()
-    {
-        await Cargar();
-    }
-
-    private async Task Limpiar()
-    {
-        NombreArtFiltro = string.Empty;
-        await Cargar();
-    }
+   
 }

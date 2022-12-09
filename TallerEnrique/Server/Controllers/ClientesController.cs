@@ -62,15 +62,6 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
 
-        //paginacion
-
-        [HttpGet]
-        public async Task<ActionResult<List<Cliente>>> Get([FromQuery] Paginacion paginacion)
-        {
-            var queryable = context.Clientes.Where(x => x.Estado == true).AsQueryable();
-            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
-            return await queryable.Paginar(paginacion).ToListAsync();
-        }
 
         //para buscar articulos
         [HttpGet("buscar/{textoBusqueda}")]

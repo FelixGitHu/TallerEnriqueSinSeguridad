@@ -91,9 +91,6 @@ else
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
 
-    //Paginacion
-    private int paginaActual = 1;
-    private int paginasTotales;
 
     public List<Servicio> Servicios { get; set; } = new List<Servicio>();
     public List<Moneda> Monedas { get; set; } = new List<Moneda>();
@@ -108,12 +105,7 @@ else
         //extraccion de datos al iniciar la pagina
         await getVentasRealizadas();
     }
-    //private async Task getVentasRealizadas()
-    //{
-    //    var responseHttp = await repositorio.Get<List<Venta>>("api/ventas/cargartodo");
-    //    VentasRealizadas = responseHttp.Response;
-
-    //}
+   
     private async Task getVentasRealizadas()
     {
         var httpResponse = await Http.GetAsync($"api/ventas/cargartodo");
@@ -165,31 +157,5 @@ else
         return false;
     }
 
-    private async Task Filtrar()
-    {
-        await Cargar();
-    }
-
-    private async Task Limpiar()
-    {
-        NombreArtFiltro = string.Empty;
-        await Cargar();
-    }
-
-    //Paginacion
-    private async Task paginaSeleccionada(int pagina)
-    {
-        paginaActual = pagina;
-        await Cargar(pagina);
-    }
-    private async Task Cargar(int pagina = 1)
-    {
-        var responseHttp = await repositorio.Get<List<Venta>>($"api/ventas?pagina={pagina}");
-        if (!responseHttp.Error)
-        {
-            VentasRealizadas = responseHttp.Response;
-            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
-            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
-        }
-    }
+    
 }

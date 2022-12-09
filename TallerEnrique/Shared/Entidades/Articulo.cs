@@ -25,17 +25,6 @@ namespace TallerEnrique.Shared.Entidades
         public List<DCompra> DCompras { get; set; } = new List<DCompra>();//Maestro detalle
         public List<DVenta> DVentas { get; set; } = new List<DVenta>();
 
-        //public override bool Equals(object obj)///esto es de la prueba para typeHead, pero no me funciono
-        //{
-        //    if (obj is Articulo a2) 
-        //    {
-        //        return Id == a2.Id;
-        //    }
-        //    return false;
-        //}
-        //public override int GetHashCode()
-        //{
-        //    return base.GetHashCode();
-        //}
+        
     }
 }

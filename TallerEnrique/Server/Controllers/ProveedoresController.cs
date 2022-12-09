@@ -57,24 +57,5 @@ namespace TallerEnrique.Server.Controllers
             await context.SaveChangesAsync();
             return NoContent();
         }
-
-        // paginacion
-
-        [HttpGet]
-        public async Task<ActionResult<List<Proveedor>>> Get([FromQuery] Paginacion paginacion)
-        {
-            var queryable = context.Proveedors.Where(x => x.Estado == true).AsQueryable();
-            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
-            return await queryable.Paginar(paginacion).ToListAsync();
-        }
-
-        //selcctor multiple
-        //[HttpGet("buscar/{textobusqueda}")]
-        //public async Task<ActionResult<List<Proveedor>>> Get (string textoBusqueda)
-        //{
-        //    if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Proveedor>(); }
-        //    textoBusqueda = textoBusqueda.ToLower();
-        //    return await context.Proveedors.Where(x => x.NombreEmpresa.ToLower().Contains(textoBusqueda)).ToListAsync();
-        //}
     }
 }

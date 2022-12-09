@@ -60,64 +60,11 @@ else
         </PagerContent>
     </MudTable>
 }
-<!--<h3>Artículos</h3>
 
-<div class="form-group">
-    <a class="btn btn-info" href="articulos/crear">Agregar artículo</a>
-
-        <MudText Typo="Typo.h6">Articulos</MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="searchString1" Placeholder="Buscar articulo..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
-
-</div>
-
-<ListadoGenerico Listado="Articulos">
-    <HayRegistrosCompleto>
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <AuthorizeView Roles="admin">
-                        <Authorized>
-                            <th>Acción</th>
-                        </Authorized>
-                    </AuthorizeView>
-                    <th>Nombre</th>
-                    <th>Marca</th>
-                    <th>Precio Compra</th>
-                    <th>Precio Venta</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Articulos)
-                {
-                    <tr>
-                        <AuthorizeView Roles="admin">
-                            <Authorized>
-                                <td>
-                                    <a href="/articulos/editar/@item.Id" class="btn btn-success">Editar</a>
-                                    <button @onclick="@(() => BorrarArticulo(item))" class="btn btn-danger">Borrar</button>
-                                </td>
-                            </Authorized>
-                        </AuthorizeView>
-                        <td>@item.Nombre</td>
-                        <td>@item.Marca</td>
-                        <td>C$ @Math.Round(item.PrecioCompra, 2)</td>
-                        <td>C$ @Math.Round(item.PrecioVenta, 2)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </HayRegistrosCompleto>
-</ListadoGenerico>-->
-@*Paginaccion*@
-<!--<Paginaciones PaginaActual="paginaActual" PaginaSeleccionada="paginaSeleccionada"
-              PaginasTotales="paginasTotales"></Paginaciones>-->
 
 
 @code {
-    //Paginacion
-    private int paginaActual = 1;
-    private int paginasTotales;
+    
     private bool dense = false;
     private bool hover = true;
     private bool striped = true;
@@ -133,14 +80,9 @@ else
     }
 
 
-    //private async Task Cargar()
-    //{
-    //    var responseHttp = await repositorio.Get<List<Articulo>>("api/articulos");
-    //    Articulos = responseHttp.Response;
-    //}
     private async Task Cargar()
     {
-        var httpResponse = await Http.GetAsync($"api/articulos");
+        var httpResponse = await Http.GetAsync($"api/articulos/cargartodos");
         if (httpResponse.IsSuccessStatusCode)
         {
             var responseString = await httpResponse.Content.ReadAsStringAsync();
@@ -168,22 +110,6 @@ else
 
     }
 
-    //Paginacion
-    private async Task paginaSeleccionada(int pagina)
-    {
-        paginaActual = pagina;
-        await Cargar(pagina);
-    }
-    private async Task Cargar(int pagina = 1)
-    {
-        var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos?pagina={pagina}");
-        if (!responseHttp.Error)
-        {
-            Articulos = responseHttp.Response;
-            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
-            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
-        }
-    }
 
     void CrearArticulo()
     {
@@ -205,14 +131,4 @@ else
         return false;
     }
 
-    private async Task Filtrar()
-    {
-        await Cargar();
-    }
-
-    private async Task Limpiar()
-    {
-        NombreArtFiltro = string.Empty;
-        await Cargar();
-    }
 }

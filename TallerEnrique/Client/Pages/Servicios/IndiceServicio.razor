@@ -67,9 +67,7 @@ else
     private Servicio selectedItem1 = null;
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
-    //Paginacion
-    private int paginaActual = 1;
-    private int paginasTotales;
+   
 
     public List<Servicio> Servicios { get; set; }
     public List<Categoria> Categorias { get; set; } = new List<Categoria>();
@@ -78,22 +76,7 @@ else
         await Cargar();
     }
 
-    //Paginacion
-    private async Task paginaSeleccionada(int pagina)
-    {
-        paginaActual = pagina;
-        await Cargar(pagina);
-    }
-    private async Task Cargar(int pagina = 1)
-    {
-        var responseHttp = await repositorio.Get<List<Servicio>>($"api/servicios?pagina={pagina}");
-        if (!responseHttp.Error)
-        {
-            Servicios = responseHttp.Response;
-            var conteo = responseHttp.HttpResponseMessage.Headers.GetValues("conteo").FirstOrDefault();
-            paginasTotales = int.Parse(responseHttp.HttpResponseMessage.Headers.GetValues("totalPaginas").FirstOrDefault());
-        }
-    }
+    
 
     private async Task Cargar()
     {
@@ -141,15 +124,6 @@ else
         return false;
     }
 
-    private async Task Filtrar()
-    {
-        await Cargar();
-    }
-
-    private async Task Limpiar()
-    {
-        NombreArtFiltro = string.Empty;
-        await Cargar();
-    }
+    
 
 }
