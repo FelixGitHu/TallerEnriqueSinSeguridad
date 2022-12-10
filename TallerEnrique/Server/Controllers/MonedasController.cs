@@ -22,7 +22,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet("cargartodos")]
         public async Task<ActionResult<List<Moneda>>> Get()
         {
-            return await context.Monedas.ToListAsync();
+            return await context.Monedas.Where(x=> x.Estado == true).ToListAsync();
         }
 
         [HttpGet("{id}")]

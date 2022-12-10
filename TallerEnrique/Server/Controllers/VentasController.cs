@@ -27,6 +27,10 @@ namespace TallerEnrique.Server.Controllers
             foreach (DVenta dVenta in venta.DVentas)
             {
                 //extrae el registro del inventario que contiene el articulo a comprar, sino es igual a null
+                var listaInventario = await context.Inventarios.ToListAsync();
+                var inventa = listaInventario.First(x => x.Id == dVenta.InventarioId);
+                inventa.ArticuloId = dVenta.InventarioId;
+
                 Inventario inventario = context.Inventarios.FirstOrDefault(inv => inv.ArticuloId == dVenta.InventarioId);
                
                 if (inventario != null)
