@@ -13,8 +13,8 @@
                 <div class="form-group col-sm-4">
                     <label>N° Factura:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.Id" readonly="readonly" />
-                        <ValidationMessage For="@(() => NuevaVenta.Id)" />
+                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.NFactura" readonly="readonly" />
+                        <ValidationMessage For="@(() => NuevaVenta.NFactura)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
@@ -50,14 +50,20 @@
             <div class=" row">
                 <div class="form-group col-sm-4">
                     <label>Descuento por Venta:</label>
-                    <div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">%</span>
+                        </div>
                         <InputNumber class="form-control" @bind-Value="@NuevaVenta.Descuento" />
                         <ValidationMessage For="@(() => NuevaVenta.Descuento)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Mano de Obra:</label>
-                    <div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                        </div>
                         <InputNumber class="form-control" @bind-Value="@NuevaVenta.ManoObra" />
                         <ValidationMessage For="@(() => NuevaVenta.ManoObra)" />
                     </div>
@@ -138,21 +144,30 @@
                 </div>
                 <div class="form-group col-sm-2">
                     <label>IVA:</label>
-                    <div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                        </div>
                         <InputNumber class="form-control" @bind-Value="@NuevaVenta.IVA" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaVenta.IVA)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-2">
                     <label>SubTotal:</label>
-                    <div>
-                        <InputNumber class="form-control"  @bind-Value="@NuevaVenta.SubTotal" readonly="readonly" />
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                        </div>
+                        <InputNumber class="form-control" @bind-Value="@NuevaVenta.SubTotal" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaVenta.SubTotal)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-2">
                     <label>Total:</label>
-                    <div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                        </div>
                         <InputNumber class="form-control" @onclick="@(() => CalcularTotal())" @bind-Value="@NuevaVenta.Total" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaVenta.Total)" />
                     </div>
@@ -219,14 +234,20 @@
                 <div class="row">
                     <div class="form-group col-sm-6">
                         <label>Precio:</label>
-                        <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                            </div>
                             <InputNumber class="form-control" @bind-Value="@detalle.PrecioVenta" />
                             <ValidationMessage For="@(() => detalle.PrecioVenta)" />
                         </div>
                     </div>
                     <div class="form-group col-sm-6">
                         <label>Descuento:</label>
-                        <div>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="inputGroup-sizing-default">%</span>
+                            </div>
                             <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
                             <ValidationMessage For="@(() => detalle.Descuento)" />
                         </div>

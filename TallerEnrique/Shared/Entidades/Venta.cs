@@ -11,9 +11,7 @@ namespace TallerEnrique.Shared.Entidades
     {
         [Key]
         public int Id { get; set; }
-        //public long  NFactura { get; set; }
-
-        
+        public long  NFactura { get; set; }
 
         [Required(ErrorMessage = "La Descripcion es Obligatorio ")]
         public string Descripcion { get; set; }

@@ -62,6 +62,7 @@ namespace TallerEnrique.Server.Controllers
             //una vez se agregan o modifican los registros de invenmtario, se guarda la compra
             //context.Compras.Add(compra);
             venta = context.Add(venta).Entity;
+            venta.NFactura = context.Ventas.Max(x => x.NFactura + 1);
             await context.SaveChangesAsync();
             await GuardarEnCaja(venta);
             return venta.Id;

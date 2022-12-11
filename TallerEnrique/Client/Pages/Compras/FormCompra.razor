@@ -13,7 +13,7 @@
                 <div class="form-group col-sm-4">
                     <label>N° Factura:</label>
                     <div>
-                        <InputNumber class="form-control" @bind-Value="@NuevaCompra.NFactura" />
+                        <InputNumber class="form-control" @bind-Value="@NuevaCompra.NFactura" readonly="readonly"/>
                         <ValidationMessage For="@(() => NuevaCompra.NFactura)" />
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                             <option value="0" disabled>--Proveedor--</option>
                             @foreach (var item in ProveedoresSeleccionados)
                             {
-                                <option value="@item.Id">@item.NombreEmpresa &nbsp; @item.NombreContacto</option>
+                                <option value="@item.Id"> EMPRESA:  @item.NombreEmpresa  || CONTACTO: @item.NombreContacto</option>
                             }
                         </InputSelectNumber>
                         <ValidationMessage For="@(() => NuevaCompra.ProveedorId)" />
@@ -41,21 +41,30 @@
             <div class=" row">
                 <div class="form-group col-sm-4">
                     <label>SubTotal:</label>
-                    <div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                        </div>
                         <InputNumber class="form-control" @bind-Value="@NuevaCompra.SubTotal" readonly="readonly" />
                         @*<ValidationMessage For="@(() => NuevaCompra.SubTotal)" />*@
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label>I.V.A:</label>
-                    <div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                        </div>
                         <InputNumber class="form-control" @bind-Value="@NuevaCompra.IVA" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaCompra.IVA)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Total:</label>
-                    <div>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                        </div>
                         <InputNumber @onclick="@(() => CalcularTotal())" class="form-control" @bind-Value="@NuevaCompra.CostoTotal" readonly="readonly" />
                         <ValidationMessage For="@(() => NuevaCompra.CostoTotal)" />
                     </div>
@@ -115,14 +124,20 @@
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <label>Precio de Compra:</label>
-                            <div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
+                                </div>
                                 <InputNumber class="form-control" @bind-Value="@detalle.PrecioUnitario" />
                                 <ValidationMessage For="@(() => detalle.PrecioUnitario)" />
                             </div>
                         </div>
                         <div class="form-group col-sm-6">
                             <label>Descuento:</label>
-                            <div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-default">%</span>
+                                </div>
                                 <InputNumber class="form-control" @bind-Value="@detalle.Descuento" />
                                 <ValidationMessage For="@(() => detalle.Descuento)" />
                             </div>

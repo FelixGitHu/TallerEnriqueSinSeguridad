@@ -49,7 +49,7 @@ else
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Factura">@context.NFactura</MudTd>
-            <MudTd DataLabel="Fecha">@context.Fecha</MudTd>
+            <MudTd DataLabel="Fecha">@context.Fecha.ToShortDateString()</MudTd>
             <MudTd DataLabel="Empresa">@context.Proveedor.NombreEmpresa</MudTd>
             <MudTd DataLabel="IVA">@Math.Round(@context.IVA, 2)</MudTd>
             <MudTd DataLabel="Sub Total">C$ @Math.Round(@context.SubTotal, 2)</MudTd>

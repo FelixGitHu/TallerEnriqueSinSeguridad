@@ -100,11 +100,11 @@ else
       
     </MudTable>
 
-    <MudSwitch @bind-Checked="_dense" Color="Color.Primary">Dense</MudSwitch>
+    @*<MudSwitch @bind-Checked="_dense" Color="Color.Primary">Dense</MudSwitch>
     <MudSwitch @bind-Checked="_multiSelect" Color="Color.Primary">MultiSelect</MudSwitch>
     <MudSwitch @bind-Checked="_virtualize" Color="Color.Primary">Virtualize</MudSwitch>
     <MudSwitch @bind-Checked="grupo.Indentation" Color="Color.Primary">Indentation</MudSwitch>
-    <MudSwitch @bind-Checked="grupo.Expandable" Color="Color.Primary">Expandable</MudSwitch>
+    <MudSwitch @bind-Checked="grupo.Expandable" Color="Color.Primary">Expandable</MudSwitch>*@
 }
 
 @code {
@@ -169,7 +169,7 @@ else
     }
     ///nueva tabla para sumar
     private bool _dense = false;
-    private bool _multiSelect = true;
+    private bool _multiSelect = false;
     private bool _virtualize = false;
 
     private TableGroupDefinition<Cierre> grupo = new()
