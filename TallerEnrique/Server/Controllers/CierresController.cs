@@ -25,26 +25,24 @@ namespace TallerEnrique.Server.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<List<Cierre>>> Get()
         {
-            return await context.Cierre.Include("Venta").Include("Inventario").Include("Categoria").ToListAsync();
+            return await  context.Cierre.OrderByDescending(x=> x.Fecha).ToListAsync();
         }
         //GET: api/caja/filtro/cliente&empleado&fecha
         [HttpGet("filtro")]
         [AllowAnonymous]
-        public async Task<ActionResult<List<Cierre>>> Get([FromQuery] string fecha) // para que funcione en rider
+        public async Task<ActionResult<List<Cierre>>> Get([FromQuery] DateTime fecha) // para que funcione en rider
         {
             DateTime f = Convert.ToDateTime(fecha);
 
-            //var queryable = context.Cierre.Include("Venta")
-            return await context.Cierre.ToListAsync();
+            var queryable = context.Cierre.AsQueryable();
 
             if (f != DateTime.Today)
             {
-                //queryable = queryable.Where(x => x.Fecha.Day == f.Day &&
-                context.Cierre.Where(x => x.Fecha.Day == f.Day &&
+                queryable = queryable.Where(x => x.Fecha.Day == f.Day &&
                                             x.Fecha.Month == f.Month &&
                                             x.Fecha.Year == f.Year);
             }
-            return await context.Cierre.OrderByDescending(x => x.Fecha).ToListAsync();
+            return await queryable.OrderByDescending(x => x.Fecha).ToListAsync();
         }
 
         // GET: api/ventas/5
