@@ -78,18 +78,22 @@ namespace TallerEnrique.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Venta>> GetPol(int id)
+        public async Task<ActionResult<Venta>> Get(int id)
         {
-            
-            var venta = await context.Ventas
+
+            return await context.Ventas
                .Include(x => x.DVentas)
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (venta == null)
-            {
-                return NotFound();
-            }
-            return venta;
+               .Include(x => x.Cliente)
+               .Include(x => x.Moneda)
+               .Include(x => x.Vehiculo)
+               .Include(x => x.Mecanico)
+               .Include(x => x.Servicio)
+               .ThenInclude(x => x.Categoria)
+               .FirstOrDefaultAsync(x => x.Id == id);
+            //.FirstAsync(x => x.Id == id);
+
         }
+        
 
 
         [HttpPut]

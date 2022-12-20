@@ -46,7 +46,7 @@ namespace TallerEnrique.Shared.Entidades
         //Estableciendo la relacion entre tablas
         public int VehiculoId { get; set; }
         public int MonedaId { get; set; }
-        public int ClienteId { get; set; }
+        public int? ClienteId { get; set; }
         public int MecanicoId { get; set; }
         public int ServicioId { get; set; }
         public int? CategoriaId { get; set; }
@@ -57,6 +57,7 @@ namespace TallerEnrique.Shared.Entidades
         public Mecanico Mecanico { get; set; }
         public Servicio Servicio  { get; set; }
         public Categoria Categoria { get; set; }
+        //public DVenta DVenta { get; set; }
 
         public List<DVenta> DVentas { get; set; } = new List<DVenta>();
     }

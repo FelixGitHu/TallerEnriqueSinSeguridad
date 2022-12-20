@@ -51,7 +51,7 @@ else
             <MudTh>Total</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Factura">@context.Id</MudTd>
+            <MudTd DataLabel="Factura">@context.NFactura</MudTd>
             <MudTd DataLabel="Cliente">@context.Cliente.Nombres</MudTd>
             @*<MudTd DataLabel="Descripcion" Class="col-2">@context.Descripcion</MudTd>*@
             <MudTd DataLabel="Fecha">@context.Fecha.ToShortDateString()</MudTd>
@@ -68,6 +68,8 @@ else
                 <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
                         @onclick="@(() => NavigationManager.NavigateTo($"/ventas/editar/{context.Id}"))" />
                 <a href="/ventas/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudFab Color="Color.Primary" StartIcon="@Icons.Filled.Payment" Size="Size.Small"
+                        @onclick="@(() => NavigationManager.NavigateTo($"/imprimir-venta/{context.Id}"))" />
             </MudTd>
 
         </RowTemplate>
