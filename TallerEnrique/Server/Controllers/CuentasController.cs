@@ -79,7 +79,7 @@ namespace TallerEnrique.Server.Controllers
             }
             else
             {
-                return BadRequest("Invalid login attempt");
+                return BadRequest("Intento de inicio de sesión no válido");
             }
         }
 

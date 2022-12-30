@@ -6,6 +6,9 @@
 @using System.Text.Json
 @inject NavigationManager NavigationManager
 
+<div class="form-group">
+    <a class="btn btn-info" href="usuarios/crear">Agregar Usuario</a>
+</div>
 
 @if (Usuarios == null)
 {
@@ -64,8 +67,9 @@ else
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
     List<UsuarioDTO> Usuarios;
-
     
+
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -132,8 +136,8 @@ else
         return false;
     }
 
-   
 
-    
+
+
 }
 
