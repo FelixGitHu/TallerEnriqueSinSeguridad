@@ -37,14 +37,14 @@ else
 
             <MudTh Class="thead-dark">Nombre</MudTh>
             <MudTh>Descripción</MudTh>
-            <MudTh>Precio</MudTh>
+            
 
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nombre categoría">@context.Categoria.Nombre</MudTd>
             <MudTd DataLabel="Descrioción">@context.Descripcion</MudTd>
-            <MudTd DataLabel="Precio">C$ @context.Precio</MudTd>
+            
 
             <MudTd>
                 <MudTooltip Text="Editar Servicio."
@@ -120,8 +120,7 @@ else
             return true;
         if (element.Descripcion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if (element.Precio.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
+        
 
         return false;
     }

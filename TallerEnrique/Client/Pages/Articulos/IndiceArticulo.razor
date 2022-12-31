@@ -45,13 +45,17 @@ else
 
             <MudTh Class="thead-dark">Nombre</MudTh>
             <MudTh>Marca</MudTh>
+            <MudTh>Descripción</MudTh>
+            <MudTh>Código</MudTh>
             <MudTh>Precio Compra</MudTh>
             <MudTh>Precio Venta</MudTh>
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Nombra">@context.Nombre</MudTd>
+            <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
             <MudTd DataLabel="Marca">@context.Marca</MudTd>
+            <MudTd DataLabel="Descripcion">@context.Descripcion</MudTd>
+            <MudTd DataLabel="Codigi¿o">@context.Codigo</MudTd>
             <MudTd DataLabel="Precio Compra">C$ @Math.Round(@context.PrecioCompra, 2)</MudTd>
             <MudTd DataLabel="Precio Venta"> C$ @Math.Round(@context.PrecioVenta, 2)</MudTd>
             <MudTd>
@@ -59,7 +63,7 @@ else
                             Color="Color.Secondary" Placement="Placement.Top">
                     <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
                             @onclick="@(() => NavigationManager.NavigateTo($"/articulos/editar/{context.Id}"))" />
-                    
+
                 </MudTooltip>
             </MudTd>
 

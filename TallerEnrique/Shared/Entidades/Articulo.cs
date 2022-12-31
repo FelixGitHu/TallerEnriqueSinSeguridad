@@ -20,6 +20,15 @@ namespace TallerEnrique.Shared.Entidades
         [Required(ErrorMessage = "El Precio  es obligatorio ")]
         public decimal PrecioCompra { get; set; }
         public decimal PrecioVenta { get { return PrecioCompra + (PrecioCompra * (12M / 100M)); } set { } }
+
+        [StringLength(300)]
+        [MaxLength(300, ErrorMessage = "Máximo 300 dígitos"), MinLength(2, ErrorMessage = "Minimo 2 dígitos")]
+        public string? Descripcion { get; set; }
+
+        [StringLength(30)]
+        [MaxLength(30, ErrorMessage = "Máximo {0} caracteres")]
+        public string? Codigo { get; set; }
+
         public bool Estado { get; set; } = true;
 
         public List<DCompra> DCompras { get; set; } = new List<DCompra>();//Maestro detalle
