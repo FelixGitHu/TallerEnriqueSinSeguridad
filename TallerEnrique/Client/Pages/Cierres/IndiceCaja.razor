@@ -2,13 +2,14 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @using System.Text.Json
+@attribute [Authorize(Roles = "admin")]
 
 <div class="d-flex position-sticky justify-content-between mb-1">
 
     <!--<div class="input-group" style="width:60%">
         <input class="form-control" type="date" placeholder="Fecha venta" @bind="FechaFiltro" />-->
-        @* <input class="form-control" type="text" placeholder="Nombre empleado" @bind="EmpleadoFiltro" />*@
-        <!--<div class="input-group-append">
+    @* <input class="form-control" type="text" placeholder="Nombre empleado" @bind="EmpleadoFiltro" />*@
+    <!--<div class="input-group-append">
             <button @onclick="Filtrar" class="btn btn-primary" type="button"><i class="oi oi-magnifying-glass"></i></button>
             <button @onclick="Limpiar" class="btn btn-danger" type="button"><i class="oi oi-delete"></i></button>
         </div>
@@ -92,20 +93,20 @@ else
         </RowTemplate>
         <GroupFooterTemplate>
             <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="5">
-                <b>Total ingresos:</b>C$ @context.Items.Sum((e) => e.Ingresos)<br />                                                                                   
-                <b>Total Egresos:</b>C$ @context.Items.Sum((e) => e.Egresos)<br />                                                                               
+                <b>Total ingresos:</b>C$ @context.Items.Sum((e) => e.Ingresos)<br />
+                <b>Total Egresos:</b>C$ @context.Items.Sum((e) => e.Egresos)<br />
                 <b>Total Saldo:</b>C$ @context.Items.Sum((e) => e.Saldo)
             </MudTh>
-            
+
         </GroupFooterTemplate>
-      
+
     </MudTable>
 
     @*<MudSwitch @bind-Checked="_dense" Color="Color.Primary">Dense</MudSwitch>
-    <MudSwitch @bind-Checked="_multiSelect" Color="Color.Primary">MultiSelect</MudSwitch>
-    <MudSwitch @bind-Checked="_virtualize" Color="Color.Primary">Virtualize</MudSwitch>
-    <MudSwitch @bind-Checked="grupo.Indentation" Color="Color.Primary">Indentation</MudSwitch>
-    <MudSwitch @bind-Checked="grupo.Expandable" Color="Color.Primary">Expandable</MudSwitch>*@
+        <MudSwitch @bind-Checked="_multiSelect" Color="Color.Primary">MultiSelect</MudSwitch>
+        <MudSwitch @bind-Checked="_virtualize" Color="Color.Primary">Virtualize</MudSwitch>
+        <MudSwitch @bind-Checked="grupo.Indentation" Color="Color.Primary">Indentation</MudSwitch>
+        <MudSwitch @bind-Checked="grupo.Expandable" Color="Color.Primary">Expandable</MudSwitch>*@
 }
 
 @code {

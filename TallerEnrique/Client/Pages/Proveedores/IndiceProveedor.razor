@@ -4,7 +4,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-
+@attribute [Authorize(Roles = "admin")]
 
 <div class="form-group">
     <a class="btn btn-info" href="proveedores/crear">Agregar Proveedor</a>
@@ -58,9 +58,11 @@ else
             <MudTh DataLabel="Email">@context.Email</MudTh>
             <MudTd DataLabel="Marca">@context.Telefono</MudTd>
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/proveedores/editar/{context.Id}"))" />
-                <a href="/proveedores/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar Proveedor."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/proveedores/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>
@@ -69,78 +71,78 @@ else
         </PagerContent>
     </MudTable>
 }
-   
 
-    @code {
-        private bool dense = false;
-        private bool hover = true;
-        private bool striped = true;
-        private bool bordered = true;
-        private Proveedor selectedItem1 = null;
-        private string searchString1 = "";
-        private string NombreArtFiltro = String.Empty; //filtros
-        
 
-        public List<Proveedor> Proveedores { get; set; }
-        protected async override Task OnInitializedAsync()
+@code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Proveedor selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
+
+
+    public List<Proveedor> Proveedores { get; set; }
+    protected async override Task OnInitializedAsync()
+    {
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        var httpResponse = await Http.GetAsync($"api/proveedores/cargartodos");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Proveedores = JsonSerializer.Deserialize<List<Proveedor>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            //Console.WriteLine("error");
+            await mostrarMensajes.MostrarMensajeError("NO se pudo cargar el listado");
+        }
+
+    }
+
+    private async Task BorrarProveedor(Proveedor proveedor)
+    {
+        var responseHttp = await repositorio.Delete($"api/proveedores/{proveedor.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
         {
             await Cargar();
         }
 
-        private async Task Cargar()
-        {
-            var httpResponse = await Http.GetAsync($"api/proveedores/cargartodos");
-            if (httpResponse.IsSuccessStatusCode)
-            {
-                var responseString = await httpResponse.Content.ReadAsStringAsync();
-                Proveedores = JsonSerializer.Deserialize<List<Proveedor>>(responseString,
-                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-            }
-            else
-            {
-                //Console.WriteLine("error");
-                await mostrarMensajes.MostrarMensajeError("NO se pudo cargar el listado");
-            }
-
-        }
-
-        private async Task BorrarProveedor(Proveedor proveedor)
-        {
-            var responseHttp = await repositorio.Delete($"api/proveedores/{proveedor.Id}");
-            if (responseHttp.Error)
-            {
-                await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
-            }
-            else
-            {
-                await Cargar();
-            }
-
-        }
-        ///Buscar por nombre
-        private bool FilterFunc1(Proveedor element) => FilterFunc(element, searchString1);
-
-        private bool FilterFunc(Proveedor element, string searchString)
-        {
-            if (string.IsNullOrWhiteSpace(searchString))
-                return true;
-            if (element.NombreEmpresa.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-            if (element.NombreContacto.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-            if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-            if (element.Departamento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-            if (element.Ciudad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-            if (element.Email.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-            if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-
-            return false;
-        }
-
-        
     }
+    ///Buscar por nombre
+    private bool FilterFunc1(Proveedor element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(Proveedor element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.NombreEmpresa.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.NombreContacto.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Departamento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Ciudad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Email.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+
+}

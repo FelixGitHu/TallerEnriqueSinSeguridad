@@ -4,7 +4,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-@*@attribute [Authorize(Roles ="admin")]*@
+@attribute [Authorize(Roles ="admin")]
 
 <div class="btn-group">
     <a href="/lista-articulos-bajas" style="background:none; border:none">
@@ -49,9 +49,11 @@ else
             <MudTd DataLabel="Precio Compra">C$ @Math.Round(@context.PrecioCompra, 2)</MudTd>
             <MudTd DataLabel="Precio Venta"> C$ @Math.Round(@context.PrecioVenta, 2)</MudTd>
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/articulos/editar/{context.Id}"))" />
-                <a href="/articulos/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar el artículo."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/articulos/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>

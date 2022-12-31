@@ -4,7 +4,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-@*@attribute [Authorize(Roles ="admin")]*@
+@attribute [Authorize(Roles = "admin, vendedor")]
 
 
 <div class="form-group">
@@ -56,9 +56,11 @@ else
             <MudTd DataLabel="Departamento">@context.Departamento</MudTd>
             <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/clientes/editar/{context.Id}"))" />
-                <a href="/clientes/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar Cliente."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/clientes/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>

@@ -17,6 +17,7 @@ namespace TallerEnrique.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CuentasController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;

@@ -4,11 +4,12 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "admin")]
 
 
-<div class="form-group">
+@*<div class="form-group">
     <a class="btn btn-info" href="configuracions/crear">Modificar Configuarción</a>
-</div>
+</div>*@
 
 @if (Configuracions == null)
 {
@@ -49,9 +50,11 @@ else
             <MudTd DataLabel="Marca">@context.Direccion</MudTd>
             <MudTd DataLabel="Marca">@context.Telefono</MudTd>
             <MudTd Class="col-2">
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/configuracions/editar/{context.Id}"))" />
-                <a href="/configuracions/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar Datos del Taller."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/configuracions/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>
@@ -128,5 +131,5 @@ else
         return false;
     }
 
-   
+
 }

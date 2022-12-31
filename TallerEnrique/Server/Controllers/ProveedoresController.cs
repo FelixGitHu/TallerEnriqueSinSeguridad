@@ -8,11 +8,14 @@ using TallerEnrique.Client.Shared;
 using TallerEnrique.Server.Helpers;
 using TallerEnrique.Shared.Entidades;
 using TallerEnrique.Shared.Complement;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace TallerEnrique.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin,vendedor")]
     public class ProveedoresController : ControllerBase
     {
         private readonly ApplicationDbContext context;

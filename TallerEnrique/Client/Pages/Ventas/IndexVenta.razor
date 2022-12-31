@@ -4,7 +4,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-
+@attribute [Authorize(Roles = "admin, vendedor")]
 
 
 <div class="form-group">
@@ -42,7 +42,7 @@ else
             <MudTh>Fecha</MudTh>
             <MudTh>Placa</MudTh>
             <MudTh>Mécanico</MudTh>
-            <MudTh>Tipo Pago</MudTh>
+            @*<MudTh>Tipo Pago</MudTh>*@
             <MudTh>Categoria Servicio</MudTh>
             @*<MudTh>Servicio</MudTh>*@
             <MudTh>Mano Obra</MudTh>
@@ -57,7 +57,7 @@ else
             <MudTd DataLabel="Fecha">@context.Fecha.ToShortDateString()</MudTd>
             <MudTd DataLabel="Placa">@context.Vehiculo.Placa</MudTd>
             <MudTd DataLabel="Mecanico">@context.Mecanico.Nombre</MudTd>
-            <MudTd DataLabel="Pago">@context.Moneda.TipoMoneda</MudTd>
+            @*<MudTd DataLabel="Pago">@context.Moneda.TipoMoneda</MudTd>*@
             <MudTd DataLabel="Categoria">@context.Categoria.Nombre</MudTd>
             @*<MudTd DataLabel="Servicio" Class="col-3">@context.Servicio.Descripcion</MudTd>*@
             <MudTd DataLabel="Mano Obra"> C$ @Math.Round(@context.ManoObra, 2)</MudTd>
@@ -65,11 +65,16 @@ else
             <MudTd DataLabel="SubTotal"> C$ @Math.Round(@context.SubTotal, 2)</MudTd>
             <MudTd DataLabel="Total"> C$ @Math.Round(@context.Total, 2)</MudTd>
             <MudTd Class="col-2">
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/ventas/editar/{context.Id}"))" />
-                <a href="/ventas/editar/@context.Id" class="btn btn-success">Editar</a>
-                <MudFab Color="Color.Primary" StartIcon="@Icons.Filled.Payment" Size="Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/imprimir-venta/{context.Id}"))" />
+                <MudTooltip Text="Editar Venta."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/ventas/editar/{context.Id}"))" />
+                </MudTooltip>
+                    <MudTooltip Text="Genarar Factura."
+                                Color="Color.Secondary" Placement="Placement.Top">
+                        <MudFab Color="Color.Primary" StartIcon="@Icons.Filled.Payment" Size="Size.Small"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/imprimir-venta/{context.Id}"))" />
+                    </MudTooltip>
             </MudTd>
 
         </RowTemplate>
@@ -107,7 +112,7 @@ else
         //extraccion de datos al iniciar la pagina
         await getVentasRealizadas();
     }
-   
+
     private async Task getVentasRealizadas()
     {
         var httpResponse = await Http.GetAsync($"api/ventas/cargartodo");
@@ -159,5 +164,5 @@ else
         return false;
     }
 
-    
+
 }

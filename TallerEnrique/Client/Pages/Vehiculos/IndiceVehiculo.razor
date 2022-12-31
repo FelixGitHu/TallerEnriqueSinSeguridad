@@ -5,6 +5,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "admin, vendedor")]
 
 <div class="form-group">
     <a class="btn btn-info" href="vehiculos/crear">Agregar Vehiculo</a>
@@ -61,9 +62,11 @@ else
             <MudTd DataLabel="Fecha Entrada">@context.FechaEntrada.ToShortDateString()</MudTd>
             <MudTd DataLabel="Fecha Salida">@context.FechaSalida.ToShortDateString()</MudTd>
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/vehiculos/editar/{context.Id}"))" />
-                <a href="/vehiculos/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar Vehículo."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/vehiculos/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>
@@ -81,7 +84,7 @@ else
     private Vehiculo selectedItem1 = null;
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
-    
+
 
     public List<Vehiculo> Vehiculos { get; set; }
     public List<Cliente> Clientes { get; set; } = new List<Cliente>();
@@ -121,7 +124,7 @@ else
 
     }
 
-    
+
     ///Buscar por nombre
     private bool FilterFunc1(Vehiculo element) => FilterFunc(element, searchString1);
 
@@ -149,5 +152,5 @@ else
         return false;
     }
 
-   
+
 }

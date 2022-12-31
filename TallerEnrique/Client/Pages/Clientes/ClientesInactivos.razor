@@ -4,7 +4,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-@*@attribute [Authorize(Roles ="admin")]*@
+@attribute [Authorize(Roles = "admin, vendedor")]
 
 
 
@@ -48,9 +48,11 @@ else
             <MudTd DataLabel="Departamento">@context.Departamento</MudTd>
             <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/clientes/editar/{context.Id}"))" />
-                <a href="/clientes/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar Cliente."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/clientes/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>
@@ -64,72 +66,72 @@ else
 
 
     private bool dense = false;
-    private bool hover = true;
-    private bool striped = true;
-    private bool bordered = true;
-    private Cliente selectedItem1 = null;
-    private string searchString1 = "";
-    private string NombreArtFiltro = String.Empty; //filtros
+private bool hover = true;
+private bool striped = true;
+private bool bordered = true;
+private Cliente selectedItem1 = null;
+private string searchString1 = "";
+private string NombreArtFiltro = String.Empty; //filtros
 
 
-    public List<Cliente> Clientes { get; set; }
-    protected async override Task OnInitializedAsync()
+public List<Cliente> Clientes { get; set; }
+protected async override Task OnInitializedAsync()
+{
+    await Cargar();
+}
+
+private async Task Cargar()
+{
+    var httpResponse = await Http.GetAsync($"api/clientes/clientesinactivos");
+    if (httpResponse.IsSuccessStatusCode)
+    {
+        var responseString = await httpResponse.Content.ReadAsStringAsync();
+        Clientes = JsonSerializer.Deserialize<List<Cliente>>(responseString,
+            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+    }
+    else
+    {
+        Console.WriteLine("error");
+    }
+
+}
+
+private async Task BorrarCliente(Cliente clientes)
+{
+    var responseHttp = await repositorio.Delete($"api/clientes/{clientes.Id}");
+    if (responseHttp.Error)
+    {
+        await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+    }
+    else
     {
         await Cargar();
     }
 
-    private async Task Cargar()
-    {
-        var httpResponse = await Http.GetAsync($"api/clientes/clientesinactivos");
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseString = await httpResponse.Content.ReadAsStringAsync();
-            Clientes = JsonSerializer.Deserialize<List<Cliente>>(responseString,
-                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-        }
-        else
-        {
-            Console.WriteLine("error");
-        }
-
-    }
-
-    private async Task BorrarCliente(Cliente clientes)
-    {
-        var responseHttp = await repositorio.Delete($"api/clientes/{clientes.Id}");
-        if (responseHttp.Error)
-        {
-            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
-        }
-        else
-        {
-            await Cargar();
-        }
-
-    }
+}
 
 
 
-    ///Buscar por nombre
-    private bool FilterFunc1(Cliente element) => FilterFunc(element, searchString1);
+///Buscar por nombre
+private bool FilterFunc1(Cliente element) => FilterFunc(element, searchString1);
 
-    private bool FilterFunc(Cliente element, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (element.Nombres.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Apellidos.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Ciudad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Departamento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
+private bool FilterFunc(Cliente element, string searchString)
+{
+    if (string.IsNullOrWhiteSpace(searchString))
+        return true;
+    if (element.Nombres.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        return true;
+    if (element.Apellidos.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        return true;
+    if (element.Ciudad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        return true;
+    if (element.Departamento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        return true;
+    if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        return true;
 
-        return false;
-    }
+    return false;
+}
 
 
 }

@@ -4,6 +4,7 @@
 @using System.Text.Json
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
+@attribute [Authorize(Roles = "admin")]
 
 
 <div class="form-group">
@@ -42,17 +43,19 @@ else
 
             <MudTh Class="thead-dark">Nombre</MudTh>
             <MudTh>Descripción</MudTh>
-            
+
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nombra">@context.Nombre</MudTd>
             <MudTd DataLabel="Marca">@context.Descripcion</MudTd>
-            
+
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/categorias/editar/{context.Id}"))" />
-                <a href="/categorias/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar Categoría."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/categorias/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>
@@ -78,7 +81,7 @@ else
         await Cargar();
     }
 
-   
+
     private async Task Cargar()
     {
         var httpResponse = await Http.GetAsync($"api/categorias/cargartodos");

@@ -1,6 +1,7 @@
 ﻿@page "/monedas"
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@attribute [Authorize(Roles = "admin")]
 
 <h3>Monedas</h3>
 
@@ -15,7 +16,7 @@
                 <tr>
                     <th>Acción</th>
                     <th>Tipo Moneda</th>
-                    
+
                 </tr>
             </thead>
             <tbody>
@@ -27,7 +28,7 @@
                             <button @onclick="@(() => BorrarMoneda(item))" class="btn btn-danger">Borrar</button>
                         </td>
                         <td>@item.TipoMoneda</td>
-                        
+
                     </tr>
                 }
             </tbody>

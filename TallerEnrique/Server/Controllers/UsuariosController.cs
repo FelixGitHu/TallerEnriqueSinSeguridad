@@ -31,11 +31,11 @@ namespace TallerEnrique.Server.Controllers
         }
 
         [HttpGet]//Listado de Usuarios 
-        public async Task<ActionResult<List<UsuarioDTO>>> Get([FromQuery] Paginacion paginacion)
+        public async Task<ActionResult<List<UsuarioDTO>>> GetUsuario()
         {
             var queryable = context.Users.AsQueryable();
-            await HttpContext.InsertarParametrosPaginacionEnRespuesta(queryable, paginacion.CantidadRegistros);
-            return await queryable.Paginar(paginacion)
+            
+            return await context.Users
                 .Select(x => new UsuarioDTO { Email = x.Email, UserId = x.Id, UserName = x.UserName, UserLastName = x.NormalizedUserName }).ToListAsync();
         }
 

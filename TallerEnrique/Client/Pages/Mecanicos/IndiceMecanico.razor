@@ -4,7 +4,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-
+@attribute [Authorize(Roles = "admin")]
 
 
 <div class="form-group">
@@ -53,9 +53,11 @@ else
             <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
             <MudTd DataLabel="Direccion">@context.Direccion</MudTd>
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/mecanicos/editar/{context.Id}"))" />
-                <a href="/mecanicos/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar Mecánico."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/mecanicos/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>
@@ -82,7 +84,7 @@ else
         await Cargar();
     }
 
-   
+
 
     private async Task Cargar()
     {
@@ -133,5 +135,5 @@ else
         return false;
     }
 
-   
+
 }

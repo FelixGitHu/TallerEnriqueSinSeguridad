@@ -1,9 +1,9 @@
 ﻿@page "/Usuarios/crear"
-
 @inject IRepositorio repositorio
 @inject NavigationManager navigationManager
 @inject ILoginService loginService
 @inject IMostrarMensajes mostrarMensajes
+@attribute [Authorize(Roles = "admin")]
 
 @using TallerEnrique.Client.Auth
 
@@ -17,14 +17,14 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-6">
                     <label>Primer Nombre:</label>
                     <div>
                         <InputText class="form-control" @bind-Value="@userInfo.UserName" />
                         <ValidationMessage For="@(() => userInfo.UserName)" />
                     </div>
                 </div>
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-6">
                     <label>Primer Apellido:</label>
                     <div>
                         <InputText class="form-control" @bind-Value="@userInfo.UserLastName" />
@@ -33,14 +33,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-6">
                     <label>E-mail:</label>
                     <div>
                         <InputText class="form-control" @bind-Value="@userInfo.Email" />
                         <ValidationMessage For="@(() => userInfo.Email)" />
                     </div>
                 </div>
-                <div class="form-group col-sm-4">
+                <div class="form-group col-sm-6">
                     <label>Contraseña:</label>
                     <div>
                         <InputPassword class="form-control" @bind-Value="@userInfo.Password" />
@@ -49,8 +49,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                <div class="form-group col-12">
+                    <button class="btn btn-success col-12" type="submit">Guardar Cambios</button>
                 </div>
             </div>
         </div>
@@ -70,8 +70,8 @@
         }
         else
         {
-            await loginService.Login(httpResponse.Response);
-            navigationManager.NavigateTo("");
+            await mostrarMensajes.MostrarMensajeExitoso("Usuario creado exitosamente ");
+            navigationManager.NavigateTo("/usuarios");
         }
     }
     //private async Task CrearUsuario()

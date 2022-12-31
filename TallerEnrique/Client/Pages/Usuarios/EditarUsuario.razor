@@ -1,7 +1,7 @@
 ﻿@page "/usuarios/editar/{UserId}"
-
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensajes
+@attribute [Authorize(Roles = "admin")]
 
 <h3>Editar Usuario</h3>
 
@@ -19,72 +19,72 @@
     <button class="btn btn-danger mb-2 mr-sm-2" @onclick="RemoverRol">Remover Rol</button>
     <a href="usuarios" class="btn btn-success">Cancelar</a>
 </div>
-    @code {
-            [Parameter] public string UserId { get; set; }
-        private List<RolDTO> roles = new List<RolDTO>();
-        private string rolSeleccionado;
+@code {
+    [Parameter] public string UserId { get; set; }
+    private List<RolDTO> roles = new List<RolDTO>();
+    private string rolSeleccionado;
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        var httpResponse = await repositorio.Get<List<RolDTO>>("api/usuarios/roles");
+        if (httpResponse.Error)
         {
-            var httpResponse = await repositorio.Get<List<RolDTO>>("api/usuarios/roles");
-            if (httpResponse.Error)
-            {
-                await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
-            }
-            else
-            {
-                roles = httpResponse.Response;
-            }
-            //await Cargar();
+            await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
         }
-        //[Parameter] public string UserId { get; set; }
-        //private List<RolDTO> roles = new List<RolDTO>();
-        //private string rolSeleccionado = "0";
-
-        //protected override async Task OnInitializedAsync()
-        //{
-        //    var httpResponse = await repositorio.Get<List<RolDTO>>("api/usuarios/roles");
-
-        //    if (httpResponse.Error)
-        //    {
-        //        await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
-        //    }
-        //    else
-        //    {
-        //        roles = httpResponse.Response;
-        //    }
-        //}
-
-        private async Task AsignarRol()
+        else
         {
-            await EditarRol("api/usuarios/asignarRol");
+            roles = httpResponse.Response;
+        }
+        //await Cargar();
+    }
+    //[Parameter] public string UserId { get; set; }
+    //private List<RolDTO> roles = new List<RolDTO>();
+    //private string rolSeleccionado = "0";
+
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    var httpResponse = await repositorio.Get<List<RolDTO>>("api/usuarios/roles");
+
+    //    if (httpResponse.Error)
+    //    {
+    //        await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
+    //    }
+    //    else
+    //    {
+    //        roles = httpResponse.Response;
+    //    }
+    //}
+
+    private async Task AsignarRol()
+    {
+        await EditarRol("api/usuarios/asignarRol");
+    }
+
+    private async Task RemoverRol()
+    {
+        await EditarRol("api/usuarios/removerRol");
+    }
+
+    private async Task EditarRol(string url)
+    {
+        if (rolSeleccionado == "0")
+        {
+            await mostrarMensajes.MostrarMensajeError("Debe seleccionar un rol");
+            return;
         }
 
-        private async Task RemoverRol()
+        var rolDTO = new EditarRolDTO() { RoleId = rolSeleccionado, UserId = UserId };
+
+        var httpResponse = await repositorio.Post<EditarRolDTO>(url, rolDTO);
+        //var httpResponse = await repositorio.Get <List<UsuarioDTO>>(url);
+
+        if (httpResponse.Error)
         {
-            await EditarRol("api/usuarios/removerRol");
+            await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
         }
-
-        private async Task EditarRol(string url)
+        else
         {
-            if (rolSeleccionado == "0")
-            {
-                await mostrarMensajes.MostrarMensajeError("Debe seleccionar un rol");
-                return;
-            }
-
-            var rolDTO = new EditarRolDTO() { RoleId = rolSeleccionado, UserId = UserId };
-
-            var httpResponse = await repositorio.Post<EditarRolDTO>(url, rolDTO);
-            //var httpResponse = await repositorio.Get <List<UsuarioDTO>>(url);
-
-            if (httpResponse.Error)
-            {
-                await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
-            }
-            else
-            {
-                await mostrarMensajes.MostrarMensajeExitoso("Operación realizada");
-            }
+            await mostrarMensajes.MostrarMensajeExitoso("Operación realizada");
         }
     }
+}

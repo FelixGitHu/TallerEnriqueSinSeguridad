@@ -2,6 +2,7 @@
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensaje
 @inject NavigationManager navigationManager
+@attribute [Authorize(Roles = "admin")]
 
 <h3>Editar Compra</h3>
 
@@ -11,7 +12,7 @@
 }
 else
 {
-    <FormCompra OnValidSubmit="Editar" NuevaCompra="Compras"/>
+    <FormCompra OnValidSubmit="Editar" NuevaCompra="Compras" />
 }
 
 @code {

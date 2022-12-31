@@ -3,6 +3,7 @@
 @inject NavigationManager navigationManager
 @inject IMostrarMensajes mostrarMensajes
 @inject HttpClient httclient
+@attribute [Authorize(Roles = "admin")]
 
 <h3>Nuevo Servicio</h3>
 

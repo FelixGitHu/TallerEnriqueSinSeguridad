@@ -5,6 +5,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "admin")]
 
 <div class="form-group">
     <a class="btn btn-info" href="usuarios/crear">Agregar Usuario</a>
@@ -36,18 +37,20 @@ else
         <HeaderContent>
 
             <MudTh Class="thead-dark">Nombre</MudTh>
-            <MudTh>Apellido</MudTh>
+            @*<MudTh>Apellido</MudTh>*@
             <MudTh>E-Mail</MudTh>
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Nombre">@context.UserLastName</MudTd>
-            <MudTd DataLabel="Apellido">@context.UserName</MudTd>
+            @*<MudTd DataLabel="Nombre">@context.UserLastName</MudTd>*@
+            <MudTd DataLabel="Nombre">@context.UserName</MudTd>
             <MudTd DataLabel="Email">@context.Email</MudTd>
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/usuarios/editar/{context.UserId}"))" />
-                <a href="/usuarios/editar/@context.UserId" class="btn btn-success">Asignar rol</a>
+                <MudTooltip Text="Asignar Rol al Usuario."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/usuarios/editar/{context.UserId}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>
@@ -67,7 +70,7 @@ else
     private string searchString1 = "";
     private string NombreArtFiltro = String.Empty; //filtros
     List<UsuarioDTO> Usuarios;
-    
+
 
 
 

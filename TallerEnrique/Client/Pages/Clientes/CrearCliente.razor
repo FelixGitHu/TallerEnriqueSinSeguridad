@@ -2,7 +2,7 @@
 @inject IRepositorio repositorio
 @inject NavigationManager navigationManager
 @inject IMostrarMensajes mostrarMensajes
-@attribute [Authorize(Roles = "admin")]
+@attribute [Authorize(Roles = "admin, vendedor")]
 <h3>Nuevo Cliente</h3>
 
 <FormularioClientes OnValidSubmit="Crear" Clientes="Clientes" />

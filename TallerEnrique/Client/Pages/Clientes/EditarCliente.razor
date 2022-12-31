@@ -2,7 +2,7 @@
 @inject IRepositorio repositorio
 @inject IMostrarMensajes mostrarMensaje
 @inject NavigationManager navigationManager
-@attribute [Authorize(Roles = "admin")]
+@attribute [Authorize(Roles = "admin, vendedor")]
 
 <h3>Editar Cliente</h3>
 

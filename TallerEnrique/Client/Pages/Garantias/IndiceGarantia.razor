@@ -4,6 +4,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
+@attribute [Authorize (Roles = "admin")]
 
 <div class="form-group">
     <a class="btn btn-info" href="garantias/crear">Agregar garantia</a>
@@ -36,13 +37,13 @@ else
 
             <MudTh Class="thead-dark">Politicas</MudTh>
             <MudTh>Tiempo Garantia</MudTh>
-            
+
             <MudTh>Acciones</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nombra">@context.Politicas</MudTd>
             <MudTd DataLabel="Marca">@context.TiempoGarantia</MudTd>
-            
+
             <MudTd>
                 <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
                         @onclick="@(() => NavigationManager.NavigateTo($"/garantias/editar/{context.Id}"))" />
@@ -116,5 +117,5 @@ else
         return false;
     }
 
-    
+
 }

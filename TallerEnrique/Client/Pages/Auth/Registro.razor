@@ -74,12 +74,14 @@
 
         if (httpResponse.Error)
         {
-            await mostrarMensajes.MostrarMensajeError(await httpResponse.GetBody());
+            await mostrarMensajes.MostrarMensajeError("Error al crear el nuevo usuario");
         }
         else
         {
-            await loginService.Login(httpResponse.Response);
-            navigationManager.NavigateTo("");
+            //await loginService.Login(httpResponse.Response);
+
+            await mostrarMensajes.MostrarMensajeExitoso("Usuario creado exitosamente ");
+            navigationManager.NavigateTo("/login");
         }
     }
 }

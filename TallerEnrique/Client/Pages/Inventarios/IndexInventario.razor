@@ -4,6 +4,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "admin, vendedor")]
 
 <h4>Repuestos Disponibles en Inventario</h4>
 
@@ -37,7 +38,7 @@ else
             <MudTh>Precio Compra</MudTh>
             <MudTh>Precio Venta</MudTh>
             <MudTh>Stock</MudTh>
-            
+
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Nombre">@context.Articulo.Nombre</MudTd>
@@ -45,7 +46,7 @@ else
             <MudTd DataLabel="Precio Compra">C$ @Math.Round(@context.Articulo.PrecioCompra, 2)</MudTd>
             <MudTd DataLabel="Precio Venta"> C$ @Math.Round(@context.Articulo.PrecioVenta, 2)</MudTd>
             <MudTd DataLabel="Existencia">@context.Existencia</MudTd>
-            
+
 
         </RowTemplate>
         <PagerContent>
@@ -53,7 +54,7 @@ else
         </PagerContent>
     </MudTable>
 }
-    @code {
+@code {
     private bool dense = false;
     private bool hover = true;
     private bool striped = true;
@@ -99,21 +100,21 @@ else
 
     }
 
-        ///Buscar por nombre
-        private bool FilterFunc1(Inventario element) => FilterFunc(element, searchString1);
+    ///Buscar por nombre
+    private bool FilterFunc1(Inventario element) => FilterFunc(element, searchString1);
 
-        private bool FilterFunc(Inventario element, string searchString)
-        {
-            if (string.IsNullOrWhiteSpace(searchString))
-                return true;
-            if (element.Articulo.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-            if (element.Articulo.Marca.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-                return true;
-          
+    private bool FilterFunc(Inventario element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Articulo.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Articulo.Marca.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
 
-            return false;
-        }
 
-       
+        return false;
     }
+
+
+}

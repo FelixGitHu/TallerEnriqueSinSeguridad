@@ -3,11 +3,12 @@
 @inject NavigationManager navigationManager
 @inject IMostrarMensajes mostrarMensajes
 @inject HttpClient httclient
+@attribute [Authorize(Roles = "admin, vendedor")]
 
 <h3>Nueva Compra</h3>
 
 @*<FormCompra OnValidSubmit="Crear" Compra="Compras"/>*@
-<FormCompra OnValidSubmit="OnvalidSubmit"  NuevaCompra="Compras" />
+<FormCompra OnValidSubmit="OnvalidSubmit" NuevaCompra="Compras" />
 
 
 @code {

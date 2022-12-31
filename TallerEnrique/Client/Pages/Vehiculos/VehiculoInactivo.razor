@@ -5,7 +5,7 @@
 @inject HttpClient Http
 @using System.Text.Json
 @inject NavigationManager NavigationManager
-
+@attribute [Authorize(Roles = "admin")]
 
 
 @if (Vehiculos == null)
@@ -54,9 +54,11 @@ else
             <MudTd DataLabel="Fecha Entrada">@context.FechaEntrada.ToShortDateString()</MudTd>
             <MudTd DataLabel="Fecha Salida">@context.FechaSalida.ToShortDateString()</MudTd>
             <MudTd>
-                <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                        @onclick="@(() => NavigationManager.NavigateTo($"/vehiculos/editar/{context.Id}"))" />
-                <a href="/vehiculos/editar/@context.Id" class="btn btn-success">Editar</a>
+                <MudTooltip Text="Editar Vehículo."
+                            Color="Color.Secondary" Placement="Placement.Top">
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/vehiculos/editar/{context.Id}"))" />
+                </MudTooltip>
             </MudTd>
 
         </RowTemplate>
