@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TallerEnrique.Server.Migrations
 {
-    public partial class initial : Migration
+    public partial class Inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,6 +17,8 @@ namespace TallerEnrique.Server.Migrations
                     Marca = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PrecioCompra = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PrecioVenta = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Descripcion = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    Codigo = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Estado = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -76,6 +78,22 @@ namespace TallerEnrique.Server.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categorias", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cierre",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Ingresos = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Egresos = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Saldo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cierre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -298,7 +316,6 @@ namespace TallerEnrique.Server.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Descripcion = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
-                    Precio = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<bool>(type: "bit", nullable: false),
                     CategoriaId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -394,6 +411,7 @@ namespace TallerEnrique.Server.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    NFactura = table.Column<long>(type: "bigint", nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Descuento = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -404,7 +422,7 @@ namespace TallerEnrique.Server.Migrations
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     VehiculoId = table.Column<int>(type: "int", nullable: false),
                     MonedaId = table.Column<int>(type: "int", nullable: false),
-                    ClienteId = table.Column<int>(type: "int", nullable: false),
+                    ClienteId = table.Column<int>(type: "int", nullable: true),
                     MecanicoId = table.Column<int>(type: "int", nullable: false),
                     ServicioId = table.Column<int>(type: "int", nullable: false),
                     CategoriaId = table.Column<int>(type: "int", nullable: true)
@@ -423,7 +441,7 @@ namespace TallerEnrique.Server.Migrations
                         column: x => x.ClienteId,
                         principalTable: "Clientes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Ventas_Mecanicos_MecanicoId",
                         column: x => x.MecanicoId,
@@ -447,7 +465,7 @@ namespace TallerEnrique.Server.Migrations
                         column: x => x.VehiculoId,
                         principalTable: "Vehiculos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -476,39 +494,6 @@ namespace TallerEnrique.Server.Migrations
                         name: "FK_DCompras_Compras_CompraId",
                         column: x => x.CompraId,
                         principalTable: "Compras",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cierre",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    VentaId = table.Column<int>(type: "int", nullable: true),
-                    CategoriaId = table.Column<int>(type: "int", nullable: false),
-                    InventarioId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cierre", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cierre_Categorias_CategoriaId",
-                        column: x => x.CategoriaId,
-                        principalTable: "Categorias",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cierre_Inventarios_InventarioId",
-                        column: x => x.InventarioId,
-                        principalTable: "Inventarios",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Cierre_Ventas_VentaId",
-                        column: x => x.VentaId,
-                        principalTable: "Ventas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -552,12 +537,12 @@ namespace TallerEnrique.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "6b961523-bd8d-4a3b-b014-10685cbd4caf", "admin", "admin" });
+                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "a5ac3000-44a3-474b-bd05-f6ed531e20b7", "admin", "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "4ae73857-b9d0-4332-aefc-56082d66346e", "vendedor", "vendedor" });
+                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "18422dd0-5402-4349-ab8f-14433d9a50f9", "vendedor", "vendedor" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -597,21 +582,6 @@ namespace TallerEnrique.Server.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cierre_CategoriaId",
-                table: "Cierre",
-                column: "CategoriaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cierre_InventarioId",
-                table: "Cierre",
-                column: "InventarioId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Cierre_VentaId",
-                table: "Cierre",
-                column: "VentaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Compras_ProveedorId",
