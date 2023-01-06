@@ -1,10 +1,10 @@
 ﻿
         <tr>
             <td class="d-sm-table-cell">
-                @ventaDetail.Articulo.Nombre.ToString()
+                @ventaDetail.Inventario.Articulo.Nombre.ToString()
             </td>
             <td>
-               $ @ventaDetail.Articulo.PrecioVenta.ToString()
+               $ @ventaDetail.Inventario.Articulo.PrecioVenta.ToString()
             </td>
             <td>
                 <InputNumber TValue="int" Value="ventaDetail.Cantidad" ValueExpression="@(()=>ventaDetail.Cantidad)" ValueChanged="@((int newvalue)=>cantidadChange(newvalue))" class="form-control"  ></InputNumber>
@@ -17,7 +17,7 @@
                $ @(decimal.Multiply((decimal)ventaDetail.PrecioVenta, ventaDetail.Cantidad)-(decimal.Multiply((decimal)ventaDetail.PrecioVenta, ventaDetail.Cantidad)*(ventaDetail.Descuento/100)))
             </td>
             <td>
-                 <button type="button" @onclick="@(()=>removeArticuloVenta.InvokeAsync(ventaDetail.Articulo))" class="btn-danger" >
+                 <button type="button" @onclick="@(()=>removeArticuloVenta.InvokeAsync(ventaDetail.Inventario.Articulo))" class="btn-danger" >
                     Remover
                 </button>
             </td>

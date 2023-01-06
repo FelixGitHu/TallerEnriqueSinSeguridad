@@ -10,8 +10,8 @@ using TallerEnrique.Server;
 namespace TallerEnrique.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230102153051_Inicial")]
-    partial class Inicial
+    [Migration("20230105130444_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -51,14 +51,14 @@ namespace TallerEnrique.Server.Migrations
                         new
                         {
                             Id = "9a821084-bb87-4287-9b4d-5f7101b75063",
-                            ConcurrencyStamp = "a5ac3000-44a3-474b-bd05-f6ed531e20b7",
+                            ConcurrencyStamp = "4a444d9e-60ac-4aab-9cf3-873103c91bb7",
                             Name = "admin",
                             NormalizedName = "admin"
                         },
                         new
                         {
                             Id = "28f70cf5-6654-48f9-a9d3-0e772cce4bd9",
-                            ConcurrencyStamp = "18422dd0-5402-4349-ab8f-14433d9a50f9",
+                            ConcurrencyStamp = "fed9f1bb-b81c-42f2-9eda-46501a2ed38d",
                             Name = "vendedor",
                             NormalizedName = "vendedor"
                         });
@@ -309,6 +309,12 @@ namespace TallerEnrique.Server.Migrations
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("IdCompra")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdVenta")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Ingresos")
                         .HasColumnType("decimal(18,2)");

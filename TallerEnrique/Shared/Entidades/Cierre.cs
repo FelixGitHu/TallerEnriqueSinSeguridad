@@ -15,6 +15,8 @@ namespace TallerEnrique.Shared.Entidades
         public decimal Egresos { get; set; } = 0;
         public decimal Saldo { get; set; } = 0;
         public DateTime Fecha { get; set; } = DateTime.Now;
+        public int IdVenta { get; set; }
+        public int IdCompra { get; set; }
 
         //Relacion con las tablas
         //public int VentaId { get; set; }

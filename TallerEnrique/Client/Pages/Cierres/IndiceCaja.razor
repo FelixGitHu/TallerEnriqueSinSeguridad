@@ -2,20 +2,20 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @using System.Text.Json
+@inject IJSRuntime JS
+@using System.Globalization;
 @attribute [Authorize(Roles = "admin")]
 
-<div class="d-flex position-sticky justify-content-between mb-1">
+<style>
+    .mud-table-cell-custom-group {
+        font-weight: 500;
+    }
 
-    <!--<div class="input-group" style="width:60%">
-        <input class="form-control" type="date" placeholder="Fecha venta" @bind="FechaFiltro" />-->
-    @* <input class="form-control" type="text" placeholder="Nombre empleado" @bind="EmpleadoFiltro" />*@
-    <!--<div class="input-group-append">
-            <button @onclick="Filtrar" class="btn btn-primary" type="button"><i class="oi oi-magnifying-glass"></i></button>
-            <button @onclick="Limpiar" class="btn btn-danger" type="button"><i class="oi oi-delete"></i></button>
-        </div>
-    </div>-->
-    <label>Lista de las ventas </label>
-</div>
+    .mud-table-cell-custom-group-footer {
+        padding-bottom: 50px;
+        text-align: right;
+    }
+</style>
 
 @if (caja == null)
 {
@@ -33,18 +33,16 @@ else if (caja.Count == 0)
 }
 else
 {
-    <style>
-        .mud-table-cell-custom-group {
-            font-weight: 500;
-        }
 
-        .mud-table-cell-custom-group-footer {
-            padding-bottom: 50px;
-            text-align: right;
-        }
-    </style>
+    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+        <MudTooltip Text="Exportar a excel" Color="Color.Tertiary" Placement="Placement.Bottom" Arrow="true">
+            <MudButton Variant="Variant.Filled" StartIcon="@Icons.Custom.FileFormats.FileExcel"
+                       @onclick="ExportarExcel"
+                       Color="Color.Warning">Excel</MudButton>
+        </MudTooltip>
+    </MudButtonGroup>
 
-    <MudTable Hover="true" Breakpoint="Breakpoint.Sm" Height="500px" FixedHeader="true"
+    <MudTable Hover="true" Breakpoint="Breakpoint.Sm" Height="500px" FixedHeader="true" Filter="new Func<Cierre, bool>(FilterFunc1)"
               Items="@caja"
               Virtualize="@_virtualize"
               GroupBy="@grupo"
@@ -52,15 +50,20 @@ else
               GroupFooterClass="mb-4"
               Dense="_dense"
               MultiSelection="_multiSelect">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Cierre de Caja</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Buscar por fecha/Nr..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
         <ColGroup>
             @if (_multiSelect)
-            {
+                {
                 <col style="width: 60px;" />
-            }
+                }
             @if (grupo.Expandable)
-            {
+                {
                 <col style="width: 60px;" />
-            }
+                }
             <col />
             <col />
             <col />
@@ -68,7 +71,7 @@ else
             <col />
         </ColGroup>
         <HeaderContent>
-            <MudTh>Nr</MudTh>
+            
             <MudTh>Fecha</MudTh>
             <MudTh>Entrada</MudTh>
             <MudTh>Salida</MudTh>
@@ -78,7 +81,7 @@ else
             <MudTh Class="mud-table-cell-custom-group" colspan="5">@($"{context.GroupName}: {context.Key}")</MudTh>
         </GroupHeaderTemplate>
         <RowTemplate>
-            <MudTd DataLabel="Nr">@context.Id</MudTd>
+            
             <MudTd DataLabel="Fecha">@context.Fecha.ToShortDateString()</MudTd>
             <MudTd DataLabel="Entrada">C$ @context.Ingresos</MudTd>
             <MudTd DataLabel="Salida">C$ @context.Egresos</MudTd>
@@ -90,12 +93,25 @@ else
                 {
                 <MudTd DataLabel="Saldo">C$ @context.Saldo</MudTd>
                 }
+            <MudTd>
+                @if (context.IdVenta != 0)
+                    {
+                    <MudButton @onclick="@(() => NavigationManager.NavigateTo($"/ver-ventadetalle/{context.IdVenta}"))"
+                               Variant="Variant.Outlined" Color="Color.Success" EndIcon="@Icons.Filled.Payments">Ver venta</MudButton>
+                    }
+                @if (context.IdCompra != 0)
+                    {
+                    <MudButton @onclick="@(() => NavigationManager.NavigateTo($"/ver-compradetalle/{context.IdCompra}"))"
+                               Variant="Variant.Outlined" Color="Color.Success" EndIcon="@Icons.Filled.Payments">Ver compra</MudButton>
+                    }
+            </MudTd>
         </RowTemplate>
         <GroupFooterTemplate>
             <MudTh Class="mud-table-cell-custom-group mud-table-cell-custom-group-footer" colspan="5">
                 <b>Total ingresos:</b>C$ @context.Items.Sum((e) => e.Ingresos)<br />
                 <b>Total Egresos:</b>C$ @context.Items.Sum((e) => e.Egresos)<br />
-                <b>Total Saldo:</b>C$ @context.Items.Sum((e) => e.Saldo)
+                @*<b>Total Saldo:</b>C$ @context.Items.Sum((e) => e.Saldo)*@
+                <b>Total Saldo:</b>C$ @context.Items.OrderByDescending(x => x.Fecha).FirstOrDefault().Saldo.ToString()
             </MudTh>
 
         </GroupFooterTemplate>
@@ -110,6 +126,7 @@ else
 }
 
 @code {
+    private DateTime FechaFiltro = DateTime.Today;
     public List<Cierre> caja { get; set; }
 
     private bool dense = false;
@@ -120,7 +137,7 @@ else
     private Cierre selectedItem1 = null;
     private HashSet<Cierre> selectedItems = new HashSet<Cierre>();
 
-    private DateTime FechaFiltro = DateTime.Today;
+    public int idventa { get; set; }
 
 
     protected override async Task OnInitializedAsync()
@@ -143,19 +160,8 @@ else
         }
         else
         {
-            Console.WriteLine("Error en caja");
+            Console.WriteLine("Error cargando datos de caja");
         }
-    }
-
-    private async Task Filtrar()
-    {
-        await CargarCaja();
-    }
-
-    private async Task Limpiar()
-    {
-        FechaFiltro = DateTime.Today;
-        await CargarCaja();
     }
 
     // esta es la funcion de filtrado de MudBlazor
@@ -167,8 +173,11 @@ else
             return true;
         if (element.Fecha.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
+        if (element.Id.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
         return false;
     }
+
     ///nueva tabla para sumar
     private bool _dense = false;
     private bool _multiSelect = false;
@@ -182,12 +191,62 @@ else
         Selector = (e) => e.Fecha.ToShortDateString()
     };
 
-    private IEnumerable<Cierre> Cierres = new List<Cierre>();
+   // private IEnumerable<Cierre> Cierres = new List<Cierre>();
 
     //protected override async Task OnInitializedAsync()
     //{
     //    Cierres = await Http.GetFromJsonAsync<List<Cierre>>("webapi/periodictable");
     //}
+    private void ExportarExcel()
+    {
+        using (var package = new ExcelPackage())
+        {
+            var worksheet = package.Workbook.Worksheets.Add("cierre");
+            worksheet.Cells["A1"].Value = "Taller Enrique Peña.";
+            using (ExcelRange r = worksheet.Cells["A1:E1"])
+            {
+                r.Merge = true; r.Style.Font.Bold = true;
+                r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
+                worksheet.DefaultColWidth = 60;
+                r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                r.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGreen);
+            }
+            worksheet.Cells["A2"].Value = $"Salidas / Entradas de dinero en caja {DateTime.Now.ToLongTimeString()}";
+            using (ExcelRange r = worksheet.Cells["A2:E2"])
+            {
+                r.Merge = true;
+                r.Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.CenterContinuous;
+                worksheet.DefaultColWidth = 60;
+                r.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                r.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightYellow);
+            }
+
+            var tableBody = worksheet.Cells["A3:D3"].LoadFromCollection(
+    from f in caja
+    select new { f.Id, f.Fecha, f.Ingresos, f.Egresos, f.Saldo }, true);
+
+            var header = worksheet.Cells["A3:E3"];
+            worksheet.DefaultColWidth = 32;
+            tableBody.Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+            //  esto afectal cuerpo
+
+            tableBody.Style.Fill.PatternType = ExcelFillStyle.None;
+            // bordes
+            tableBody.Style.Border.BorderAround(ExcelBorderStyle.Hair);
+            worksheet.Cells.Style.Border.BorderAround(ExcelBorderStyle.Hair);
+
+            // fuentes
+            header.Style.Font.Bold = true;
+            header.Style.Font.Color.SetColor(System.Drawing.Color.Black);
+
+            // Este es el encabezado.
+            header.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            header.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightBlue);
+
+            JS.GuardarComo($"Informe_EntradasSalidas_{DateTime.Now.ToShortDateString()}.xlsx", package.GetAsByteArray());
+        }
+    }
 }
 
 

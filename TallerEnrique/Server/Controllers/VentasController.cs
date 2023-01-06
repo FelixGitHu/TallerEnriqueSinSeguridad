@@ -33,6 +33,7 @@ namespace TallerEnrique.Server.Controllers
                 var listaInventario = await context.Inventarios.ToListAsync();
                 var inventa = listaInventario.First(x => x.Id == dVenta.InventarioId);
                 inventa.ArticuloId = dVenta.InventarioId;
+                
 
                 Inventario inventario = context.Inventarios.FirstOrDefault(inv => inv.ArticuloId == dVenta.InventarioId);
                
@@ -91,7 +92,7 @@ namespace TallerEnrique.Server.Controllers
                .Include(x => x.Vehiculo)
                .Include(x => x.Mecanico)
                .Include(x => x.Servicio)
-               .ThenInclude(x => x.Categoria)
+               .Include(x => x.Categoria)
                .FirstOrDefaultAsync(x => x.Id == id);
             //.FirstAsync(x => x.Id == id);
 
@@ -141,6 +142,7 @@ namespace TallerEnrique.Server.Controllers
             CierresController cc = new CierresController(context);
             Cierre cajas = new Cierre()
             {
+                IdVenta = venta.Id,
                 Fecha = venta.Fecha,
                 Ingresos = Convert.ToDecimal(venta.Total),
             };

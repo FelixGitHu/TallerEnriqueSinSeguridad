@@ -140,6 +140,7 @@ namespace TallerEnrique.Server.Controllers
             CierresController cc = new CierresController(context);
             Cierre cajas = new Cierre()
             {
+                IdCompra = Compra.Id,
                 Fecha = Compra.Fecha,
                 Egresos = Convert.ToDecimal(Compra.CostoTotal)
             };

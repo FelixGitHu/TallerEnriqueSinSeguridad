@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TallerEnrique.Server.Migrations
 {
-    public partial class Inicial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -89,7 +89,9 @@ namespace TallerEnrique.Server.Migrations
                     Ingresos = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Egresos = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Saldo = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdVenta = table.Column<int>(type: "int", nullable: false),
+                    IdCompra = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -537,12 +539,12 @@ namespace TallerEnrique.Server.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "a5ac3000-44a3-474b-bd05-f6ed531e20b7", "admin", "admin" });
+                values: new object[] { "9a821084-bb87-4287-9b4d-5f7101b75063", "4a444d9e-60ac-4aab-9cf3-873103c91bb7", "admin", "admin" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "18422dd0-5402-4349-ab8f-14433d9a50f9", "vendedor", "vendedor" });
+                values: new object[] { "28f70cf5-6654-48f9-a9d3-0e772cce4bd9", "fed9f1bb-b81c-42f2-9eda-46501a2ed38d", "vendedor", "vendedor" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

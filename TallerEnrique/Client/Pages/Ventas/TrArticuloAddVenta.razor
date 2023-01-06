@@ -29,10 +29,10 @@
 
         addArticuloVenta.InvokeAsync(new DVenta
         {
-            Articulo = ArticuloaddDetail,
+            //Inventario = Inventario.ArticuloaddDetail,
             Cantidad = 1,
             Descuento = 0,
-            ArticuloId = (int)ArticuloaddDetail.Id,
+            InventarioId = (int)ArticuloaddDetail.Id,
             PrecioVenta = (decimal)ArticuloaddDetail.PrecioVenta
         });
 
