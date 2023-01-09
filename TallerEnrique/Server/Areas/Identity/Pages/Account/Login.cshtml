@@ -1,0 +1,55 @@
+﻿@page "/login"
+@model LoginModel
+
+<div class="text-center">
+    <div class="p-5 bg-image" style="background-image: url('https://mdbootstrap.com/img/new/textures/full/108.jpg');height: 300px;"></div>
+    <div class="card mx-4 mx-md-5 shadow-5-strong" style="margin-top: -100px;background: hsla(0, 0%, 100%, 0.8);backdrop-filter: blur(30px);">
+        <div class="card-body py-5 px-md-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-5">Iniciar sesion ahora</h2>
+                    <form id="account" method="post">
+
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-outline mb-4">
+                            <label asp-for="Input.Email">Email</label>
+                            <input asp-for="Input.Email" class="form-control" placeholder="Introduzca su correo"/>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Password">Contraseña</label>
+                            <input asp-for="Input.Password" class="form-control" placeholder="Introduzca su contraseña"/>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-outline mb-4">
+                            <div class="checkbox">
+                                <label asp-for="Input.RememberMe">
+                                    <input asp-for="Input.RememberMe" />
+                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+                        </div>
+                        <div class="form-group">
+                            <p>
+                                <a id="forgot-password" asp-page="./ForgotPassword">Olvido su contraseña?</a>
+                            </p>
+                            <p>
+                                <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Registrar nuevo usuario</a>
+                            </p>
+                            <p>
+                                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Reenviar correo de confirmación</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }

@@ -1,0 +1,49 @@
+﻿@page "/Registro"
+@model RegisterModel
+
+
+        <EditForm asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div class="text-center">
+                <div class="p-5 bg-image" style="background-image: url('https://mdbootstrap.com/img/new/textures/full/108.jpg');height: 300px;"></div>
+                <div class="card mx-4 mx-md-5 shadow-5-strong" style="margin-top: -100px; background: hsla(0, 0%, 100%, 0.8);backdrop-filter: blur(30px);">
+                    <div class="card-body py-5 px-md-5">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-lg-8">
+                                <h2 class="fw-bold mb-5">Registrarse ahora</h2>
+                                <form>
+                                    <div asp-validation-summary="All" class="text-danger"></div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                            <label asp-for="Input.Email">Email</label>
+                                            <input asp-for="Input.Email" class="form-control" placeholder="Introduzca un correo" />
+                                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                            <label asp-for="Input.Password">Contraseña</label>
+                                            <input asp-for="Input.Password" class="form-control" placeholder="Introduzca su contraseña" />
+                                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-outline">
+                                            <label asp-for="Input.ConfirmPassword">Confirmar Contraseña</label>
+                                            <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Confirme su contraseña" />
+                                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </form>
+                                <button type="submit" class="btn btn-primary">Registrarse</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+
+    
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
