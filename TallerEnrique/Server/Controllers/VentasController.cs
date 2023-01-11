@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -66,7 +67,14 @@ namespace TallerEnrique.Server.Controllers
             //una vez se agregan o modifican los registros de invenmtario, se guarda la compra
             //context.Compras.Add(compra);
             venta = context.Add(venta).Entity;
-            venta.NFactura = context.Ventas.Max(x => x.NFactura + 1);
+            if (context.Ventas.IsNullOrEmpty())
+            {
+                venta.NFactura = 1;
+            }
+            else
+            {
+                venta.NFactura = context.Ventas.Max(x => x.NFactura + 1); //  funcion para obtener el numero de factura, que debe de ser un numero consecutivo y que no se repita jamas                    
+            }
             await context.SaveChangesAsync();
             await GuardarEnCaja(venta);
             return venta.Id;
