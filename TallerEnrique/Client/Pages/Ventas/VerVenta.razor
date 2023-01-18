@@ -89,24 +89,24 @@
             <table class="table table-sm">
                 <thead>
                     <tr>
-                        <th><small>Descripción</small></th>
-                        <th><small>Precio x un.</small></th>
-                        <th><small>Cantidad</small></th>
-                        <th><small>Descuento</small></th>
-                        <th><small>Iva(15 %)</small></th>
-                        <th><small>Subtotal</small></th>
+                        <th>Descripción</th>
+                        <th>Precio x un.</th>
+                        <th>Cantidad</th>
+                        <th>Descuento</th>
+                        <th>Iva(15 %)</th>
+                        <th>Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in venta.DVentas)
                     {
                         <tr>
-                            <td style="text-transform:uppercase"><small>@item.Articulo.Nombre</small></td>
-                            <td><small>C$ @item.PrecioVenta</small></td>
-                            <td><small>@item.Cantidad</small></td>
-                            <td><small>@item.Descuento %</small></td>
-                            <td><small>C$ @item.Venta.IVA.ToString("#.##") </small></td>
-                            <td><small>C$ @item.Venta.SubTotal</small></td>
+                            <td style="text-transform:uppercase"><small>@item.Inventario.Articulo.Nombre</small></td>
+                            <td>C$ @item.PrecioVenta</td>
+                            <td>@item.Cantidad</td>
+                            <td>@item.Descuento %</td>
+                            <td>C$ @item.Venta.IVA.ToString("#.##") </td>
+                            <td>C$ @item.Venta.SubTotal</td>
                         </tr>
                     }
                 </tbody>

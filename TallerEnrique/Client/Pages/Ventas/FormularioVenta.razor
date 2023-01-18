@@ -104,7 +104,7 @@
                     <label>Forma de Pago:</label>
                     <div>
                         <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.MonedaId">
-                            <option value="0" disabled>--Forma de pago--</option>
+                            <option value="0" disabled>--Moneda--</option>
                             @foreach (var item in MonedaSeleccionados)
                             {
                                 <option value="@item.Id">@item.TipoMoneda</option>
@@ -381,17 +381,17 @@
         articulosDisponibles = httpResponse.Response;
     }
 
-    public async Task addDVenta(DVenta ArticuloNuevo)
-    {
-        NuevaVenta.DVentas.Add(ArticuloNuevo);
-        articulosDisponibles.Remove(ArticuloNuevo.Articulo);
-    }
+    //public async Task addDVenta(DVenta ArticuloNuevo)
+    //{
+    //    NuevaVenta.DVentas.Add(ArticuloNuevo);
+    //    articulosDisponibles.Remove(ArticuloNuevo.Articulo);
+    //}
 
-    public async Task removeDVenta(Articulo remArti)
-    {
-        NuevaVenta.DVentas.RemoveAll(x => x.Articulo == remArti);
-        articulosDisponibles.Add(remArti);
-    }
+    //public async Task removeDVenta(Articulo remArti)
+    //{
+    //    NuevaVenta.DVentas.RemoveAll(x => x.Articulo == remArti);
+    //    articulosDisponibles.Add(remArti);
+    //}
 
     public void calcularSubtotal()
     {

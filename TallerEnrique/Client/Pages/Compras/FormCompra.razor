@@ -105,7 +105,7 @@
                                 <option value="0" disabled> --- Seleccione un producto ---</option>
                                 @foreach (var item in ProductosSeleccionados)
                                     {
-                                    <option value="@item.Id">@item.Nombre</option>
+                            <option value="@item.Id">@item.Nombre => @item.Descripcion</option>
                                     }
                             </InputSelectNumber>
                             <ValidationMessage For="@(() => detalle.ArticuloId)" />

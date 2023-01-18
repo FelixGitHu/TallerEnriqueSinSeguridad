@@ -8,7 +8,7 @@
 
 
 <div class="form-group">
-    <a class="btn btn-info" href="categorias/crear">Agregar categoria</a>
+    <a class="btn btn-info" href="categorias/crear">Agregar categoría</a>
 </div>
 <div class="btn-group" style="font-size:medium">
     <a href="/categorias/inactivas" style="background:none; border:none">
@@ -27,7 +27,7 @@
 else if (Categorias.Count == 0)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">
-        <text>No se encontraron Categorias.</text>
+        <text>No se encontraron Categorías.</text>
     </div>
 }
 else
@@ -35,7 +35,7 @@ else
     <MudTable Items="@Categorias" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Categoria, bool>(FilterFunc1)"
               @bind-SelectedItem="selectedItem1">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Categorias</MudText>
+            <MudText Typo="Typo.h6">Categorías</MudText>
             <MudSpacer />
             <MudTextField @bind-Value="searchString1" Placeholder="Buscar categoría..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>

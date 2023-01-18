@@ -16,14 +16,14 @@
             <div class="card-body py-5 px-md-5">
 
                 <div class="row d-flex justify-content-center">
-                    <div class="col-lg-8">
-                        <h2 class="fw-bold mb-5">Iniciar sesion ahora</h2>
+                    <div class="col-lg-6">
+                        <h2 class="fw-bold mb-5">Iniciar sesión ahora</h2>
                         <form>
                             <div class="form-outline mb-4">
                                 <label>Correo Electrónico </label>
                                 <div>
                                     @*<InputText id="form3Example3" Class="form-control" @bind-Value="@userInfo.Email" />*@
-                                    <InputText Class="form-control" @bind-Value="@userInfo.Email" />
+                                    <InputText Class="form-control" @bind-Value="@userInfo.Email" placeholder="Ingrese su correo" />
                                     <ValidationMessage For="@(() => userInfo.Email)" />
                                 </div>
                             </div>
@@ -41,7 +41,7 @@
                         </form>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
                 <a class="btn btn-primary" href="Registro">Registrarse</a>
             </div>
         </div>

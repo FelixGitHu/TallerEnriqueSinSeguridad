@@ -36,7 +36,7 @@ namespace TallerEnrique.Server.Controllers
             var queryable = context.Users.AsQueryable();
             
             return await context.Users
-                .Select(x => new UsuarioDTO { Email = x.Email, UserId = x.Id, UserName = x.UserName, UserLastName = x.NormalizedUserName }).ToListAsync();
+                .Select(x => new UsuarioDTO { Email = x.Email, UserId = x.Id }).ToListAsync();
         }
 
         [HttpGet("roles")]//Listado de Roles

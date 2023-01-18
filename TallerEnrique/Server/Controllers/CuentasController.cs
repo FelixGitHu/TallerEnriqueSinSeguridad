@@ -37,7 +37,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpPost("Crear")]
         public async Task<ActionResult<UserToken>> CreateUser([FromBody] UserInfo model)
         {
-            var user = new IdentityUser { UserName = model.UserName, NormalizedUserName = model.UserLastName, Email = model.Email };
+            var user = new IdentityUser { UserName = model.Email, Email = model.Email };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {

@@ -19,45 +19,30 @@
             <div class="card-body py-5 px-md-5">
 
                 <div class="row d-flex justify-content-center">
-                    <div class="col-lg-8">
+                    <div class="col-lg-6">
                         <h2 class="fw-bold mb-5">Registrarse ahora</h2>
                         <form>
-                            <div class="row">
-                                <div class="col-md-6 mb-4">
-                                    <div class="form-outline">
-                                        <InputText class="form-control" @bind-Value="@userInfo.UserName" />
-                                        <ValidationMessage For="@(() => userInfo.UserName)" />
-                                        <label class="form-label" for="form3Example1">Primer Nombre</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-4">
-                                    <div class="form-outline">
-                                        <InputText class="form-control" @bind-Value="@userInfo.UserLastName" />
-                                        <ValidationMessage For="@(() => userInfo.UserLastName)" />
-                                        <label class="form-label" for="form3Example2">Primer apellido</label>
-                                    </div>
-                                </div>
-                            </div>
+                            
 
                             <div class="form-outline mb-4">
-                                @*<InputText id="form3Example3" Class="form-control" @bind-Value="@userInfo.Email" />*@
-                                <InputText Class="form-control" @bind-Value="@userInfo.Email" />
-                                <ValidationMessage For="@(() => userInfo.Email)" />
                                 <label class="form-label" for="form3Example3">Email </label>
+                                <InputText Class="form-control" @bind-Value="@userInfo.Email" placeholder="Ingrese una dirección de correo" />
+                                <ValidationMessage For="@(() => userInfo.Email)" />
+
                             </div>
 
                             <div class="form-outline mb-4">
-                                @*<InputPassword id="form3Example4" Class="form-control" @bind-value="@userInfo.Password" />*@
+                                <label class="form-label" for="form3Example4">Contraseña</label>
                                 <InputPassword Class="form-control" @bind-Value="@userInfo.Password" />
                                 <ValidationMessage For="@(() => userInfo.Password)" />
-                                <label class="form-label" for="form3Example4">Contraseña</label>
+
                             </div>
 
                         </form>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary ">Registrarse</button>
-                <a href="Login" class="btn btn-primary">Iniciar Sesion</a>
+                <a href="Login" class="btn btn-primary">Iniciar Sesión</a>
             </div>
         </div>
         

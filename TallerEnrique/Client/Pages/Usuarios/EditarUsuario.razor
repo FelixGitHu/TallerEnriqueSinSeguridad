@@ -14,10 +14,11 @@
             <option value="@rol.Nombre">@rol.Nombre</option>
         }
     </select>
-
-    <button class="btn btn-info mb-2 mr-sm-2" @onclick="AsignarRol">Asignar Rol</button>
-    <button class="btn btn-danger mb-2 mr-sm-2" @onclick="RemoverRol">Remover Rol</button>
-    <a href="usuarios" class="btn btn-success">Cancelar</a>
+    
+        <button class="btn btn-info mb-2 mr-sm-2" @onclick="AsignarRol">Asignar Rol</button>
+        <button class="btn btn-danger mb-2 mr-sm-2" @onclick="RemoverRol">Remover Rol</button>
+        <a href="usuarios" class="btn btn-success mb-2 mr-sm-2">Cancelar</a>
+    
 </div>
 @code {
     [Parameter] public string UserId { get; set; }

@@ -8,7 +8,7 @@
 @attribute [Authorize(Roles = "admin, vendedor")]
 
 <div class="form-group">
-    <a class="btn btn-info" href="vehiculos/crear">Agregar Vehiculo</a>
+    <a class="btn btn-info" href="vehiculos/crear">Agregar Vehículo</a>
 </div>
 <div class="btn-group" style="font-size:medium">
     <a href="/vehiculos/inactivos" style="background:none; border:none">
@@ -35,7 +35,7 @@ else
     <MudTable Items="@Vehiculos" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Vehiculo, bool>(FilterFunc1)"
               @bind-SelectedItem="selectedItem1">
         <ToolBarContent>
-            <MudText Typo="Typo.h6">Vehiculos</MudText>
+            <MudText Typo="Typo.h6">Vehículos</MudText>
             <MudSpacer />
             <MudTextField @bind-Value="searchString1" Placeholder="Buscar vehículo..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
