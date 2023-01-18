@@ -65,12 +65,12 @@ else
 
         </RowTemplate>
         <PagerContent>
-            <MudTablePager />
+            <MudTablePager RowsPerPageString="Filas por página" InfoFormat="@infoFormat" />
         </PagerContent>
     </MudTable>
 }
 @code {
-
+    private string infoFormat = "{first_item}-{last_item} de {all_items}";
     private bool dense = false;
     private bool hover = true;
     private bool striped = true;
@@ -80,15 +80,15 @@ else
     private string NombreArtFiltro = String.Empty; //filtros
 
     public List<Proveedor> Proveedores { get; set; } = new List<Proveedor>();
-    
+
     public List<Compra> ComprasRealizadas = new List<Compra>();
 
     protected async override Task OnInitializedAsync()
     {
-        
+
         await getComprasRealizadas();
     }
-   
+
 
     //}
     private async Task getComprasRealizadas()
@@ -121,7 +121,7 @@ else
 
     }
 
-   
+
     ///Buscar por nombre
     private bool FilterFunc1(Compra element) => FilterFunc(element, searchString1);
 
@@ -147,5 +147,5 @@ else
         return false;
     }
 
-   
+
 }

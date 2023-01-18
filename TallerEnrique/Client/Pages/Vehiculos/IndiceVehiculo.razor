@@ -71,12 +71,13 @@ else
 
         </RowTemplate>
         <PagerContent>
-            <MudTablePager />
+            <MudTablePager RowsPerPageString="Filas por página" InfoFormat="@infoFormat"/>
         </PagerContent>
     </MudTable>
 }
 
 @code {
+    private string infoFormat = "{first_item}-{last_item} de {all_items}";
     private bool dense = false;
     private bool hover = true;
     private bool striped = true;

@@ -57,81 +57,81 @@ else
 
         </RowTemplate>
         <PagerContent>
-            <MudTablePager />
+            <MudTablePager RowsPerPageString="Filas por página" InfoFormat="@infoFormat"/>
         </PagerContent>
     </MudTable>
 }
 
 @code {
-
+    private string infoFormat = "{first_item}-{last_item} de {all_items}";
 
     private bool dense = false;
-private bool hover = true;
-private bool striped = true;
-private bool bordered = true;
-private Cliente selectedItem1 = null;
-private string searchString1 = "";
-private string NombreArtFiltro = String.Empty; //filtros
+    private bool hover = true;
+    private bool striped = true;
+    private bool bordered = true;
+    private Cliente selectedItem1 = null;
+    private string searchString1 = "";
+    private string NombreArtFiltro = String.Empty; //filtros
 
 
-public List<Cliente> Clientes { get; set; }
-protected async override Task OnInitializedAsync()
-{
-    await Cargar();
-}
-
-private async Task Cargar()
-{
-    var httpResponse = await Http.GetAsync($"api/clientes/clientesinactivos");
-    if (httpResponse.IsSuccessStatusCode)
-    {
-        var responseString = await httpResponse.Content.ReadAsStringAsync();
-        Clientes = JsonSerializer.Deserialize<List<Cliente>>(responseString,
-            new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-    }
-    else
-    {
-        Console.WriteLine("error");
-    }
-
-}
-
-private async Task BorrarCliente(Cliente clientes)
-{
-    var responseHttp = await repositorio.Delete($"api/clientes/{clientes.Id}");
-    if (responseHttp.Error)
-    {
-        await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
-    }
-    else
+    public List<Cliente> Clientes { get; set; }
+    protected async override Task OnInitializedAsync()
     {
         await Cargar();
     }
 
-}
+    private async Task Cargar()
+    {
+        var httpResponse = await Http.GetAsync($"api/clientes/clientesinactivos");
+        if (httpResponse.IsSuccessStatusCode)
+        {
+            var responseString = await httpResponse.Content.ReadAsStringAsync();
+            Clientes = JsonSerializer.Deserialize<List<Cliente>>(responseString,
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+        else
+        {
+            Console.WriteLine("error");
+        }
+
+    }
+
+    private async Task BorrarCliente(Cliente clientes)
+    {
+        var responseHttp = await repositorio.Delete($"api/clientes/{clientes.Id}");
+        if (responseHttp.Error)
+        {
+            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+        }
+        else
+        {
+            await Cargar();
+        }
+
+    }
 
 
 
-///Buscar por nombre
-private bool FilterFunc1(Cliente element) => FilterFunc(element, searchString1);
+    ///Buscar por nombre
+    private bool FilterFunc1(Cliente element) => FilterFunc(element, searchString1);
 
-private bool FilterFunc(Cliente element, string searchString)
-{
-    if (string.IsNullOrWhiteSpace(searchString))
-        return true;
-    if (element.Nombres.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        return true;
-    if (element.Apellidos.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        return true;
-    if (element.Ciudad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        return true;
-    if (element.Departamento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        return true;
-    if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-        return true;
+    private bool FilterFunc(Cliente element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Nombres.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Apellidos.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Ciudad.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Departamento.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
 
-    return false;
-}
+        return false;
+    }
 
 
 }

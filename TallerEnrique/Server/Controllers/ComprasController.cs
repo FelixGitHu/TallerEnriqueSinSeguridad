@@ -45,6 +45,9 @@ namespace TallerEnrique.Server.Controllers
                 }
                 else
                 {
+                    var lista_articulo = await context.Articulos.ToListAsync();
+                    var articulo = lista_articulo.First(x => x.Id == dCompra.ArticuloId);
+                    articulo.PrecioCompra = dCompra.PrecioUnitario;
                     //sino existe ninmgun registro, es mas facil porque solo creamos uno nuevo
                     context.Inventarios.Add(new Inventario()
                     {
