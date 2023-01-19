@@ -32,7 +32,7 @@ namespace TallerEnrique.Server.Controllers
             {
                 //extrae el registro del inventario que contiene el articulo a comprar, sino es igual a null
                 var listaInventario = await context.Inventarios.ToListAsync();
-                var inventa = listaInventario.First(x => x.Id == dVenta.InventarioId);
+                var inventa = listaInventario.First(x => x.ArticuloId == dVenta.InventarioId);
                 inventa.ArticuloId = dVenta.InventarioId;
                 
 
