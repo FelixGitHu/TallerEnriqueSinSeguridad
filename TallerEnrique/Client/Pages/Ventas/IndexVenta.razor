@@ -65,10 +65,10 @@ else
             <MudTd DataLabel="SubTotal"> C$ @Math.Round(@context.SubTotal, 2)</MudTd>
             <MudTd DataLabel="Total"> C$ @Math.Round(@context.Total, 2)</MudTd>
             <MudTd Class="col-2">
-                <MudTooltip Text="Editar Venta."
+                <MudTooltip Text="Ver datelle de la Venta."
                             Color="Color.Secondary" Placement="Placement.Top">
-                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                            @onclick="@(() => NavigationManager.NavigateTo($"/ventas/editar/{context.Id}"))" />
+                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Description" Size="MudBlazor.Size.Small"
+                            @onclick="@(() => NavigationManager.NavigateTo($"/ventadetalle/{context.Id}"))" />
                 </MudTooltip>
                     <MudTooltip Text="Genarar Factura."
                                 Color="Color.Secondary" Placement="Placement.Top">

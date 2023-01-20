@@ -136,7 +136,10 @@
                             <option value="0" disabled>--Servicio--</option>
                             @foreach (var item in ServicioSeleccionados)
                             {
+                                if (NuevaVenta.CategoriaId == item.CategoriaId)
+                                {
                                 <option value="@item.Id">@item.Descripcion</option>
+                                }
                             }
                         </InputSelectNumber>
                         <ValidationMessage For="@(() => NuevaVenta.ServicioId)" />

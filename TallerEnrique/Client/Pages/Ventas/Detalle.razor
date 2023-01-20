@@ -1,4 +1,4 @@
-﻿@page "/ver-ventadetalle/{idventa:int}"
+﻿@page "/ventadetalle/{idventa:int}"
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
@@ -11,7 +11,7 @@
     <div class="btn-group">
         <button id="miboton" class="btn btn-sm btn-secondary" @onclick="@Volver">
             <i class="oi oi-arrow-circle-left"></i> Volver atrás
-        </button>      
+        </button>
     </div>
     <div class="btn-group">
     </div>
@@ -84,13 +84,14 @@
             await JS.InvokeVoidAsync("simple", "Error", "Venta no encontrada.", "error");
             NavigationManager.NavigateTo("cierres");
         }
-     
+       
     }
 
 
 
     void Volver()
     {
-        NavigationManager.NavigateTo("cierres");
+        NavigationManager.NavigateTo("/ventas");
     }
+
 }

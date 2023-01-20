@@ -32,11 +32,13 @@ namespace TallerEnrique.Server.Controllers
             {
                 //extrae el registro del inventario que contiene el articulo a comprar, sino es igual a null
                 var listaInventario = await context.Inventarios.ToListAsync();
-                var inventa = listaInventario.First(x => x.ArticuloId == dVenta.InventarioId);
-                inventa.ArticuloId = dVenta.InventarioId;
+                var inventa = listaInventario.First(x => x.Id == dVenta.InventarioId);
+                dVenta.InventarioId = inventa.ArticuloId;
+                dVenta.ArticuloId = inventa.ArticuloId;
                 
 
                 Inventario inventario = context.Inventarios.FirstOrDefault(inv => inv.ArticuloId == dVenta.InventarioId);
+                
                
                 if (inventario != null)
                 {
@@ -94,13 +96,16 @@ namespace TallerEnrique.Server.Controllers
         {
 
             return await context.Ventas
-               .Include(x => x.DVentas)
+               
                .Include(x => x.Cliente)
                .Include(x => x.Moneda)
                .Include(x => x.Vehiculo)
                .Include(x => x.Mecanico)
                .Include(x => x.Servicio)
                .Include(x => x.Categoria)
+               .Include(x => x.DVentas)
+               .ThenInclude(x => x.Inventario)
+               .ThenInclude(x => x.Articulo)
                .FirstOrDefaultAsync(x => x.Id == id);
             //.FirstAsync(x => x.Id == id);
 

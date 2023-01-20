@@ -101,14 +101,15 @@
                     @foreach (var item in venta.DVentas)
                     {
                         <tr>
-                            <td style="text-transform:uppercase"><small>@item.Inventario.Articulo.Nombre</small></td>
+                            <td>@item.Articulo.Nombre</td>
                             <td>C$ @item.PrecioVenta</td>
                             <td>@item.Cantidad</td>
                             <td>@item.Descuento %</td>
-                            <td>C$ @item.Venta.IVA.ToString("#.##") </td>
-                            <td>C$ @item.Venta.SubTotal</td>
+                            <td>C$ @venta.IVA.ToString("#.##") </td>
+                            <td>C$ @venta.SubTotal</td>
                         </tr>
                     }
+                
                 </tbody>
             </table>
 

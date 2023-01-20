@@ -1,4 +1,4 @@
-﻿@page "/ver-compradetalle/{idcompra:int}"
+﻿@page "/compradetalle/{idcompra:int}"
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
@@ -27,20 +27,20 @@
                         <th>Artículo</th>
                         <th>Precio de compra.</th>
                         <th>IVA</th>
-                        <th>Cantidad.</th>                        
+                        <th>Cantidad.</th>
                         <th>Subtotal.</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in compra.DCompras)
                     {
-                    <tr>
-                        <td style="text-transform:uppercase"><small>@item.Articulo.Nombre</small></td>
-                        <td><small>@item.PrecioUnitario</small></td>
-                        <td><small>@compra.IVA.ToString("#.##")</small></td>
-                        <td><small>@item.Cantidad </small></td>
-                        <td><small>C$@compra.SubTotal.ToString("#.##") </small></td>
-                    </tr>
+                        <tr>
+                            <td style="text-transform:uppercase"><small>@item.Articulo.Nombre</small></td>
+                            <td><small>@item.PrecioUnitario</small></td>
+                            <td><small>@compra.IVA.ToString("#.##")</small></td>
+                            <td><small>@item.Cantidad </small></td>
+                            <td><small>C$@compra.SubTotal.ToString("#.##") </small></td>
+                        </tr>
                     }
                 </tbody>
             </table>
@@ -63,7 +63,7 @@
 
     [Parameter] public int idcompra { get; set; }
 
-    public Configuracion ListaAjustes { get; set; }    
+    public Configuracion ListaAjustes { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -86,7 +86,6 @@
 
     void Volver()
     {
-        NavigationManager.NavigateTo("cierres");
-    }       
-
+        NavigationManager.NavigateTo("/compras");
+    }
 }
