@@ -36,10 +36,10 @@
                     {
                     <tr>
                         <td style="text-transform:uppercase"><small>@item.Articulo.Nombre</small></td>
-                        <td><small>@item.PrecioUnitario</small></td>
-                        <td><small>@compra.IVA.ToString("#.##")</small></td>
+                        <td><small>C$ @item.PrecioUnitario.ToString("##,#.##")</small></td>
+                        <td><small>C$ @compra.IVA.ToString("##,#.##")</small></td>
                         <td><small>@item.Cantidad </small></td>
-                        <td><small>C$@compra.SubTotal.ToString("#.##") </small></td>
+                        <td><small>C$ @compra.SubTotal.ToString("##,#.##") </small></td>
                     </tr>
                     }
                 </tbody>
@@ -47,7 +47,7 @@
 
             <p class="card-text text-right m-4">
                 <h6><b>TOTAL</b></h6>
-                <h5><b>C$ @compra.CostoTotal</b></h5>
+                <h5><b>C$ @compra.CostoTotal.ToString("##,#.##")</b></h5>
             </p>
         </div>
     </div>

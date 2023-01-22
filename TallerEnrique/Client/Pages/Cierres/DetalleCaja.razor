@@ -38,12 +38,12 @@
                     {
                         <tr>
                             <td style="text-transform:uppercase"><small>@item.Inventario.Articulo.Nombre</small></td>
-                            <td><small>C$ @item.PrecioVenta</small></td>
+                            <td><small>C$ @item.PrecioVenta.ToString("##,#.##")</small></td>
                             <td><small>@item.Cantidad</small></td>
-                            <td><small>@item.Descuento %</small></td>
-                            <td><small>C$ @venta.IVA.ToString("#.##") </small></td>
-                            <td><small>C$ @venta.ManoObra.ToString("#.##")</small></td>
-                            <td><small>C$ @venta.Total</small></td>
+                            <td><small>C$ @Math.Round(@item.Descuento, 2)</small></td>
+                            <td><small>C$ @venta.IVA.ToString("##,#.##") </small></td>
+                            <td><small>C$ @venta.ManoObra.ToString("##,#.##")</small></td>
+                            <td><small>C$ @venta.SubTotal.ToString("##,#.##")</small></td>
                         </tr>
                     }
                 </tbody>
@@ -51,7 +51,7 @@
 
             <p class="card-text text-right m-4">
                 <h6><b>TOTAL</b></h6>
-                <h5><b>C$ @venta.Total</b></h5>
+                <h5><b>C$ @venta.Total.ToString("##,#.##")</b></h5>
             </p>
         </div>
     </div>

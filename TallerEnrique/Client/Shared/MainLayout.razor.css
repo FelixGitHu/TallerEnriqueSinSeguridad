@@ -68,3 +68,11 @@
         padding-right: 1.5rem !important;
     }
 }
+@media print{
+    #eliminarSidebar{
+        display:none
+    }
+    .top-row{
+        display:none
+    }
+}

@@ -79,15 +79,15 @@
                                 @onclick="@(() => NuevaCompra.DCompras.Add(new DCompra()))">
                             Agregar Detalles
                         </button>
-                        <button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
+                        @*<button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
                             Calcular Total
-                        </button>
+                        </button>*@
                         <hr />
                     </div>
                     <div class="col-6">
                         <a href="compras" class="btn btn-success">Volver</a>
-                        <button class="btn btn-success" type="submit">Guardar Cambios</button>
-                        <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Venta</button>
+                        <button class="btn btn-success" type="submit">Guardar Compra</button>
+                        <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Compra</button>
                         <hr />
                     </div>
                 </div>
@@ -151,61 +151,6 @@
                     </div>
                 }
             </div>
-
-
-            @*aqui el formulario qur funciona*@
-            <!--<hr />
-            <h3>  Articulos Disponibles</h3>
-            <div class="row ">-->
-            @*aca la lista de productos que se pueden llevar*@
-            <!--<div class="col-md-5 ">
-                <table class="table table-bordered table-sm" id="tbproducto">
-                    <thead>
-                        <tr class="table-active">
-                            <th>NombreArticulo</th>
-                            <th>Precio</th>
-                            <th>Marca</th>
-                            <th>Agregado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (Articulo ArticuloDisponible in articulosDisponibles)
-                        {
-                            <TrArticuloAddCompra ArticuloaddDetail="ArticuloDisponible" addArticuloCompra="addDCompra" />
-                        }
-                    </tbody>
-                </table>
-            </div>-->
-            @*aca la lista que actualmente se lleva*@
-            <!--<div class="col-md-6 ">
-                    <table class="table table-bordered table-sm">
-                        <thead>
-                            <tr class="table-active">
-                                <th>NombreArticulo</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>Descuento</th>
-                                <th>SubTotal</th>
-
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (NuevaCompra.DCompras.Count != 0)
-                            {
-                                @foreach (DCompra articuloEnCompra in NuevaCompra.DCompras)
-                                {
-                                    <TrArticuloInCompra removeArticuloCompra="removeDCompra" calcularSubTotal="calcularSubtotal" compraDetail="articuloEnCompra" />
-                                }
-                            }
-                            else
-                            {
-                                <h3>sin compras</h3>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>-->
         </div>
     </div>
 
@@ -265,46 +210,47 @@
         NuevaCompra.CostoTotal += NuevaCompra.SubTotal + NuevaCompra.IVA;
         return NuevaCompra.CostoTotal;
     }
-   
-
-public void enviarCompra()
-{
-    //NuevaCompra.DCompras = articulosComprados;
-    OnValidSubmit.InvokeAsync();
-}
 
 
+    public void enviarCompra()
+    {
+        //NuevaCompra.DCompras = articulosComprados;
+        CalcularTotal();
+        OnValidSubmit.InvokeAsync();
+    }
 
 
-private void Cancelar()
-{
-    NuevaCompra = new Compra();
-}
-
-private async Task ObtenerProveedores()
-{
-    var httpResponse = await repositorio.Get<List<Proveedor>>("api/proveedores/cargartodos");
-    ProveedoresSeleccionados = httpResponse.Response;
-}
 
 
-private async Task ObtenerProductos()
-{
-    var httpResponse = await repositorio.Get<List<Articulo>>("api/articulos/cargartodos");
-    ProductosSeleccionados = httpResponse.Response;
-}
-private async Task<IEnumerable<Articulo>> BuscarProductos(string searchText)
-{
-    var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos/buscar/{searchText}"); //aqui busca el método "buscar" en el controlador de producto
-    return responseHttp.Response;
-}
+    private void Cancelar()
+    {
+        NuevaCompra = new Compra();
+    }
 
-//No se para que es esto
-void OnChange(object value)
-{
-    var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+    private async Task ObtenerProveedores()
+    {
+        var httpResponse = await repositorio.Get<List<Proveedor>>("api/proveedores/cargartodos");
+        ProveedoresSeleccionados = httpResponse.Response;
+    }
 
-    Console.WriteLine($"Value changed to {str}");
-}
+
+    private async Task ObtenerProductos()
+    {
+        var httpResponse = await repositorio.Get<List<Articulo>>("api/articulos/cargartodos");
+        ProductosSeleccionados = httpResponse.Response;
+    }
+    private async Task<IEnumerable<Articulo>> BuscarProductos(string searchText)
+    {
+        var responseHttp = await repositorio.Get<List<Articulo>>($"api/articulos/buscar/{searchText}"); //aqui busca el método "buscar" en el controlador de producto
+        return responseHttp.Response;
+    }
+
+    //No se para que es esto
+    void OnChange(object value)
+    {
+        var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+
+        Console.WriteLine($"Value changed to {str}");
+    }
 
 }

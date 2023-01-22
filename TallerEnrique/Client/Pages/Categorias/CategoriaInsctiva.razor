@@ -6,6 +6,11 @@
 @inject HttpClient Http
 @attribute [Authorize(Roles = "admin")]
 
+    <div class="btn-group">
+        <a href="/categorias" style="background:none; border:none">
+            &nbsp;&nbsp;<b>Categoías Activas</b> &nbsp;&nbsp;
+        </a>
+    </div>
 @if (Categorias == null)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">

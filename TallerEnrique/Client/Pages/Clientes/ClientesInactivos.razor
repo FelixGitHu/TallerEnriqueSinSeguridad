@@ -7,8 +7,11 @@
 @attribute [Authorize(Roles = "admin, vendedor")]
 
 
-
-
+<div class="btn-group">
+    <a href="/clientes" style="background:none; border:none">
+        &nbsp;&nbsp;<b>Clientes Activos</b> &nbsp;&nbsp;
+    </a>
+</div>
 @if (Clientes == null)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">
@@ -57,7 +60,7 @@ else
 
         </RowTemplate>
         <PagerContent>
-            <MudTablePager RowsPerPageString="Filas por página" InfoFormat="@infoFormat"/>
+            <MudTablePager RowsPerPageString="Filas por página" InfoFormat="@infoFormat" />
         </PagerContent>
     </MudTable>
 }

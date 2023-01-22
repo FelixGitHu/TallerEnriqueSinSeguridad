@@ -43,8 +43,8 @@ else
         <RowTemplate>
             <MudTd DataLabel="Nombre">@context.Articulo.Nombre</MudTd>
             <MudTd DataLabel="Marca">@context.Articulo.Marca</MudTd>
-            <MudTd DataLabel="Precio Compra">C$ @Math.Round(@context.Articulo.PrecioCompra, 2)</MudTd>
-            <MudTd DataLabel="Precio Venta"> C$ @Math.Round(@context.Articulo.PrecioVenta, 2)</MudTd>
+            <MudTd DataLabel="Precio Compra">C$ @context.Articulo.PrecioCompra.ToString("##,#.##")</MudTd>
+            <MudTd DataLabel="Precio Venta"> C$ @context.Articulo.PrecioVenta.ToString("##,#.##")</MudTd>
             <MudTd DataLabel="Existencia">@context.Existencia</MudTd>
 
 

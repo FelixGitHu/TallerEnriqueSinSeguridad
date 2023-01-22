@@ -52,9 +52,9 @@ else
             <MudTd DataLabel="Factura">@context.NFactura</MudTd>
             <MudTd DataLabel="Fecha">@context.Fecha.ToShortDateString()</MudTd>
             <MudTd DataLabel="Empresa">@context.Proveedor.NombreEmpresa</MudTd>
-            <MudTd DataLabel="IVA">@Math.Round(@context.IVA, 2)</MudTd>
-            <MudTd DataLabel="Sub Total">C$ @Math.Round(@context.SubTotal, 2)</MudTd>
-            <MudTd DataLabel="Total"> C$ @Math.Round(@context.CostoTotal, 2)</MudTd>
+            <MudTd DataLabel="IVA">C$ @context.IVA.ToString("##,#.##")</MudTd>
+            <MudTd DataLabel="Sub Total">C$ @context.SubTotal.ToString("##,#.##")</MudTd>
+            <MudTd DataLabel="Total"> C$ @context.CostoTotal.ToString("##,#.##")</MudTd>
             <MudTd>
                 <MudTooltip Text="Ver detalle de la Compra."
                             Color="Color.Secondary" Placement="Placement.Top">

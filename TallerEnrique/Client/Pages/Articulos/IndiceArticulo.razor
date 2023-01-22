@@ -56,8 +56,8 @@ else
             <MudTd DataLabel="Marca">@context.Marca</MudTd>
             <MudTd DataLabel="Descripcion">@context.Descripcion</MudTd>
             <MudTd DataLabel="Codigi¿o">@context.Codigo</MudTd>
-            <MudTd DataLabel="Precio Compra">C$ @Math.Round(@context.PrecioCompra, 2)</MudTd>
-            <MudTd DataLabel="Precio Venta"> C$ @Math.Round(@context.PrecioVenta, 2)</MudTd>
+            <MudTd DataLabel="Precio Compra">C$ @context.PrecioCompra.ToString("##,#.##")</MudTd>
+            <MudTd DataLabel="Precio Venta"> C$ @context.PrecioVenta.ToString("##,#.##")</MudTd>
             <MudTd>
                 <MudTooltip Text="Editar el artículo."
                             Color="Color.Secondary" Placement="Placement.Top">

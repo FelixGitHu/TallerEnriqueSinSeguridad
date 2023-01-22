@@ -6,125 +6,130 @@
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "admin")]
 
-@if (Mecanicos == null)
-{
-    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Cargando...</span>
+    <div class="btn-group">
+        <a href="/mecanicos" style="background:none; border:none">
+            &nbsp;&nbsp;<b>Mecánicos Activos</b> &nbsp;&nbsp;
+        </a>
+    </div>
+    @if (Mecanicos == null)
+    {
+        <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Cargando...</span>
+            </div>
         </div>
-    </div>
-}
-else if (Mecanicos.Count == 0)
-{
-    <div class="d-flex justify-content-center align-items-center" style="height:24rem">
-        <text>No se encontraron mecánicos.</text>
-    </div>
-}
-else
-{
-    <MudTable Items="@Mecanicos" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Mecanico, bool>(FilterFunc1)"
-              @bind-SelectedItem="selectedItem1">
-        <ToolBarContent>
-            <MudText Typo="Typo.h6">Mecánicos</MudText>
-            <MudSpacer />
-            <MudTextField @bind-Value="searchString1" Placeholder="Buscar mecánico..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
-        </ToolBarContent>
-        <HeaderContent>
-
-            <MudTh Class="thead-dark">Nombre</MudTh>
-            <MudTh>Apellido</MudTh>
-            <MudTh>Teléfono</MudTh>
-            <MudTh>Dirrección</MudTh>
-            <MudTh>Acciones</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
-            <MudTd DataLabel="Apellido">@context.Apellido</MudTd>
-            <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
-            <MudTd DataLabel="Direccion">@context.Direccion</MudTd>
-            <MudTd>
-                <MudTooltip Text="Editar Mecánico."
-                            Color="Color.Secondary" Placement="Placement.Top">
-                    <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
-                            @onclick="@(() => NavigationManager.NavigateTo($"/mecanicos/editar/{context.Id}"))" />
-                </MudTooltip>
-            </MudTd>
-
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager RowsPerPageString="Filas por página" InfoFormat="@infoFormat" />
-        </PagerContent>
-    </MudTable>
-}
-
-@code {
-    private string infoFormat = "{first_item}-{last_item} de {all_items}";
-    private bool dense = false;
-    private bool hover = true;
-    private bool striped = true;
-    private bool bordered = true;
-    private Mecanico selectedItem1 = null;
-    private string searchString1 = "";
-    private string NombreArtFiltro = String.Empty; //filtros
-
-
-
-    public List<Mecanico> Mecanicos { get; set; }
-    protected async override Task OnInitializedAsync()
+    }
+    else if (Mecanicos.Count == 0)
     {
-        await Cargar();
+        <div class="d-flex justify-content-center align-items-center" style="height:24rem">
+            <text>No se encontraron mecánicos.</text>
+        </div>
+    }
+    else
+    {
+        <MudTable Items="@Mecanicos" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Mecanico, bool>(FilterFunc1)"
+                  @bind-SelectedItem="selectedItem1">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">Mecánicos</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString1" Placeholder="Buscar mecánico..." Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="MudBlazor.Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+
+                <MudTh Class="thead-dark">Nombre</MudTh>
+                <MudTh>Apellido</MudTh>
+                <MudTh>Teléfono</MudTh>
+                <MudTh>Dirrección</MudTh>
+                <MudTh>Acciones</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
+                <MudTd DataLabel="Apellido">@context.Apellido</MudTd>
+                <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
+                <MudTd DataLabel="Direccion">@context.Direccion</MudTd>
+                <MudTd>
+                    <MudTooltip Text="Editar Mecánico."
+                                Color="Color.Secondary" Placement="Placement.Top">
+                        <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Edit" Size="MudBlazor.Size.Small"
+                                @onclick="@(() => NavigationManager.NavigateTo($"/mecanicos/editar/{context.Id}"))" />
+                    </MudTooltip>
+                </MudTd>
+
+            </RowTemplate>
+            <PagerContent>
+                <MudTablePager RowsPerPageString="Filas por página" InfoFormat="@infoFormat" />
+            </PagerContent>
+        </MudTable>
     }
 
+    @code {
+        private string infoFormat = "{first_item}-{last_item} de {all_items}";
+        private bool dense = false;
+        private bool hover = true;
+        private bool striped = true;
+        private bool bordered = true;
+        private Mecanico selectedItem1 = null;
+        private string searchString1 = "";
+        private string NombreArtFiltro = String.Empty; //filtros
 
 
-    private async Task Cargar()
-    {
-        var httpResponse = await Http.GetAsync($"api/mecanicos/mecanicoinactivo");
-        if (httpResponse.IsSuccessStatusCode)
-        {
-            var responseString = await httpResponse.Content.ReadAsStringAsync();
-            Mecanicos = JsonSerializer.Deserialize<List<Mecanico>>(responseString,
-                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
-        }
-        else
-        {
-            Console.WriteLine("error");
-        }
 
-    }
-
-    private async Task BorrarMecanico(Mecanico mecanico)
-    {
-        var responseHttp = await repositorio.Delete($"api/mecanicos/{mecanico.Id}");
-        if (responseHttp.Error)
-        {
-            await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
-        }
-        else
+        public List<Mecanico> Mecanicos { get; set; }
+        protected async override Task OnInitializedAsync()
         {
             await Cargar();
         }
 
+
+
+        private async Task Cargar()
+        {
+            var httpResponse = await Http.GetAsync($"api/mecanicos/mecanicoinactivo");
+            if (httpResponse.IsSuccessStatusCode)
+            {
+                var responseString = await httpResponse.Content.ReadAsStringAsync();
+                Mecanicos = JsonSerializer.Deserialize<List<Mecanico>>(responseString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            }
+            else
+            {
+                Console.WriteLine("error");
+            }
+
+        }
+
+        private async Task BorrarMecanico(Mecanico mecanico)
+        {
+            var responseHttp = await repositorio.Delete($"api/mecanicos/{mecanico.Id}");
+            if (responseHttp.Error)
+            {
+                await mostrarMensajes.MostrarMensajeError(await responseHttp.GetBody());
+            }
+            else
+            {
+                await Cargar();
+            }
+
+        }
+
+        ///Buscar por nombre
+        private bool FilterFunc1(Mecanico element) => FilterFunc(element, searchString1);
+
+        private bool FilterFunc(Mecanico element, string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+                return true;
+            if (element.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Apellido.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+            if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            return false;
+        }
+
+
     }
-
-    ///Buscar por nombre
-    private bool FilterFunc1(Mecanico element) => FilterFunc(element, searchString1);
-
-    private bool FilterFunc(Mecanico element, string searchString)
-    {
-        if (string.IsNullOrWhiteSpace(searchString))
-            return true;
-        if (element.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Apellido.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-        if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
-            return true;
-
-        return false;
-    }
-
-
-}

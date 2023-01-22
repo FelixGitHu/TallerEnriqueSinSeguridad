@@ -6,6 +6,11 @@
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "admin")]
 
+    <div class="btn-group">
+        <a href="/proveedores" style="background:none; border:none">
+            &nbsp;&nbsp;<b>Proveedores Activos</b> &nbsp;&nbsp;
+        </a>
+    </div>
 @if (Proveedores == null)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">

@@ -9,10 +9,10 @@
 
 <div class="d-flex justify-content-between mb-2">
     <div class="btn-group">
-        <button class="btn btn-sm btn-secondary" @onclick="@Volver">
+        <button id="miboton" class="btn btn-sm btn-secondary" @onclick="@Volver">
             <i class="oi oi-arrow-circle-left"></i> Volver atrás
         </button>
-        <button class="btn btn-sm btn-primary" onclick="window.print()">
+        <button id="miboton" class="btn btn-sm btn-primary" onclick="window.print()">
             Imprimir
         </button>
     </div>
@@ -76,7 +76,7 @@
                     <div class="form-group col-6 ">
                         <small><b>Número Placa:</b> @venta.Vehiculo.Placa <b>Marca:</b> @venta.Vehiculo.Marca</small> <br />
                         <small><b>Mecánico:</b> @venta.Mecanico.Nombre</small><br />
-                        <small><b>Mano Obra:</b> C$ @venta.ManoObra</small>
+                        <small><b>Mano Obra:</b> C$ @venta.ManoObra.ToString("##,#.##")</small>
                     </div>
                         
                         
@@ -102,11 +102,11 @@
                     {
                         <tr>
                             <td>@item.Articulo.Nombre</td>
-                            <td>C$ @item.PrecioVenta</td>
+                            <td>C$ @item.PrecioVenta.ToString("##,#.##")</td>
                             <td>@item.Cantidad</td>
-                            <td>@item.Descuento %</td>
-                            <td>C$ @venta.IVA.ToString("#.##") </td>
-                            <td>C$ @venta.SubTotal</td>
+                            <td>C$ @Math.Round(@item.Descuento, 2)</td>
+                            <td>C$ @venta.IVA.ToString("##,#.##") </td>
+                            <td>C$ @venta.SubTotal.ToString("##,#.##")</td>
                         </tr>
                     }
                 
@@ -115,7 +115,7 @@
 
             <p class="card-text text-right m-4">
                 <h6><b>TOTAL</b></h6>
-                <h5><b>C$ @venta.Total</b></h5>
+                <h5><b>C$ @venta.Total.ToString("##,#.##")</b></h5>
             </p>
         </div>
     </div>

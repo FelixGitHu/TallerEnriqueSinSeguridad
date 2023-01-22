@@ -60,11 +60,11 @@ else
             @*<MudTd DataLabel="Pago">@context.Moneda.TipoMoneda</MudTd>*@
             <MudTd DataLabel="Categoria">@context.Categoria.Nombre</MudTd>
             @*<MudTd DataLabel="Servicio" Class="col-3">@context.Servicio.Descripcion</MudTd>*@
-            <MudTd DataLabel="Mano Obra"> C$ @Math.Round(@context.ManoObra, 2)</MudTd>
-            <MudTd DataLabel="IVA">C$ @Math.Round(@context.IVA, 2)</MudTd>
-            <MudTd DataLabel="SubTotal"> C$ @Math.Round(@context.SubTotal, 2)</MudTd>
-            <MudTd DataLabel="Total"> C$ @Math.Round(@context.Total, 2)</MudTd>
-            <MudTd Class="col-2">
+            <MudTd DataLabel="Mano Obra"> C$ @context.ManoObra.ToString("##,#.##")</MudTd>
+            <MudTd DataLabel="IVA">C$ @context.IVA.ToString("##,#.##")</MudTd>
+            <MudTd DataLabel="SubTotal"> C$ @context.SubTotal.ToString("##,#.##")</MudTd>
+            <MudTd DataLabel="Total"> C$ @context.Total.ToString("##,#.##")</MudTd>
+            <MudTd Class="col-1">
                 <MudTooltip Text="Ver datelle de la Venta."
                             Color="Color.Secondary" Placement="Placement.Top">
                     <MudFab Color="MudBlazor.Color.Error" StartIcon="@Icons.Material.Filled.Description" Size="MudBlazor.Size.Small"

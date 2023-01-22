@@ -186,14 +186,14 @@
                             @onclick="@(() => NuevaVenta.DVentas.Add(new DVenta()))">
                         Agregar Detalles
                     </button>
-                    <button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
+                    @*<button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
                         Calcular Total
-                    </button>
+                    </button>*@
                     <hr />
                 </div>
                 <div class="col-6">
                     <a href="ventas" class="btn btn-success">Volver</a>
-                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
+                    <button class="btn btn-success" type="submit">Guardar Venta</button>
                     <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar Venta</button>
                     <hr />
                 </div>
@@ -267,60 +267,6 @@
             }
         </div>
 
-            <!--<hr />
-    <h3>  Articulos Disponibles</h3>
-    <div class="row ">-->
-            @*aca la lista de productos que se pueden llevar*@
-            <!--<div class="col-md-5 ">
-        <table class="table table-bordered table-sm" id="tbproducto">
-            <thead>
-                <tr class="table-active">
-                    <th>NombreArticulo</th>
-                    <th>Precio</th>
-                    <th>Marca</th>
-                    <th>Agregado</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (Articulo ArticuloDisponible in articulosDisponibles)
-                {
-
-                    <TrArticuloAddVenta ArticuloaddDetail="ArticuloDisponible" addArticuloVenta="addDVenta" />
-                }
-            </tbody>
-        </table>
-    </div>-->
-            @*aca la lista que actualmente se lleva*@
-            <!--<div class="col-md-6 ">
-            <table class="table table-bordered table-sm">
-                <thead>
-                    <tr class="table-active">
-                        <th>NombreArticulo</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Descuento</th>
-                        <th>SubTotal</th>
-
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (NuevaVenta.DVentas.Count != 0)
-                    {
-                        @foreach (DVenta articuloEnVenta in NuevaVenta.DVentas)
-                        {
-
-                            <TrArticuloInVenta removeArticuloVenta="removeDVenta" calcularSubTotal="calcularSubtotal" ventaDetail="articuloEnVenta" />
-                        }
-                    }
-                    else
-                    {
-                        <h3>sin ventas</h3>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>-->
         </div>
     </div>
 
@@ -372,9 +318,7 @@
         await ObtenerInventario();
         await ObtenerCliente();
 
-        //extraer los articulos disponibles para comprar
-        //await GetArticulosDisponibles();
-        //instancia de lista dcompra
+        
         NuevaVenta.DVentas = new List<DVenta>();
     }
 
@@ -384,17 +328,7 @@
         articulosDisponibles = httpResponse.Response;
     }
 
-    //public async Task addDVenta(DVenta ArticuloNuevo)
-    //{
-    //    NuevaVenta.DVentas.Add(ArticuloNuevo);
-    //    articulosDisponibles.Remove(ArticuloNuevo.Articulo);
-    //}
-
-    //public async Task removeDVenta(Articulo remArti)
-    //{
-    //    NuevaVenta.DVentas.RemoveAll(x => x.Articulo == remArti);
-    //    articulosDisponibles.Add(remArti);
-    //}
+   
 
     public void calcularSubtotal()
     {
@@ -410,6 +344,7 @@
     public void enviarVenta()
     {
         //NuevaCompra.DCompras = articulosComprados;
+        CalcularTotal();
         OnValidSubmit.InvokeAsync();
     }
 
