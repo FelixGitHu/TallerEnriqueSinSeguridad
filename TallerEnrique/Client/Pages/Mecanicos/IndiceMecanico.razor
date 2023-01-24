@@ -7,14 +7,11 @@
 @attribute [Authorize(Roles = "admin")]
 
 
-<div class="form-group">
-    <a class="btn btn-info" href="mecanicos/crear">Agregar mecánico</a>
+<div class="form-group col-12 d-flex justify-content-end">
+    <a class="btn btn-info" style="margin:5px" href="mecanicos/crear">Agregar mecánico</a>
+    <a class="btn btn-info" style="margin:5px" href="/mecanicos/inactivos">Dados de baja</a>
 </div>
-<div class="btn-group" style="font-size:medium">
-    <a href="/mecanicos/inactivos" style="background:none; border:none">
-        &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
-    </a>
-</div>
+
 
 @if (Mecanicos == null)
 {

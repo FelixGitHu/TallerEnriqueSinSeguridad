@@ -7,13 +7,12 @@
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "admin, vendedor")]
 
-<div class="form-group">
-    <a class="btn btn-info" href="vehiculos/crear">Agregar Vehículo</a>
+<div class="form-group col-12 d-flex justify-content-end">
+    <a class="btn btn-info" style="margin:5px" href="vehiculos/crear">Agregar Vehículo</a>
+    <a class="btn btn-info" style="margin:5px" href="/vehiculos/inactivos">Dados de baja</a>
 </div>
 <div class="btn-group" style="font-size:medium">
-    <a href="/vehiculos/inactivos" style="background:none; border:none">
-        &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
-    </a>
+    
 </div>
 
 @if (Vehiculos == null)

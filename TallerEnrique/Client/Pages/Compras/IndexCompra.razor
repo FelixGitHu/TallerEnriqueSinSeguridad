@@ -6,14 +6,14 @@
 @inject NavigationManager NavigationManager
 @attribute [Authorize (Roles = "admin, vendedor")]
 
-<div class="form-group">
+<div class="form-group d-flex justify-content-end">
     <a class="btn btn-info" href="compras/crear">Agregar Compras</a>
 </div>
-<div class="btn-group" style="font-size:medium">
+@*<div class="btn-group" style="font-size:medium">
     <a href="/compras/inactiva" style="background:none; border:none">
         &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
     </a>
-</div>
+</div>*@
 
 @if (ComprasRealizadas == null)
 {

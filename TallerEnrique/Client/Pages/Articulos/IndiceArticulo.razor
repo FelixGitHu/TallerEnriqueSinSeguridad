@@ -8,15 +8,11 @@
 
 
 
-<div class="form-group">
-    <a class="btn btn-info" href="articulos/crear">Agregar artículo</a>
+<div class="form-group col-12 d-flex justify-content-end" style="margin:5px" >
+    <a class="btn btn-info"  style="margin:5px" href="articulos/crear">Agregar artículo</a> 
+    <a class="btn btn-info" style="margin:5px" href="/articulos/inactivos">Dados de baja</a>
+</div>
 
-</div>
-<div class="btn-group" style="font-size:medium">
-    <a href="/articulos/inactivos" style="background:none; border:none">
-        &nbsp;&nbsp;<b>Dados de baja</b> &nbsp;&nbsp;
-    </a>
-</div>
 
 @if (Articulos == null)
 {
