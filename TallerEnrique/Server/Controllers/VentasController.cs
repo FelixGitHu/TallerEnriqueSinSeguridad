@@ -88,7 +88,7 @@ namespace TallerEnrique.Server.Controllers
         public async Task<ActionResult<List<Venta>>> Get()
         {
            
-           return await context.Ventas.Include("Vehiculo").Include("Moneda").Include("Servicio").Include("Mecanico").Include("Categoria").Include("DVentas").Include("Cliente").OrderByDescending(x => x.Fecha).ToListAsync();
+           return await context.Ventas.Include("Vehiculo").Include("Moneda").Include("Servicio").Include("Mecanico").Include("Categoria").Include("DVentas").Include("Cliente").OrderByDescending(x => x.NFactura).ToListAsync();
         }
 
         [HttpGet("{id}")]

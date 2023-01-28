@@ -34,13 +34,13 @@ else if (caja.Count == 0)
 else
 {
 
-    <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+    @*<MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
         <MudTooltip Text="Exportar a excel" Color="Color.Tertiary" Placement="Placement.Bottom" Arrow="true">
             <MudButton Variant="Variant.Filled" StartIcon="@Icons.Custom.FileFormats.FileExcel"
                        @onclick="ExportarExcel"
                        Color="Color.Warning">Excel</MudButton>
         </MudTooltip>
-    </MudButtonGroup>
+    </MudButtonGroup>*@
 
     <MudTable Hover="true" Breakpoint="Breakpoint.Sm" Height="500px" FixedHeader="true" Filter="new Func<Cierre, bool>(FilterFunc1)"
               Items="@caja"

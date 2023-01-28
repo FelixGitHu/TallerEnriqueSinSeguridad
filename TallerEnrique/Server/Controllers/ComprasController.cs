@@ -83,13 +83,13 @@ namespace TallerEnrique.Server.Controllers
         public async Task<ActionResult<List<Compra>>> Get()
         {
           
-            return await context.Compras.Where(x=> x.Estado == true).Include("Proveedor").Include("DCompras").OrderByDescending(x => x.Fecha).ToListAsync();
+            return await context.Compras.Where(x=> x.Estado == true).Include("Proveedor").Include("DCompras").OrderByDescending(x => x.NFactura).ToListAsync();
         }
         [HttpGet("comprasinactivas")]
         public async Task<ActionResult<List<Compra>>> GetInactivos()
         {
 
-            return await context.Compras.Where(x => x.Estado == false).Include("Proveedor").Include("DCompras").OrderByDescending(x => x.Fecha).ToListAsync();
+            return await context.Compras.Where(x => x.Estado == false).Include("Proveedor").Include("DCompras").OrderByDescending(x => x.NFactura).ToListAsync();
         }
 
 
