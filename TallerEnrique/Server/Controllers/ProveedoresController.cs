@@ -26,9 +26,17 @@ namespace TallerEnrique.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post(Proveedor proveedor)
         {
-            context.Add(proveedor);
-            await context.SaveChangesAsync();
-            return proveedor.Id;
+            if (!Exists(proveedor.Email))
+            {
+                context.Add(proveedor);
+                await context.SaveChangesAsync();
+                return proveedor.Id;
+            }
+            else
+            {
+                return BadRequest("El proveedor ya existe.");
+            }
+            
         }
         //generico Este metodo esta de mas al igual que los demas get que estan en el resto de contraladores
         [HttpGet("cargartodos")]
@@ -64,6 +72,11 @@ namespace TallerEnrique.Server.Controllers
             context.Remove(new Proveedor { Id = id });
             await context.SaveChangesAsync();
             return NoContent();
+        }
+
+        private bool Exists(string correo)
+        {
+            return (context.Proveedors.Any(e => e.Email == correo));
         }
     }
 }

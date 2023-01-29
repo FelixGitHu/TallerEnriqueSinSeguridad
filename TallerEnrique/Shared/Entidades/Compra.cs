@@ -14,7 +14,7 @@ namespace TallerEnrique.Shared.Entidades
 
         public long NFactura { get; set; }
 
-        [Required(ErrorMessage = "La Fecha es obligatorio")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public DateTime Fecha { get; set; } = DateTime.Today;
         public decimal CostoTotal { get; set; }
         
@@ -33,7 +33,7 @@ namespace TallerEnrique.Shared.Entidades
         public bool Estado { get; set; } = true;
 
         //Relacionando las tablas 
-        
+        [Required(ErrorMessage = "Campo obligatorio ")]
         public int ProveedorId { get; set; }
 
         public Proveedor Proveedor { get; set; }

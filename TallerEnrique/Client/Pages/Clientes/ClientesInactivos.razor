@@ -37,6 +37,7 @@ else
 
             <MudTh Class="thead-dark">Nombres</MudTh>
             <MudTh>Apellidos</MudTh>
+            <MudTh>Cédula</MudTh>
             <MudTh>Ciudad</MudTh>
             <MudTh>Departamento</MudTh>
             <MudTh>Teléfono</MudTh>
@@ -45,6 +46,7 @@ else
         <RowTemplate>
             <MudTd DataLabel="Nombres">@context.Nombres</MudTd>
             <MudTd DataLabel="Apellidos">@context.Apellidos</MudTd>
+            <MudTd DataLabel="Cédula">@context.Cedula</MudTd>
             <MudTd DataLabel="Ciudad">@context.Ciudad</MudTd>
             <MudTd DataLabel="Departamento">@context.Departamento</MudTd>
             <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
@@ -130,7 +132,8 @@ else
             return true;
         if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-
+        //if (element.Cedula.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        //    return true;
         return false;
     }
 

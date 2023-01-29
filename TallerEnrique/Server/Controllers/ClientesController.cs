@@ -26,9 +26,16 @@ namespace TallerEnrique.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post(Cliente clientes)
         {
-            context.Add(clientes);
-            await context.SaveChangesAsync();
-            return clientes.Id;
+            if (!Exists(clientes.Cedula))
+            {
+                context.Clientes.Add(clientes);
+                await context.SaveChangesAsync();
+                return clientes.Id;
+            }
+            else
+            {
+                return BadRequest("El número de cédula no se puede repetir");
+            }
         }
         //General
         [HttpGet("cargartodos")]
@@ -54,9 +61,9 @@ namespace TallerEnrique.Server.Controllers
         [HttpPut]
         public async Task<ActionResult> Put(Cliente clientes)
         {
-            context.Attach(clientes).State = EntityState.Modified;
-            await context.SaveChangesAsync();
-            return NoContent();
+                context.Attach(clientes).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+                return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -71,13 +78,18 @@ namespace TallerEnrique.Server.Controllers
 
 
         //para buscar articulos
-        [HttpGet("buscar/{textoBusqueda}")]
-        public async Task<ActionResult<List<Cliente>>> Get(string textoBusqueda)
+        //[HttpGet("buscar/{textoBusqueda}")]
+        //public async Task<ActionResult<List<Cliente>>> Get(string textoBusqueda)
+        //{
+        //    if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Cliente>(); }
+        //    textoBusqueda = textoBusqueda.ToLower();
+        //    return await context.Clientes
+        //        .Where(x => x.Nombres.ToLower().Contains(textoBusqueda)).ToListAsync();
+        //}
+
+        private bool Exists(string cedula)
         {
-            if (string.IsNullOrWhiteSpace(textoBusqueda)) { return new List<Cliente>(); }
-            textoBusqueda = textoBusqueda.ToLower();
-            return await context.Clientes
-                .Where(x => x.Nombres.ToLower().Contains(textoBusqueda)).ToListAsync();
+            return (context.Clientes.Any(e => e.Cedula == cedula));
         }
     }
 }

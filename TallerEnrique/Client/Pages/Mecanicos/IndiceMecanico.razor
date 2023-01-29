@@ -40,6 +40,7 @@ else
 
             <MudTh Class="thead-dark">Nombre</MudTh>
             <MudTh>Apellido</MudTh>
+            <MudTh>Cédula</MudTh>
             <MudTh>Teléfono</MudTh>
             <MudTh>Dirrección</MudTh>
             <MudTh>Acciones</MudTh>
@@ -47,6 +48,7 @@ else
         <RowTemplate>
             <MudTd DataLabel="Nombre">@context.Nombre</MudTd>
             <MudTd DataLabel="Apellido">@context.Apellido</MudTd>
+            <MudTd DataLabel="Cédula">@context.Cedula</MudTd>
             <MudTd DataLabel="Telefono">@context.Telefono</MudTd>
             <MudTd DataLabel="Direccion">@context.Direccion</MudTd>
             <MudTd>
@@ -128,6 +130,8 @@ else
         if (element.Telefono.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.Direccion.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Cedula.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;

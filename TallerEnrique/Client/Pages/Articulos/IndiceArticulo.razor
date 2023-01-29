@@ -74,9 +74,9 @@ else
 
 @code {
 
-   
-        private string infoFormat = "{first_item}-{last_item} de {all_items}";
- 
+
+    private string infoFormat = "{first_item}-{last_item} de {all_items}";
+
 
     private bool dense = false;
     private bool hover = true;
@@ -139,6 +139,8 @@ else
         if (element.Nombre.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (element.Marca.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (element.Codigo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;

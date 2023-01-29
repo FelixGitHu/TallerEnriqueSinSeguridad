@@ -40,7 +40,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
                         </div>
-                        <InputNumber class="form-control" @bind-Value="@Articulo.PrecioVenta"  />
+                        <InputNumber class="form-control" @bind-Value="@Articulo.PrecioVenta" />
                         <ValidationMessage For="@(() => Articulo.PrecioVenta)" />
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                 <div class="form-group col-sm-4">
                     <label>Código:</label>
                     <div>
-                        <InputText class="form-control" @bind-Value="@Articulo.Codigo" />
+                        <InputText class="form-control" @bind-Value="@Articulo.Codigo"  readonly="@ocultarcodigo"/>
                         <ValidationMessage For="@(() => Articulo.Codigo)" />
                     </div>
                 </div>
@@ -73,10 +73,12 @@
             </div>
         </div>
     </div>
- 
+
 </EditForm>
 
 @code {
     [Parameter] public Articulo Articulo { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public bool ocultarcodigo { get; set; } = false;
+}
 }

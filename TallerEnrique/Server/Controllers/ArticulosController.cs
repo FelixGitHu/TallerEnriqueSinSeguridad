@@ -26,9 +26,17 @@ namespace TallerEnrique.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post(Articulo articulo)
         {
-            context.Add(articulo);
-            await context.SaveChangesAsync();
-            return articulo.Id;
+            if (!Exists(articulo.Codigo))
+            {
+                context.Add(articulo);
+                await context.SaveChangesAsync();
+                return articulo.Id;
+            }
+            else
+            {
+                return BadRequest("El código del artículo ya existe.");
+            }
+                
         }
         //General
         [HttpGet("cargartodos")]
@@ -76,6 +84,10 @@ namespace TallerEnrique.Server.Controllers
             textoBusqueda = textoBusqueda.ToLower();
             return await context.Articulos
                 .Where(x => x.Nombre.ToLower().Contains(textoBusqueda)).ToListAsync();
+        }
+        private bool Exists(string codigo)
+        {
+            return (context.Articulos.Any(e => e.Codigo == codigo));
         }
 
     }

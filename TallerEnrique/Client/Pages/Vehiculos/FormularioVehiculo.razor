@@ -37,7 +37,7 @@
                 <div class="form-group col-sm-4">
                     <label>Placa:</label>
                     <div>
-                        <InputText class="form-control" @bind-Value="@Vehiculo.Placa" />
+                        <InputText class="form-control" @bind-Value="@Vehiculo.Placa" readonly="@ocultarplaca" />
                         <ValidationMessage For="@(() => Vehiculo.Placa)" />
                     </div>
                 </div>
@@ -107,20 +107,23 @@
 
 @code {
 
+    [Parameter] public bool ocultarplaca { get; set; } = false;
 
     [Parameter] public Vehiculo Vehiculo { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
 
-    [Parameter] public List<Cliente> ClienteSeleccionados { get; set; } = new List<Cliente>();
+    [Parameter] public List<Cliente>
+    ClienteSeleccionados { get; set; } = new List<Cliente>
+        ();
 
-    protected override async Task OnInitializedAsync()
-    {
-       
+        protected override async Task OnInitializedAsync()
+        {
+
         await ObtenerClientes();
-    }
+        }
 
-    private async Task ObtenerClientes()
-    {
+        private async Task ObtenerClientes()
+        {
         var httpResponse = await repositorio.Get<List<Cliente>>("api/clientes/cargartodos");
         ClienteSeleccionados = httpResponse.Response;
     }

@@ -22,14 +22,14 @@
                     </div>
                 </div>
 
-
                 <div class="form-group col-sm-4">
-                    <label>Teléfono:</label>
+                    <label>Cédula:</label>
                     <div>
-                        <InputText class="form-control" @bind-Value="@Mecanico.Telefono" />
-                        <ValidationMessage For="@(() => Mecanico.Telefono)" />
+                        <InputText class="form-control" @bind-Value="@Mecanico.Cedula" readonly="@ocultarcedula" />
+                        <ValidationMessage For="@(() => Mecanico.Cedula)" />
                     </div>
                 </div>
+
             </div>
             <div class=" row">
                 <div class="form-group col-sm-8">
@@ -37,6 +37,13 @@
                     <div>
                         <InputTextArea class="form-control" @bind-Value="@Mecanico.Direccion" />
                         <ValidationMessage For="@(() => Mecanico.Direccion)" />
+                    </div>
+                </div>
+                <div class="form-group col-sm-4">
+                    <label>Teléfono:</label>
+                    <div>
+                        <InputText class="form-control" @bind-Value="@Mecanico.Telefono" />
+                        <ValidationMessage For="@(() => Mecanico.Telefono)" />
                     </div>
                 </div>
             </div>
@@ -60,4 +67,5 @@
 @code {
     [Parameter] public Mecanico Mecanico { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }//Para pasar eventos como parametro
+    [Parameter] public bool ocultarcedula { get; set; } = false;
 }

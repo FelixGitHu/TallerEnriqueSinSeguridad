@@ -12,12 +12,13 @@
 }
 else
 {
-    <FormularioMecanico OnValidSubmit="Editar" Mecanico="Mecanico" />
+    <FormularioMecanico OnValidSubmit="Editar" Mecanico="Mecanico" ocultarcedula="ocultadni"/>
 }
 
 @code {
     [Parameter] public int MecanicoId { get; set; }
     private Mecanico Mecanico;
+    public bool ocultadni = true;
 
     protected async override Task OnInitializedAsync()
     {
@@ -30,7 +31,7 @@ else
             }
             else
             {
-                await mostrarMensaje.MostrarMensajeError(await httpResponse.GetBody());
+                await mostrarMensaje.MostrarMensajeError("Error inesperado");
             }
         }
         else

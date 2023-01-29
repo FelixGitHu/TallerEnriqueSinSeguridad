@@ -132,6 +132,8 @@ else
             return true;
         if (element.Marca.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
+        if (element.Codigo.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
 
         return false;
     }

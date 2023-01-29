@@ -11,13 +11,17 @@ namespace TallerEnrique.Shared.Entidades
     {
         [Key]
         public int Id { get; set; }
-        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Nombres { get; set; }
-        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Apellidos { get; set; }
-        [Required(ErrorMessage = "El campo {0} es requerido")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Ciudad { get; set; }
-        [Required(ErrorMessage = "El campo {0} es requerido")]
+
+        [RegularExpression("[0-9]{13}[A-Z]{1}",
+        ErrorMessage = "El término introducido no corresponde la formato de cédula nicaragüense")]
+        public string Cedula { get; set; }
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Departamento { get; set; }
         public string Telefono { get; set; }
         public bool Estado { get; set; } = true;

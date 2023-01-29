@@ -13,12 +13,12 @@ namespace TallerEnrique.Shared.Entidades
         public int Id { get; set; }
         public long  NFactura { get; set; }
 
-        [Required(ErrorMessage = "La Descripcion es Obligatorio ")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Descripcion { get; set; }
 
-        [Required(ErrorMessage = "La Fecha es Obligatorio ")]
-        public DateTime Fecha { get; set; } = DateTime.Today;
+        [Required(ErrorMessage = "Campo obligatorio")] public DateTime Fecha { get; set; } = DateTime.Today;
         public decimal Descuento { get; set; }
+        [Required(ErrorMessage = "Campo obligatorio")]
         public decimal ManoObra { get; set; }
         public bool Estado { get; set; } = true;
         public decimal SubTotal

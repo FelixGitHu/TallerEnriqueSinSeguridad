@@ -11,12 +11,13 @@
 }
 else
 {
-    <FormularioVehiculo OnValidSubmit="Editar" Vehiculo="Vehiculo" />
+    <FormularioVehiculo OnValidSubmit="Editar" Vehiculo="Vehiculo" ocultarplaca="ocultaplaca"/>
 }
 
 @code {
     [Parameter] public int VehiculoId { get; set; }
     private Vehiculo Vehiculo;
+    public bool ocultaplaca = true;
 
     protected async override Task OnInitializedAsync()
     {

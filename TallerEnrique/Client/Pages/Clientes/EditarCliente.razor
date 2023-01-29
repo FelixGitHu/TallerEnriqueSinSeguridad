@@ -12,12 +12,13 @@
 }
 else
 {
-    <FormularioClientes OnValidSubmit="Editar" Clientes="Clientes" />
+    <FormularioClientes OnValidSubmit="Editar" Clientes="Clientes" ocultarcedula="ocultadni"/>
 }
 
 @code {
     [Parameter] public int ClienteId { get; set; }
     private Cliente Clientes;
+    public bool ocultadni = true;
 
     protected async override Task OnInitializedAsync()
     {

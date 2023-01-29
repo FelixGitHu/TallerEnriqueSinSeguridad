@@ -26,9 +26,16 @@ namespace TallerEnrique.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post(Mecanico mecanico)
         {
-            context.Add(mecanico);
-            await context.SaveChangesAsync();
-            return mecanico.Id;
+            if (!Exists(mecanico.Cedula))
+            {
+                context.Add(mecanico);
+                await context.SaveChangesAsync();
+                return mecanico.Id;
+            }
+            else
+            {
+                return BadRequest("El número de cédula no se puede repetir.");
+            }
         }
 
         [HttpGet("cargartodos")]
@@ -53,7 +60,7 @@ namespace TallerEnrique.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Mecanico>> Get(int id)
         {
-            return await context.Mecanicos.Where(x => x.Estado == true).FirstOrDefaultAsync(x => x.Id == id);
+            return await context.Mecanicos.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         [HttpPut]
@@ -74,6 +81,9 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
 
-       
+        private bool Exists(string cedula)
+        {
+            return (context.Mecanicos.Any(e => e.Cedula == cedula));
+        }
     }
 }

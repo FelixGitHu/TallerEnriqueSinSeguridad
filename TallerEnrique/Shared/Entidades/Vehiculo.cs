@@ -12,38 +12,33 @@ namespace TallerEnrique.Shared.Entidades
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "El Nombre de la marca  es Obligatorio ")]
-        //[StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Marca { get; set; }
 
-        [Required(ErrorMessage = "El Número del modelo  es Obligatorio ")]
-        //[StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Modelo { get; set; }
 
-        [Required(ErrorMessage = "El Color  es Obligatorio ")]
-        ///[StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Color { get; set; }
 
-        [Required(ErrorMessage = "El Número de la Placa  es Obligatorio ")]
-        //[StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Placa { get; set; }
 
-        [Required(ErrorMessage = "La Fecha de Entrada es Obligatorio ")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public DateTime FechaEntrada { get; set; } = DateTime.Now;
 
-        [Required(ErrorMessage = "La Fecha de salida es Obligatorio ")]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public DateTime FechaSalida { get; set; } = DateTime.Now;
 
-        [Required(ErrorMessage = "El Año es Obligatorio ")]
-        //[StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public int YearCar { get; set; }
 
-        [Required(ErrorMessage = "El Kilometraje es Obligatorio ")]
-        //[StringLength(50, ErrorMessage = "{0} el nombre debe tener entre {2} y {1} caracteres", MinimumLength = 2)]
+        [Required(ErrorMessage = "Campo obligatorio")]
         public string Kilometraje { get; set; }
         public bool Estado { get; set; } = true;
 
         //Relacion con la tabla Clienta
+        [Required(ErrorMessage = "Campo obligatorio")]
         public int ClienteId { get; set; }
         public Cliente Cliente { get; set; }
 

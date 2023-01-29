@@ -25,9 +25,17 @@ namespace TallerEnrique.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Post(Vehiculo vehiculo)
         {
-            context.Add(vehiculo);
-            await context.SaveChangesAsync();
-            return vehiculo.Id;
+            if (!Exists(vehiculo.Placa))
+            {
+                context.Add(vehiculo);
+                await context.SaveChangesAsync();
+                return vehiculo.Id;
+            }
+            else
+            {
+                return BadRequest("Número de plca ya existe.");
+            }
+            
         }
 
         [HttpGet("cargartodos")]
@@ -66,6 +74,9 @@ namespace TallerEnrique.Server.Controllers
             return NoContent();
         }
 
-        
+        private bool Exists(string placa)
+        {
+            return (context.Vehiculos.Any(e => e.Placa == placa));
+        }
     }
 }
