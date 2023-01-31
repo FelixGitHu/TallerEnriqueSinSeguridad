@@ -19,7 +19,8 @@ namespace TallerEnrique.Shared.Entidades
         public string Ciudad { get; set; }
 
         [RegularExpression("[0-9]{13}[A-Z]{1}",
-        ErrorMessage = "El término introducido no corresponde la formato de cédula nicaragüense")]
+        ErrorMessage = "El término introducido no corresponde al formato de cédula nicaragüense")]
+        [Required(ErrorMessage ="Campo obligatorio")]
         public string Cedula { get; set; }
         [Required(ErrorMessage = "Campo obligatorio")]
         public string Departamento { get; set; }

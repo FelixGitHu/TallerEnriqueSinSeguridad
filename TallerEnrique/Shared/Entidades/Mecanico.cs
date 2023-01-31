@@ -16,7 +16,8 @@ namespace TallerEnrique.Shared.Entidades
         [Required(ErrorMessage = "El campo es requerido")]
         public string Apellido { get; set; }
         [RegularExpression("[0-9]{13}[A-Z]{1}",
-        ErrorMessage = "El término introducido no corresponde la formato de cédula nicaragüense")]
+        ErrorMessage = "El término introducido no corresponde al formato de cédula nicaragüense")]
+        [Required(ErrorMessage = "El campo es requerido")]
         public string Cedula { get; set; }
         public string Telefono { get; set; }
         [Required(ErrorMessage = "El campo es requerido")]
