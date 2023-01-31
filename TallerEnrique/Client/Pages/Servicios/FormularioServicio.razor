@@ -12,7 +12,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-sm-4">
-                    <label>Categoria:</label>
+                    <label>Categoría:</label>
                     <div>
                         <InputSelectNumber class="form-control" @bind-Value="Servicio.CategoriaId">
                             <option value="0">--Categoria--</option>
@@ -24,27 +24,24 @@
                         <ValidationMessage For="@(() => Servicio.CategoriaId)" />
                     </div>
                 </div>
-                
+
                 <div class="form-group col-sm-4">
-                    <label>Descripcion:</label>
+                    <label>Descripción:</label>
                     <div>
                         <InputText class="form-control" @bind-Value="@Servicio.Descripcion" />
                         <ValidationMessage For="@(() => Servicio.Descripcion)" />
                     </div>
                 </div>
-                
+
             </div>
-            <div class="row">
-                <div class="col-6"></div>
-                <div class="col-6">
-                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
-                    <a href="servicios" class="btn btn-success">Cancelar</a>
-                    <MudTooltip Text="Desactiva o Reactiva un Registro."
-                                Color="Color.Secondary" Placement="Placement.Top">
-                        <InputCheckbox @bind-Value="@Servicio.Estado"></InputCheckbox>
-                        <label><b>Dar De Baja</b></label>
-                    </MudTooltip>
-                </div>
+
+            <div class="form-group col-12 d-flex justify-content-end" style="margin:5px">
+                <button class="btn btn-success" style="margin:5px" type="submit">Guardar</button>
+                <a class="btn btn-success" style="margin:5px" href="servicios">Cancelar</a>
+                <MudTooltip Text="Desactiva o Reactiva un Registro." Color="Color.Secondary" Placement="Placement.Top">
+                    <InputCheckbox @bind-Value="@Servicio.Estado"></InputCheckbox>
+                    <label style="display:flex"><b>Dar De Baja</b></label>
+                </MudTooltip>
             </div>
         </div>
     </div>

@@ -47,17 +47,14 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-6"></div>
-                <div class="col-6">
-                    <button class="btn btn-success" type="submit">Guardar Cambios</button>
-                    <a href="mecanicos" class="btn btn-success">Cancelar</a>
-                    <MudTooltip Text="Desactiva o Reactiva un Registro."
-                                Color="Color.Secondary" Placement="Placement.Top">
-                        <InputCheckbox @bind-Value="@Mecanico.Estado"></InputCheckbox>
-                        <label><b>Dar De Baja</b></label>
-                    </MudTooltip>
-                </div>
+
+            <div class="form-group col-12 d-flex justify-content-end" style="margin:5px">
+                <button class="btn btn-success" style="margin:5px" type="submit">Guardar</button>
+                <a class="btn btn-success" style="margin:5px" href="mecanicos">Cancelar</a>
+                <MudTooltip Text="Desactiva o Reactiva un Registro." Color="Color.Secondary" Placement="Placement.Top">
+                    <InputCheckbox @bind-Value="@Mecanico.Estado"></InputCheckbox>
+                    <label style="display:flex"><b>Dar De Baja</b></label>
+                </MudTooltip>
             </div>
         </div>
     </div>
