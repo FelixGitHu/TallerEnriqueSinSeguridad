@@ -187,8 +187,8 @@
                         Agregar Detalles
                     </button>
                     @*<button @onclick="@(() => CalcularTotal())" type="button" class="btn btn-secondary">
-                        Calcular Total
-                    </button>*@
+                    Calcular Total
+                </button>*@
                     <hr />
                 </div>
                 <div class="col-6">
@@ -208,7 +208,7 @@
 
                 <h5>Detalles del producto @(i + 1)</h5>
                 <div class="row">
-                    <div class="form-group col-sm-6">
+                    <div class="form-group col-sm-12">
                         <label>Productos:</label>
                         <InputSelect class="form-control" @bind-Value="detalle.InventarioId">
                             <option value="0" disabled> --- Seleccione un producto ---</option>
@@ -224,8 +224,16 @@
                         <ValidationMessage For="@(() => detalle.InventarioId)" />
                         @*para validar que sea un Id*@
                     </div>
-                   
-
+                </div>
+                @foreach (var inv in InventarioSeleccionado)
+                {
+                    if (detalle.InventarioId == inv.ArticuloId)
+                    {
+                        
+                        detalle.PrecioVenta = inv.Articulo.PrecioVenta;
+                    }
+                }
+                <div class="row">
                     <div class="form-group col-sm-6">
                         <label>Cantidad:</label>
                         <div>
@@ -233,18 +241,16 @@
                             <ValidationMessage For="@(() => detalle.Cantidad)" />
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-sm-6">
-                        <label>Precio:</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
-                            </div>
-                            <InputNumber class="form-control" @bind-Value="@detalle.PrecioVenta" />
-                            <ValidationMessage For="@(() => detalle.PrecioVenta)" />
+                    @*<div class="form-group col-sm-6">
+                    <label>Precio:</label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroup-sizing-default">C$</span>
                         </div>
+                        <InputNumber class="form-control" @bind-Value="@detalle.PrecioVenta" />
+                        <ValidationMessage For="@(() => detalle.PrecioVenta)" />
                     </div>
+                </div>*@
                     <div class="form-group col-sm-6">
                         <label>Descuento:</label>
                         <div class="input-group">
@@ -255,9 +261,9 @@
                             <ValidationMessage For="@(() => detalle.Descuento)" />
                         </div>
                     </div>
-                    
+
                 </div>
-               
+
                 <div class="row">
                     <button type="button" class="btn btn-danger btn-sm"
                             @onclick="@(() => NuevaVenta.DVentas.RemoveAt(indice))">
