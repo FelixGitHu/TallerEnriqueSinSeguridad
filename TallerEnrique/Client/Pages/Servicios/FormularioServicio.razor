@@ -14,13 +14,13 @@
                 <div class="form-group col-sm-4">
                     <label>Categoría:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="Servicio.CategoriaId">
-                            <option value="0">--Categoria--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="Servicio.CategoriaId">
+                            <option selected value="">--Categoria--</option>
                             @foreach (var item in CategoriasSeleccionadas)
                             {
                                 <option value="@item.Id">@item.Nombre @*&nbsp; @item.Descripcion*@</option>
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => Servicio.CategoriaId)" />
                     </div>
                 </div>

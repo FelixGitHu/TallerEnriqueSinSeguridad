@@ -62,13 +62,13 @@
                 <div class="form-group col-sm-4">
                     <label>Cliente:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="Vehiculo.ClienteId">
-                            <option value="0">--Cliente--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="Vehiculo.ClienteId">
+                            <option selected value="">--Cliente--</option>
                             @foreach (var item in ClienteSeleccionados)
                             {
                                 <option value="@item.Id">@item.Nombres @*&nbsp; @item.Descripcion*@</option>
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => Vehiculo.ClienteId)" />
                     </div>
                 </div>

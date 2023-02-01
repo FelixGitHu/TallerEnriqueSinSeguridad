@@ -27,13 +27,13 @@
                 <div class="form-group col-sm-4">
                     <label>Proveedor:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="NuevaCompra.ProveedorId">
-                            <option value="0" disabled>--Proveedor--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="NuevaCompra.ProveedorId">
+                            <option selected value="">--Proveedor--</option>
                             @foreach (var item in ProveedoresSeleccionados)
                             {
                                 <option value="@item.Id"> EMPRESA:  @item.NombreEmpresa  || CONTACTO: @item.NombreContacto</option>
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => NuevaCompra.ProveedorId)" />
                     </div>
                 </div>
@@ -101,13 +101,13 @@
                     <div class="row">
                         <div class="form-group col-sm-6">
                             <label>Productos:</label>
-                            <InputSelectNumber class="form-control" @bind-Value="detalle.ArticuloId">
-                                <option value="0" disabled> --- Seleccione un producto ---</option>
+                            <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="detalle.ArticuloId">
+                                <option selected value=""> --- Seleccione un producto ---</option>
                                 @foreach (var item in ProductosSeleccionados)
                                     {
                             <option value="@item.Id">@item.Nombre => @item.Descripcion</option>
                                     }
-                            </InputSelectNumber>
+                            </InputSelect>
                             <ValidationMessage For="@(() => detalle.ArticuloId)" />
                             @*para validar que sea un Id*@
                         </div>

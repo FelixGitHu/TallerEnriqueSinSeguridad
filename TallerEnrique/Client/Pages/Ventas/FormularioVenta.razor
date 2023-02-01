@@ -20,13 +20,13 @@
                 <div class="form-group col-sm-4">
                     <label>Cliente:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.ClienteId">
-                            <option value="0" disabled>--Seleccione Cliente--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="NuevaVenta.ClienteId">
+                            <option selected value="">--Seleccione un Cliente--</option>
                             @foreach (var item in ClienteSeleccionados)
                             {
                                 <option value="@item.Id">@item.Nombres &nbsp; @item.Apellidos</option>
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => NuevaVenta.ClienteId)" />
                     </div>
                 </div>
@@ -71,8 +71,8 @@
                 <div class="form-group col-sm-4">
                     <label>Vehiculo:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.VehiculoId">
-                            <option value="0" disabled>--Seleccione Auto--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="NuevaVenta.VehiculoId">
+                            <option selected value="">--Seleccione un Auto--</option>
                             @foreach (var item in VehiculoSeleccionados)
                             {
                                 if (NuevaVenta.ClienteId == item.ClienteId)
@@ -81,7 +81,7 @@
                                 }
 
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => NuevaVenta.VehiculoId)" />
                     </div>
                 </div>
@@ -90,34 +90,34 @@
                 <div class="form-group col-sm-4">
                     <label>Mecanico a Cargo:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.MecanicoId">
-                            <option value="0" disabled>--Seleccione Mecanico--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="NuevaVenta.MecanicoId">
+                            <option selected value="">--Seleccione un Mecanico--</option>
                             @foreach (var item in MecanicoSeleccionados)
                             {
                                 <option value="@item.Id">@item.Nombre </option>
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => NuevaVenta.MecanicoId)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Forma de Pago:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.MonedaId">
-                            <option value="0" disabled>--Moneda--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="NuevaVenta.MonedaId">
+                            <option selected value="">--Moneda--</option>
                             @foreach (var item in MonedaSeleccionados)
                             {
                                 <option value="@item.Id">@item.TipoMoneda</option>
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => NuevaVenta.MonedaId)" />
                     </div>
                 </div>
                 <div class="form-group col-sm-4">
                     <label>Categoria:</label>
                     <div>
-                        <InputSelect class="form-control" @bind-Value="NuevaVenta.CategoriaId">
-                            <option value="0" disabled>--Seleccione Categoria--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="NuevaVenta.CategoriaId">
+                            <option selected value="">--Seleccione una Categoria--</option>
                             @foreach (var item in CategoriaSeleccionados)
                             {
                                 <option value="@item.Id">@item.Nombre </option>
@@ -132,8 +132,8 @@
                 <div class="form-group col-sm-6">
                     <label>Servicio:</label>
                     <div>
-                        <InputSelectNumber class="form-control" @bind-Value="NuevaVenta.ServicioId">
-                            <option value="0" disabled>--Servicio--</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="NuevaVenta.ServicioId">
+                            <option selected value="">--Servicio--</option>
                             @foreach (var item in ServicioSeleccionados)
                             {
                                 if (NuevaVenta.CategoriaId == item.CategoriaId)
@@ -141,7 +141,7 @@
                                 <option value="@item.Id">@item.Descripcion</option>
                                 }
                             }
-                        </InputSelectNumber>
+                        </InputSelect>
                         <ValidationMessage For="@(() => NuevaVenta.ServicioId)" />
                     </div>
                 </div>
@@ -210,8 +210,8 @@
                 <div class="row">
                     <div class="form-group col-sm-12">
                         <label>Productos:</label>
-                        <InputSelect class="form-control" @bind-Value="detalle.InventarioId">
-                            <option value="0" disabled> --- Seleccione un producto ---</option>
+                        <InputSelect required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-control" @bind-Value="detalle.InventarioId">
+                            <option selected value=""> --- Seleccione un producto ---</option>
                             @foreach (var item in InventarioSeleccionado)
                                 {
                                     if (item.Existencia > 0)
@@ -234,7 +234,7 @@
                     }
                 }
                 <div class="row">
-                    <div class="form-group col-sm-6">
+                    <div required oninvalid="this.setCustomValidity('Por favor selecciona una opción')" class="form-group col-sm-6">
                         <label>Cantidad:</label>
                         <div>
                             <InputNumber class="form-control" @bind-Value="@detalle.Cantidad" />
@@ -324,7 +324,7 @@
         await ObtenerInventario();
         await ObtenerCliente();
 
-        
+
         NuevaVenta.DVentas = new List<DVenta>();
     }
 
@@ -334,7 +334,7 @@
         articulosDisponibles = httpResponse.Response;
     }
 
-   
+
 
     public void calcularSubtotal()
     {
