@@ -22,7 +22,7 @@
 else if (VentasRealizadas.Count == 0)
 {
     <div class="d-flex justify-content-center align-items-center" style="height:24rem">
-        <text>No se encontraron registros.</text>
+        <text>Cargando...</text>
     </div>
 }
 else
@@ -51,7 +51,7 @@ else
             <MudTh>Total</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Factura">@context.NFactura</MudTd>
+            <MudTd DataLabel="Factura">TE00 @context.NFactura</MudTd>
             <MudTd DataLabel="Cliente">@context.Cliente.Nombres</MudTd>
             @*<MudTd DataLabel="Descripcion" Class="col-2">@context.Descripcion</MudTd>*@
             <MudTd DataLabel="Fecha">@context.Fecha.ToShortDateString()</MudTd>

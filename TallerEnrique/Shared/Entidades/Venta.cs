@@ -41,11 +41,12 @@ namespace TallerEnrique.Shared.Entidades
             set { }
         }
         public decimal Total { get; set; }
-        
+        public FormasPago FormaPago { get; set; } = FormasPago.Córdoba;
+
 
         //Estableciendo la relacion entre tablas
         public int VehiculoId { get; set; }
-        public int MonedaId { get; set; }
+        public int? MonedaId { get; set; }
         public int? ClienteId { get; set; }
         public int MecanicoId { get; set; }
         public int ServicioId { get; set; }
@@ -60,5 +61,10 @@ namespace TallerEnrique.Shared.Entidades
         //public DVenta DVenta { get; set; }
 
         public List<DVenta> DVentas { get; set; } = new List<DVenta>();
+    }
+
+    public enum FormasPago // segun los requerimientos del cliente solo se aceptara córdoba como moneda de pago
+    {
+        Córdoba = 1
     }
 }

@@ -41,17 +41,20 @@
             <h5 class="d-flex justify-content-center">
                 <small> @configuracion.DescripcionServicios</small>
             </h5>
+            <h5 class="d-flex justify-content-center">
+                <small> <b>RUC:</b> 0410207750001G</small>
+            </h5>
 
             <div class="d-flex justify-content-start">
                 <b> </b> @*aqui irán los datos de la tabla configuración*@
-                <small><b>N° factura:</b> @venta.NFactura</small>
-            </div>                             
-                                               
+                <small><b>N° factura:</b> TE00 @venta.NFactura</small>
+            </div>
+
             <div class="d-flex justify-content-start">
                 <small><b>Fecha de venta:</b> @venta.Fecha.ToShortDateString()</small>
             </div>
             <div class="d-flex justify-content-start">
-                <small><b>Forma de Pago:</b> @venta.Moneda.TipoMoneda</small>
+                <small><b>Forma de Pago:</b> @venta.FormaPago</small>
             </div>
             <div class="d-flex justify-content-start">
                 <small><b>Servicio:</b> @venta.Servicio.Descripcion</small>
@@ -68,18 +71,18 @@
                 <div class="row">
                     @if (venta.ClienteId != null)
                     {
-                    <div class="form-group col-6">
-                        <small><b>Cliente:</b> @venta.Cliente.Nombres @venta.Cliente.Apellidos </small> <br />
-                        <small><b>Dirección:</b> @venta.Cliente.Ciudad</small> <br />
-                        <small><b>Teléfono:</b> @venta.Cliente.Telefono</small>
-                    </div>
-                    <div class="form-group col-6 ">
-                        <small><b>Número Placa:</b> @venta.Vehiculo.Placa <b>Marca:</b> @venta.Vehiculo.Marca</small> <br />
-                        <small><b>Mecánico:</b> @venta.Mecanico.Nombre</small><br />
-                        <small><b>Mano Obra:</b> C$ @venta.ManoObra.ToString("##,#.##")</small>
-                    </div>
-                        
-                        
+                        <div class="form-group col-6">
+                            <small><b>Cliente:</b> @venta.Cliente.Nombres @venta.Cliente.Apellidos </small> <br />
+                            <small><b>Dirección:</b> @venta.Cliente.Ciudad</small> <br />
+                            <small><b>Teléfono:</b> @venta.Cliente.Telefono</small>
+                        </div>
+                        <div class="form-group col-6 ">
+                            <small><b>Número Placa:</b> @venta.Vehiculo.Placa <b>Marca:</b> @venta.Vehiculo.Marca</small> <br />
+                            <small><b>Mecánico responsable:</b> @venta.Mecanico.Nombre @venta.Mecanico.Apellido</small><br />
+                            <small><b>Mano Obra:</b> C$ @venta.ManoObra.ToString("##,#.##")</small>
+                        </div>
+
+
                     }
 
                 </div>
@@ -109,7 +112,7 @@
                             <td>C$ @venta.SubTotal.ToString("##,#.##")</td>
                         </tr>
                     }
-                
+
                 </tbody>
             </table>
 
